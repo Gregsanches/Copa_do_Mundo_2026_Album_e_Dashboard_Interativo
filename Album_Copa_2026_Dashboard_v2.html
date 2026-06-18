@@ -1,0 +1,1944 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Álbum Copa do Mundo 2026</title>
+  
+  <!-- Fontes e Ícones -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+
+  <style>
+    :root {
+      --color-background-primary: #0b0f19;
+      --color-background-secondary: #151d30;
+      --color-background-tertiary: #1f2b48;
+      --color-text-primary: #f8fafc;
+      --color-text-secondary: #94a3b8;
+      --color-text-tertiary: #64748b;
+      --color-border-primary: #06b6d4;
+      --color-border-secondary: #334155;
+      --color-border-tertiary: #1e293b;
+      --color-success: #10b981;
+      --color-warning: #f59e0b;
+      --color-danger: #ef4444;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --border-radius-sm: 8px;
+      --border-radius-md: 12px;
+      --border-radius-lg: 16px;
+      --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--color-background-primary);
+      color: var(--color-text-primary);
+      line-height: 1.5;
+      padding: 24px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #06b6d4, #3b82f6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Navegação */
+    .nav {
+      display: flex;
+      gap: 8px;
+      padding: 6px;
+      background: var(--color-background-secondary);
+      border-radius: var(--border-radius-lg);
+      border: 1px solid var(--color-border-tertiary);
+      overflow-x: auto;
+      margin-bottom: 24px;
+    }
+
+    .nav button {
+      font-size: 13.5px;
+      font-weight: 600;
+      padding: 10px 18px;
+      border-radius: var(--border-radius-md);
+      border: none;
+      background: transparent;
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      transition: var(--transition-smooth);
+    }
+
+    .nav button:hover {
+      color: var(--color-text-primary);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .nav button.active {
+      background: var(--color-background-tertiary);
+      color: var(--color-text-primary);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .page {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* KPIs */
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .kpi {
+      background: var(--color-background-secondary);
+      border-radius: var(--border-radius-lg);
+      padding: 18px 20px;
+      border: 1px solid var(--color-border-tertiary);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--color-border-primary);
+      opacity: 0.7;
+    }
+
+    .kpi-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin-bottom: 6px;
+    }
+
+    .kpi-value {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--color-text-primary);
+    }
+
+    .kpi-sub {
+      font-size: 11px;
+      color: var(--color-text-tertiary);
+      margin-top: 4px;
+    }
+
+    /* Barras de progresso */
+    .progress-container {
+      background: var(--color-background-secondary);
+      padding: 20px;
+      border-radius: var(--border-radius-lg);
+      border: 1px solid var(--color-border-tertiary);
+      margin-bottom: 24px;
+    }
+
+    .progress-bar-label {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .progress-bar-outer {
+      height: 14px;
+      background: var(--color-background-tertiary);
+      border-radius: 7px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .progress-bar-inner {
+      height: 100%;
+      background: linear-gradient(90deg, #10b981, #059669);
+      border-radius: 7px;
+      transition: width 0.6s cubic-bezier(0.1, 0.8, 0.3, 1);
+    }
+
+    /* Gráficos de barras em linha */
+    .grid-plots {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .plot-card {
+      background: var(--color-background-secondary);
+      border-radius: var(--border-radius-lg);
+      padding: 20px;
+      border: 1px solid var(--color-border-tertiary);
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--color-text-primary);
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-batch {
+      font-size: 12.5px;
+      font-weight: 700;
+      border: none;
+      border-radius: var(--border-radius-sm);
+      padding: 8px 14px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: var(--transition-smooth);
+    }
+
+    .btn-batch-check {
+      background-color: var(--color-success);
+      color: #ffffff;
+    }
+
+    .btn-batch-check:hover {
+      background-color: #059669;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+    }
+
+    .btn-batch-uncheck {
+      background-color: var(--color-danger);
+      color: #ffffff;
+    }
+
+    .btn-batch-uncheck:hover {
+      background-color: #dc2626;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+    }
+
+    .bar-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .bar-row .bar-label {
+      font-size: 12.5px;
+      color: var(--color-text-secondary);
+      width: 120px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex-shrink: 0;
+    }
+
+    .bar-row .bar-track {
+      flex: 1;
+      height: 14px;
+      background: var(--color-background-tertiary);
+      border-radius: 7px;
+      overflow: hidden;
+    }
+
+    .bar-row .bar-fill {
+      height: 100%;
+      border-radius: 7px;
+      transition: width 0.5s ease;
+    }
+
+    .bar-row .bar-pct {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+      min-width: 38px;
+      text-align: right;
+    }
+
+    /* Filtros */
+    .filters, .gallery-filters {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    select, input[type="text"] {
+      font-size: 13.5px;
+      padding: 8px 16px;
+      border: 1px solid var(--color-border-secondary);
+      border-radius: var(--border-radius-sm);
+      background: var(--color-background-secondary);
+      color: var(--color-text-primary);
+      outline: none;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+
+    select:focus, input[type="text"]:focus {
+      border-color: var(--color-border-primary);
+      box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.15);
+    }
+
+    /* Lista por Seleção */
+    .selection-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .selection-row {
+      background: var(--color-background-secondary);
+      border: 1px solid var(--color-border-tertiary);
+      border-radius: var(--border-radius-lg);
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: var(--transition-smooth);
+    }
+
+    .selection-row:hover {
+      border-color: var(--color-border-secondary);
+      transform: translateY(-2px);
+    }
+
+    .selection-badge {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    /* Heatmap */
+    .hm-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .hm-group {
+      background: var(--color-background-secondary);
+      border: 1px solid var(--color-border-tertiary);
+      border-radius: var(--border-radius-lg);
+      padding: 16px;
+    }
+
+    .hm-group-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .hm-cell {
+      font-size: 11.5px;
+      padding: 8px 12px;
+      border-radius: var(--border-radius-sm);
+      text-align: center;
+      color: #fff;
+      font-weight: 600;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Galeria */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: 12px;
+      max-height: 600px;
+      overflow-y: auto;
+      padding-right: 6px;
+    }
+
+    .card-fig {
+      border-radius: var(--border-radius-md);
+      border: 1px solid var(--color-border-tertiary);
+      padding: 8px;
+      background: var(--color-background-secondary);
+      cursor: pointer;
+      position: relative;
+      transition: var(--transition-smooth);
+      user-select: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card-fig:hover {
+      border-color: var(--color-border-secondary);
+      transform: scale(1.03);
+    }
+
+    .card-fig.possui {
+      border-color: var(--color-success);
+      background: linear-gradient(180deg, var(--color-background-secondary) 0%, rgba(16, 185, 129, 0.05) 100%);
+    }
+
+    .card-fig img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: var(--border-radius-sm);
+      background: var(--color-background-tertiary);
+      margin-bottom: 8px;
+    }
+
+    .img-placeholder {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: var(--border-radius-sm);
+      background: var(--color-background-tertiary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: var(--color-text-tertiary);
+      margin-bottom: 8px;
+    }
+
+    .card-fig .fn {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 2px;
+    }
+
+    .card-fig .fc {
+      font-size: 10px;
+      color: var(--color-text-tertiary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-fig .checked-badge {
+      display: none !important;
+    }
+
+    /* Checkbox acessível no canto inferior direito */
+    .card-fig .fig-checkbox {
+      position: absolute;
+      bottom: 6px;
+      right: 6px;
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      border: 1.5px solid var(--color-border-secondary);
+      background: var(--color-background-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      z-index: 2;
+    }
+
+    .card-fig .fig-checkbox i {
+      font-size: 11px;
+      color: transparent;
+      transition: var(--transition-smooth);
+    }
+
+    .card-fig.possui .fig-checkbox {
+      background: var(--color-success);
+      border-color: var(--color-success);
+    }
+
+    .card-fig.possui .fig-checkbox i {
+      color: #fff;
+    }
+
+    /* Simulação */
+    .sim-controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .sim-card {
+      background: var(--color-background-secondary);
+      border-radius: var(--border-radius-lg);
+      padding: 20px;
+      border: 1px solid var(--color-border-tertiary);
+    }
+
+    .sim-row {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .sim-row label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+    }
+
+    .sim-slider-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sim-row input[type=range] {
+      flex: 1;
+      accent-color: var(--color-border-primary);
+    }
+
+    .sim-row span {
+      font-size: 14px;
+      font-weight: 700;
+      min-width: 60px;
+      text-align: right;
+    }
+
+    .btn-action {
+      background: var(--color-border-primary);
+      color: var(--color-background-primary);
+      font-weight: 700;
+      border: none;
+      border-radius: var(--border-radius-sm);
+      padding: 10px 20px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: var(--transition-smooth);
+    }
+
+    .btn-action:hover {
+      filter: brightness(1.1);
+      box-shadow: 0 4px 14px rgba(6, 182, 212, 0.3);
+    }
+
+    .result-box {
+      background: var(--color-background-secondary);
+      border-radius: var(--border-radius-lg);
+      padding: 20px;
+      border: 1px solid var(--color-border-tertiary);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .result-box .big {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--color-border-primary);
+      margin: 8px 0;
+    }
+
+    /* Acessibilidade */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      border: 0;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--color-background-primary);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--color-background-tertiary);
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div>
+      <h1>Álbum Copa do Mundo 2026</h1>
+      <p style="font-size: 12px; color: var(--color-text-secondary); margin-top: 2px;">Painel Interativo de Estatísticas e Gerenciamento de Figurinhas</p>
+    </div>
+    <div style="font-size: 12.5px; color: var(--color-text-secondary); display: flex; align-items: center; gap: 14px;">
+      <span>💡 Clique nas figurinhas da <b>Galeria</b> para colar/descolar</span>
+    </div>
+  </header>
+
+  <nav class="nav">
+    <button class="active" onclick="showPage('visao')"><i class="ti ti-chart-pie"></i> Visão Geral</button>
+    <button onclick="showPage('selecoes')"><i class="ti ti-flag"></i> Por Seleção</button>
+    <button onclick="showPage('heatmap')"><i class="ti ti-grid-3x3"></i> Por Grupo</button>
+    <button onclick="showPage('simulacao')"><i class="ti ti-chart-dots"></i> Análise de Dados</button>
+    <button onclick="showPage('galeria')"><i class="ti ti-photo"></i> Galeria</button>
+  </nav>
+
+  <!-- Visão Geral -->
+  <div id="page-visao" class="page active">
+    <div class="kpis" id="kpi-geral"></div>
+    <div class="progress-container">
+      <div class="progress-bar-label">
+        <span>Completude Geral do Álbum</span>
+        <span id="pb-pct-text">0%</span>
+      </div>
+      <div class="progress-bar-outer"><div class="progress-bar-inner" id="pb-geral" style="width:0%"></div></div>
+    </div>
+    <div class="grid-plots">
+      <div class="plot-card">
+        <p class="section-title"><i class="ti ti-world"></i> Por Confederação</p>
+        <div id="bars-conf"></div>
+      </div>
+      <div class="plot-card">
+        <p class="section-title"><i class="ti ti-layout-grid-add"></i> Por Tipo de Categoria</p>
+        <div id="bars-tipo"></div>
+      </div>
+    </div>
+    <div class="plot-card" style="margin-top: 4px;">
+      <p class="section-title"><i class="ti ti-trophy"></i> Top 10 Seleções Mais Completas</p>
+      <div id="bars-top10"></div>
+      <div class="plot-card" style="margin-top: 20px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px;">
+  <div>
+    <p class="section-title" style="margin-bottom: 4px;"><i class="ti ti-device-sd-card"></i> Backup e Sincronização</p>
+    <p style="font-size: 12px; color: var(--color-text-secondary);">Transfira suas figurinhas marcadas para outro computador, celular ou faça uma cópia de segurança.</p>
+  </div>
+  <div style="display: flex; gap: 10px; align-items: center;">
+    <!-- Botão de Exportar -->
+    <button class="btn-action" onclick="exportarProgresso()" title="Baixar arquivo de backup com suas marcações">
+      <i class="ti ti-download"></i> Exportar Dados
+    </button>
+    
+    <!-- Botão de Importar -->
+    <button class="btn-action" style="background: var(--color-background-tertiary); color: var(--color-text-primary); border: 1px solid var(--color-border-secondary);" onclick="triggerImport()" title="Carregar arquivo de backup salvo">
+      <i class="ti ti-upload"></i> Importar Dados
+    </button>
+    <input type="file" id="import-file-input" style="display: none;" accept=".json" onchange="importarProgresso(event)">
+  </div>
+</div>
+    </div>
+  </div>
+
+  <!-- Seleções -->
+  <div id="page-selecoes" class="page">
+    <div class="filters">
+      <select id="fil-grupo" onchange="renderSelecoes()"><option value="">Todos os grupos</option></select>
+      <select id="fil-conf" onchange="renderSelecoes()"><option value="">Todas confederações</option></select>
+    </div>
+    <div id="sel-list" class="selection-list"></div>
+  </div>
+
+  <!-- Heatmap -->
+  <div id="page-heatmap" class="page">
+    <div id="hm-container" class="hm-container"></div>
+  </div>
+
+  <!-- Análise de Dados -->
+  <div id="page-simulacao" class="page">
+
+    <!-- Parâmetros Globais -->
+    <div class="sim-controls" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));">
+      <div class="sim-card">
+        <p class="section-title"><i class="ti ti-adjustments-horizontal"></i> Parâmetros do Modelo</p>
+        <div class="sim-row">
+          <label for="sim-preco-unit">Valor unitário da figurinha (R$)</label>
+          <div class="sim-slider-wrap">
+            <input type="range" id="sim-preco-unit" min="50" max="500" value="100" step="10" oninput="updateSim()">
+            <span id="sim-preco-unit-out">R$ 1,00</span>
+          </div>
+        </div>
+        <div class="sim-row">
+          <label for="sim-fpac">Figurinhas por pacote</label>
+          <div class="sim-slider-wrap">
+            <input type="range" id="sim-fpac" min="1" max="20" value="7" step="1" oninput="updateSim()">
+            <span id="sim-fpac-out">7</span>
+          </div>
+        </div>
+        <div class="sim-row">
+          <label for="sim-ppw">Pacotes comprados por semana</label>
+          <div class="sim-slider-wrap">
+            <input type="range" id="sim-ppw" min="1" max="100" value="5" step="1" oninput="updateSim()">
+            <span id="sim-ppw-out">5</span>
+          </div>
+        </div>
+        <div style="font-size:11px;color:var(--color-text-tertiary);margin-top:4px;padding:8px;background:var(--color-background-tertiary);border-radius:var(--border-radius-sm);">
+          <i class="ti ti-info-circle"></i> Figurinhas coladas: <b id="sim-coladas-count">0</b> / <b id="sim-total-count">994</b> — Faltam: <b id="sim-faltam-count">994</b>
+        </div>
+      </div>
+
+      <!-- Previsão de Conclusão -->
+      <div class="sim-card">
+        <p class="section-title"><i class="ti ti-calendar-stats"></i> Previsão de Conclusão</p>
+        <div id="previsao-results" style="display:flex;flex-direction:column;gap:10px;">
+          <div style="font-size:13px;color:var(--color-text-secondary);">Calculando...</div>
+        </div>
+      </div>
+
+      <!-- Indicador: Custo das figurinhas restantes -->
+      <div class="sim-card" style="border-left: 3px solid #f59e0b;">
+        <p class="section-title"><i class="ti ti-currency-dollar"></i> Custo das Figurinhas Restantes</p>
+        <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:12px;">Custo médio esperado por figurinha considerando as <b id="restantes-count">—</b> que ainda faltam. Quanto menos faltam, mais cara fica cada uma.</div>
+        <div id="ultima-fig-value" style="font-size:38px;font-weight:700;color:#f59e0b;margin:4px 0;">—</div>
+        <div id="ultima-fig-sub" style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:8px;"></div>
+        <div id="custo-restantes-detail" style="font-size:11px;color:var(--color-text-tertiary);"></div>
+      </div>
+    </div>
+
+    <!-- Monte Carlo: Completar sem trocas -->
+    <div class="grid-plots" style="margin-bottom:24px;">
+      <div class="sim-card" style="grid-column: 1 / -1;">
+        <p class="section-title"><i class="ti ti-calculator"></i> Simulação de Completude Apenas por Compras (Sem Trocas)</p>
+        <p style="font-size:12px;color:var(--color-text-secondary);margin-bottom:16px;">Considerando que todas as figurinhas têm a mesma probabilidade de aparecer em um pacote (sem raridades), quantos pacotes seriam necessários para completar o álbum comprando sozinho?</p>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end;margin-bottom:16px;">
+          <button class="btn-action" onclick="runMonteCarloSimulation()"><i class="ti ti-refresh"></i> Rodar Simulação (1.000 iterações)</button>
+          <div id="mc-running" style="font-size:12px;color:var(--color-text-tertiary);display:none;"><i class="ti ti-loader"></i> Simulando...</div>
+        </div>
+        <div id="sim-results" class="result-box" style="margin-bottom:16px;"></div>
+      </div>
+    </div>
+
+    <!-- Gráficos -->
+    <div class="grid-plots">
+      <div class="plot-card">
+        <p class="section-title"><i class="ti ti-chart-line"></i> Custo Marginal Dinâmico por Figurinha (R$)</p>
+        <p style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:8px;">Quanto custa, em média, obter uma nova figurinha única conforme o álbum vai sendo completado.</p>
+        <div class="chart-wrap" style="height:250px"><canvas id="chart-sim"></canvas></div>
+      </div>
+      <div class="plot-card">
+        <p class="section-title"><i class="ti ti-chart-histogram"></i> Distribuição de Custo Total (Monte Carlo)</p>
+        <p style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:8px;">Distribuição das 1.000 simulações de custo total para completar o álbum sem trocas.</p>
+        <div class="chart-wrap" style="height:250px"><canvas id="chart-mc"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Galeria -->
+  <div id="page-galeria" class="page">
+    <div class="gallery-filters">
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        <select id="gal-sel" onchange="renderGaleria()"><option value="">Todas as seleções</option></select>
+        <label style="font-size:11px;color:var(--color-text-tertiary);display:flex;align-items:center;gap:5px;cursor:pointer;user-select:none;">
+          <input type="checkbox" id="gal-ordem-album" onchange="renderGaleria()" style="accent-color:var(--color-border-primary);width:12px;height:12px;">
+          Ordem do álbum
+        </label>
+      </div>
+      <select id="gal-tipo" onchange="renderGaleria()">
+        <option value="">Todos os tipos</option>
+        <option value="jogador">Jogador</option>
+        <option value="escudo">Escudo</option>
+        <option value="foto_time">Foto time</option>
+        <option value="especial_fwc">Especial FWC</option>
+        <option value="coca_cola">Coca-Cola</option>
+      </select>
+      <select id="gal-status" onchange="renderGaleria()">
+        <option value="">Todos os status</option>
+        <option value="possui">Coladas</option>
+        <option value="falta">Faltando</option>
+      </select>
+      <input type="text" id="gal-search" placeholder="Buscar jogador..." oninput="renderGaleria()">
+      <div style="display: flex; gap: 8px;">
+  <button class="btn-batch btn-batch-check" onclick="toggleFilteredBatch(true)" title="Colar todas as figurinhas que estão aparecendo no filtro atual">
+    <i class="ti ti-checkbox"></i> Colar Filtradas
+  </button>
+  <button class="btn-batch btn-batch-uncheck" onclick="toggleFilteredBatch(false)" title="Descolar todas as figurinhas que estão aparecendo no filtro atual">
+    <i class="ti ti-square-x"></i> Descolar Filtradas
+  </button>
+</div>
+      <span id="gal-count" style="font-size:13.5px;color:var(--color-text-secondary);align-self:center;margin-left:auto"></span>
+    </div>
+    <div class="gallery-grid" id="gal-grid"></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+  // Mapeamento estruturado das seleções
+  const SELECOES_DB = {
+    "ESPECIAL": {g: "-", cf: "-", t: "especial_fwc"},
+    "HISTÓRIA": {g: "-", cf: "-", t: "especial_fwc"},
+    "COCA-COLA": {g: "-", cf: "-", t: "coca_cola"},
+    "MÉXICO": {g: "A", cf: "CONCACAF", t: "jogador"},
+    "ÁFRICA DO SUL": {g: "A", cf: "CAF", t: "jogador"},
+    "COREIA DO SUL": {g: "A", cf: "AFC", t: "jogador"},
+    "TCHÉQUIA": {g: "A", cf: "UEFA", t: "jogador"},
+    "CANADÁ": {g: "B", cf: "CONCACAF", t: "jogador"},
+    "BÓSNIA": {g: "B", cf: "UEFA", t: "jogador"},
+    "CATAR": {g: "B", cf: "AFC", t: "jogador"},
+    "SUÍÇA": {g: "B", cf: "UEFA", t: "jogador"},
+    "BRASIL": {g: "C", cf: "CONMEBOL", t: "jogador"},
+    "MARROCOS": {g: "C", cf: "CAF", t: "jogador"},
+    "HAITI": {g: "C", cf: "CONCACAF", t: "jogador"},
+    "ESCÓCIA": {g: "C", cf: "UEFA", t: "jogador"},
+    "ESTADOS UNIDOS": {g: "D", cf: "CONCACAF", t: "jogador"},
+    "PARAGUAI": {g: "D", cf: "CONMEBOL", t: "jogador"},
+    "AUSTRÁLIA": {g: "D", cf: "AFC", t: "jogador"},
+    "TURQUIA": {g: "D", cf: "UEFA", t: "jogador"},
+    "ALEMANHA": {g: "E", cf: "UEFA", t: "jogador"},
+    "CURAÇAO": {g: "E", cf: "CONCACAF", t: "jogador"},
+    "COSTA DO MARFIM": {g: "E", cf: "CAF", t: "jogador"},
+    "EQUADOR": {g: "E", cf: "CONMEBOL", t: "jogador"},
+    "HOLANDA": {g: "F", cf: "UEFA", t: "jogador"},
+    "JAPÃO": {g: "F", cf: "AFC", t: "jogador"},
+    "SUÉCIA": {g: "F", cf: "UEFA", t: "jogador"},
+    "TUNÍSIA": {g: "F", cf: "CAF", t: "jogador"},
+    "BÉLGICA": {g: "G", cf: "UEFA", t: "jogador"},
+    "EGITO": {g: "G", cf: "CAF", t: "jogador"},
+    "IRÃ": {g: "G", cf: "AFC", t: "jogador"},
+    "NOVA ZELÂNDIA": {g: "G", cf: "OFC", t: "jogador"},
+    "ESPANHA": {g: "H", cf: "UEFA", t: "jogador"},
+    "CABO VERDE": {g: "H", cf: "CAF", t: "jogador"},
+    "ARÁBIA SAUDITA": {g: "H", cf: "AFC", t: "jogador"},
+    "URUGUAI": {g: "H", cf: "CONMEBOL", t: "jogador"},
+    "FRANÇA": {g: "I", cf: "UEFA", t: "jogador"},
+    "SENEGAL": {g: "I", cf: "CAF", t: "jogador"},
+    "IRAQUE": {g: "I", cf: "AFC", t: "jogador"},
+    "NORUEGA": {g: "I", cf: "UEFA", t: "jogador"},
+    "ARGENTINA": {g: "J", cf: "CONMEBOL", t: "jogador"},
+    "ARGÉLIA": {g: "J", cf: "CAF", t: "jogador"},
+    "ÁUSTRIA": {g: "J", cf: "UEFA", t: "jogador"},
+    "JORDÂNIA": {g: "J", cf: "AFC", t: "jogador"},
+    "PORTUGAL": {g: "K", cf: "UEFA", t: "jogador"},
+    "CONGO": {g: "K", cf: "CAF", t: "jogador"},
+    "UZBEQUISTÃO": {g: "K", cf: "AFC", t: "jogador"},
+    "COLÔMBIA": {g: "K", cf: "CONMEBOL", t: "jogador"},
+    "INGLATERRA": {g: "L", cf: "UEFA", t: "jogador"},
+    "CROÁCIA": {g: "L", cf: "UEFA", t: "jogador"},
+    "GANA": {g: "L", cf: "CAF", t: "jogador"},
+    "PANAMÁ": {g: "L", cf: "CONCACAF", t: "jogador"}
+  };
+
+  // Figurinhas estruturadas de forma robusta e otimizada (Unpack dinâmico)
+  // [c: codigo, n: nome, s: selecao, p_default: boolean, u: url_imagem]
+  const PACKED_DATA = [
+    ["FWC00","Primeira figurinha","ESPECIAL",false,"https://i.postimg.cc/0QCKnrPX/FWC00-Primeira-figurinha.jpg"],
+    ["FWC1","Taça 1","ESPECIAL",false,"https://i.postimg.cc/bJRSgdp5/FWC1-Taca-1.jpg"],
+    ["FWC2","Taça2","ESPECIAL",false,"https://i.postimg.cc/63h4cTtj/FWC2-Taca2.jpg"],
+    ["FWC3","Mascotes oficiais","ESPECIAL",false,"https://i.postimg.cc/63h4cTtg/FWC3-Mascotes-oficiais.png"],
+    ["FWC4","Nós somos 2026","ESPECIAL",false,"https://i.postimg.cc/SRN2vqxg/FWC4-Nos-somos-2026.jpg"],
+    ["FWC5","Bola Oficial","ESPECIAL",false,"https://i.postimg.cc/fyTtrZRP/FWC5-Bola-Oficial.jpg"],
+    ["FWC6","Emblema do país-sede","ESPECIAL",false,"https://i.postimg.cc/VvLrV1k3/FWC6-Emblema-do-pais-sede.jpg"],
+    ["FWC7","Emblema do país-sede","ESPECIAL",false,"https://i.postimg.cc/7hYGWDL8/FWC7-Emblema-do-pais-sede.jpg"],
+    ["FWC8","Emblema do país-sede","ESPECIAL",false,"https://i.postimg.cc/NMx2DLB8/FWC8-Emblema-do-pais-sede.jpg"],
+    ["FWC9","ITALY 1934","HISTÓRIA",false,"https://i.postimg.cc/ncPqjs3P/FWC9-ITALY-1934.png"],
+    ["FWC10","URUGUAY 1950","HISTÓRIA",false,"https://i.postimg.cc/HsxQk09q/FWC10-URUGUAY-1950.jpg"],
+    ["FWC11","GERMAN FR 1954","HISTÓRIA",false,"https://i.postimg.cc/KvHtkK00/FWC11-GERMAN-FR-1954.jpg"],
+    ["FWC12","BRAZIL 1962","HISTÓRIA",false,"https://i.postimg.cc/RVDw63gP/FWC12-BRAZIL-1962.jpg"],
+    ["FWC13","GERMAN FR 1974","HISTÓRIA",false,"https://i.postimg.cc/yYb0gJLw/FWC13-GERMAN-FR-1974.jpg"],
+    ["FWC14","ARGENTINA 1986","HISTÓRIA",false,"https://i.postimg.cc/rFP50dfB/FWC14-ARGENTINA-1986.jpg"],
+    ["FWC15","BRAZIL 1994","HISTÓRIA",false,"https://i.postimg.cc/vHN5g1PF/FWC15-BRAZIL-1994.jpg"],
+    ["FWC16","BRAZIL 2002","HISTÓRIA",false,"https://i.postimg.cc/m257zcdG/FWC16-BRAZIL-2002.jpg"],
+    ["FWC17","ITALY 2006","HISTÓRIA",false,"https://i.postimg.cc/fTrYt3HN/FWC17-ITALY-2006.jpg"],
+    ["FWC18","GERMAN 2014","HISTÓRIA",false,"https://i.postimg.cc/15jDngWP/FWC18-GERMAN-2014.jpg"],
+    ["FWC19","ARGENTINA 2022","HISTÓRIA",false,"https://i.postimg.cc/Gh2kmPxM/FWC19-ARGENTINA-2022.jpg"],
+    ["CC1","Lamine Yamal","COCA-COLA",false,"https://i.postimg.cc/wvn7xJqF/CC1-Lamine-Yamal.jpg"],
+    ["CC2","Joshua Kimmich","COCA-COLA",false,"https://i.postimg.cc/V62dsMf7/CC2-Joshua-Kimmich.jpg"],
+    ["CC3","Harry Kane","COCA-COLA",false,"https://i.postimg.cc/bJ4sYbyB/CC3-Harry-Kane.jpg"],
+    ["CC4","Santiago Giménez","COCA-COLA",false,"https://i.postimg.cc/MTgvZR6r/CC4-Santiago-Gimenez.jpg"],
+    ["CC5","Joško Gvardiol","COCA-COLA",false,"https://i.postimg.cc/ZRXCY3bs/CC5-Josko-Gvardiol.jpg"],
+    ["CC6","Federico Valverde","COCA-COLA",false,"https://i.postimg.cc/ZRXCY3bg/CC6-Federico-Valverde.jpg"],
+    ["CC7","Jefferson Lerma","COCA-COLA",false,"https://i.postimg.cc/xCBcjHfB/CC7-Jefferson-Lerma.jpg"],
+    ["CC8","Enner Valencia","COCA-COLA",false,"https://i.postimg.cc/KzCRcLGw/CC8-Enner-Valencia.jpg"],
+    ["CC9","Gabriel Magalhães","COCA-COLA",false,"https://i.postimg.cc/0Qhb5mkL/CC9-Gabriel-Magalhaes.jpg"],
+    ["CC10","Virgil van Dijk","COCA-COLA",false,"https://i.postimg.cc/sXbvfSfF/CC10-Virgil-van-Dijk.jpg"],
+    ["CC11","Alphonso Davies","COCA-COLA",false,"https://i.postimg.cc/QtvHN5NG/CC11-Alphonso-Davies.jpg"],
+    ["CC12","Emiliano Martínez","COCA-COLA",false,"https://i.postimg.cc/63Fy6R6x/CC12-Emiliano-Martinez.jpg"],
+    ["CC13","Raúl Jiménez","COCA-COLA",false,"https://i.postimg.cc/9MsrXTXj/CC13-Raul-Jimenez.jpg"],
+    ["CC14","Lautaro Martínez","COCA-COLA",false,"https://i.postimg.cc/gjRrxJjt/CC14-Lautaro-Martinez.jpg"]
+  ];
+
+  // Geração programática das 48 equipes para evitar repetições redundantes
+  const TEAM_PREFIXES = [
+    {p: "MEX", s: "MÉXICO", owns: [], names: ["ESCUDO MEX","Luis Malagón","Johan Vásquez","Jorge Sánchez","César Montes","Jesús Gallardo","Israel Reyes","Diego Lainez","Carlos Rodríguez","Edson Álvarez","Orbelín Pineda","Marcel Ruiz","TIME MEX","Érick Sánchez","Hirving Lozano","Santiago Giménez","Raúl Jiménez","Alexis Vega","Roberto Alvarado","César Huerta"]},
+    {p: "RSA", s: "ÁFRICA DO SUL", owns: [], names: ["ESCUDO RSA","Ronwen Williams","Sipho Chaine","Aubrey Modiba","Samukele Kabini","Mbekezeli Mbokazi","Khulumani Ndamane","Siyabonga Ngezana","Khuliso Mudau","Nkosinathi Sibisi","Teboho Mokoena","Thalente Mbatha","TIME RSA","Bathuisi Aubaas","Yaya Sithole","Sipho Mbule","Lyle Foster","Ioraam Rayners","Mohau Nkota","Oswin Appolis"]},
+    {p: "KOR", s: "COREIA DO SUL", owns: [], names: ["ESCUDO KOR","Hyeon-woo Jo","Seung-Gyu Kim","Min-jae Kim","Yu-min Cho","Young-woo Seol","Han-beom Lee","Tae-seok Lee","Myung-jae Lee","Jae-sung Lee","In-beom Hwang","Kang-in Lee","TIME KOR","Seung-ho Paik","Jens Castrop","Dong-gyeong Lee","Gue-sung Cho","Heung-min Son","Hee-chan Hwang","Hyeon-Gyu Oh"]},
+    {p: "CZE", s: "TCHÉQUIA", owns: [], names: ["ESCUDO CZE","Matěj Kovář","Jindřich Staněk","Ladislav Krejčí","Vladimír Coufal","Jaroslav Zelený","Tomáš Holeš","David Zima","Michal Sadílek","Lukáš Provod","Lukáš Červ","Tomáš Souček","TIME CZE","Pavel Šulc","Matěj Vydra","Vasil Kušej","Tomáš Chorý","Václav Černý","Adam Hložek","Patrik Schick"]},
+    {p: "CAN", s: "CANADÁ", owns: [], names: ["ESCUDO CAN","Dayne St. Clair","Alphonso Davies","Alistair Johnston","Samuel Adekugbe","Richie Laryea","Derek Cornelius","Moïse Bombito","Kamal Miller","Stephen Eustáquio","Ismaël Koné","Jonathan Osorio","TIME CAN","Jacob Shaffelburg","Mathieu Choinière","Niko Sigur","Tajon Buchanan","Liam Millar","Cyle Larin","Jonathan David"]},
+    {p: "BIH", s: "BÓSNIA", owns: [], names: ["ESCUDO BIH","Nikola Vasilj","Amar Dedić","Sead Kolašinac","Tarik Muharemović","Nihad Mujakić","Nikola Katić","Amir Hadžiahmetović","Benjamin Tahirović","Armin Gigović","Ivan Šunjić","Ivan Bašić","TIME BIH","Dženis Burnić","Esmir Bajraktarević","Amar Memić","Ermedin Demirović","Edin Džeko","Samed Baždar","Haris Tabaković"]},
+    {p: "QAT", s: "CATAR", owns: [], names: ["ESCUDO QAT","Meshaal Barsham","Sultan Albrake","Lucas Mendes","Homam Ahmed","Boualem Khoukhi","Pedro Miguel","Tarek Salman","Mohamed Al-Mannai","Karim Boudiaf","Assim Madibo","Ahmed Fatehi","TIME QAT","Mohammed Waad","Abdulaziz Hatem","Hassan Al-Haydos","Edmilson Junior","Akram Hassan Afif","Ahmed Al Ganehi","Almoez Ali"]},
+    {p: "SUI", s: "SUÍÇA", owns: [], names: ["ESCUDO SUI","Gregor Kobel","Yvon Mvogo","Manuel Akanji","Ricardo Rodriguez","Nico Elvedi","Aurèle Amenda","Silvan Widmer","Granit Xhaka","Denis Zakaria","Remo Freuler","Fabian Rieder","TIME SUI","Ardon Jashari","Johan Manzambi","Michel Aebischer","Breel Embolo","Ruben Vargas","Dan Ndoye","Zeki Amdouni"]},
+    {p: "BRA", s: "BRASIL", owns: [], names: ["ESCUDO BRA","Alisson","Bento","Marquinhos","Éder Militão","Gabriel Magalhães","Danilo","Wesley","Lucas Paquetá","Casemiro","Bruno Guimarães","Luiz Henrique","TIME BRA","Vinícius Júnior","Rodrygo","João Pedro","Matheus Cunha","Gabriel Martinelli","Raphinha","Estêvão"]},
+    {p: "MAR", s: "MARROCOS", owns: [], names: ["ESCUDO MAR","Yassine Bounou","Munir El Kajoui","Achraf Hakimi","Noussair Mazraoui","Nayef Aguerd","Romain Saïss","Jawad El Yamiq","Adam Masina","Sofyan Amrabat","Azzedine Ounahi","Eliesse Ben Seghir","TIME MAR","Bilal El Khannouss","Ismael Saibari","Youssef En-Nesyri","Abde Ezzalzouli","Soufiane Rahimi","Brahim Díaz","Ayoub El Kaabi"]},
+    {p: "HAI", s: "HAITI", owns: [], names: ["ESCUDO HAI","Johny Placide","Carlens Arcus","Martin Expérience","Jean-Kevin Duverne","Ricardo Adé","Duke Lacroix","Garven Metusala","Hannes Delcroix","Leverton Pierre","Danley Jean Jacques","Jean-Ricner Bellegarde","TIME HAI","Christopher Attys","Derrick Etienne Jr.","Josué Casimir","Ruben Providence","Duckens Nazon","Louicius Deedson","Frantzdy Pierrot"]},
+    {p: "SCO", s: "ESCÓCIA", owns: [], names: ["ESCUDO SCO","Angus Gunn","Jack Hendry","Kieran Tierney","Aaron Hickey","Andrew Robertson","Scott McKenna","John Souttar","Anthony Ralston","Grant Hanley","Scott McTominay","Billy Gilmour","TIME SCO","Lewis Ferguson","Ryan Christie","Kenny McLean","John McGinn","Lyndon Dykes","Che Adams","Ben Gannon-Doak"]},
+    {p: "EUA", s: "ESTADOS UNIDOS", owns: [], names: ["ESCUDO EUA","Math Freese","Chris Richards","Tim Ream","Mark McKenzie","Alex Freeman","Antonee Robinson","Tyler Adams","Tanner Tessmann","Weston McKenny","Christian Roldan","Timothy Weah","TIME EUA","Diego Luna","Malim Tillman","Christian Pulisic","Brenden Aaronson","Ricardo Pepi","Haji Wright","Folarin Balogun"]},
+    {p: "PAR", s: "PARAGUAI", owns: [], names: ["ESCUDO PAR","Roberto Fernández","Orlando Gill","Gustavo Gómez","Fabián Balbuena","Juan José Cáceres","Omar Alderete","Junior Alonso","Mathías Villasanti","Diego Gómez","Damián Bobadilla","Andrés Cubas","TIME PAR","Matías Galarza Fonda","Julio Enciso","Alejandro Romero Gamarra","Miguel Almirón","Ramón Sosa","Ángel Romero","Antonio Sanabria"]},
+    {p: "AUS", s: "AUSTRÁLIA", owns: [], names: ["ESCUDO AUS","Mathew Ryan","Joe Gauci","Harry Souttar","Alessandro Circati","Jordan Bos","Aziz Behich","Cameron Burgess","Lewis Miller","Milos Degenek","Jackson Irvine","Riley McGree","TIME AUS","Aiden O’Neill","Connor Metcalfe","Patrick Yazbek","Craig Goodwin","Kusini Yengi","Nestory Irankunda","Mohamed Touré"]},
+    {p: "TUR", s: "TURQUIA", owns: [], names: ["ESCUDO TUR","Ugurcan Cakir","Mert Muldur","Zeki Celik","Abdulkerim Bardakci","Caglar Soyunku","Merih Demiral","Ferdi Kadioglu","Kaan Ayhan","Ismail Yuksek","Hakan Calhanoglu","Orkun Kokcu","TIME TUR","Arda Güler","Irfan Can Kahvecu","Yunus Akgun","Can Uzun","Baris Alper Yilmaz","Kerem Akturkoglu","Kenan Yildiz"]},
+    {p: "GER", s: "ALEMANHA", owns: [], names: ["ESCUDO GER","Marc-André ter Stegen","Jonathan Tah","David Raum","Nico Schlotterbeck","Antonio Rüdiger","Waldemar Anton","Ridle Baku","Maximilian Mittelstädt","Joshua Kimmich","Florian Wirtz","Felix Nmecha","TIME GER","Leon Goretzka","Jamal Musiala","Serge Gnabry","Kai Havertz","Leroy Sané","Karim Adeyemi","Nick Woltemade"]},
+    {p: "CUW", s: "CURAÇAO", owns: [], names: ["ESCUDO CUW","Eloy Room","Armando Obispo","Sherel Floranus","Jurien Gaari","Joshua Brenet","Roshon Van Eijma","Shurandy Sambo","Livano Comenencia","Godfried Roemeratoe","Juninho Bacuna","Leandro Bacuna","TIME CUW","Tahith Chong","Kenji Gorré","Jearl Margaritha","Jurgen Locadia","Jeremy Antonisse","Gervane Kastaneer","Sontje Hansen"]},
+    {p: "CIV", s: "COSTA DO MARFIM", owns: [], names: ["ESCUDO CIV","Yahia Fofana","Ghislain Konan","Wilfried Singo","Odilon Kossounou","Evan Ndicka","Willy Boly","Emmanuel Agbadou","Ousmane Diomande","Franck Kessié","Seko Fofana","Ibrahim Sangaré","TIME CIV","Jean-Philippe Gbamin","Amad Diallo","Sébastien Haller","Simon Adingra","Yan Diomande","Evann Guessand","Oumar Diakité"]},
+    {p: "ECU", s: "EQUADOR", owns: [], names: ["ESCUDO ECU","Hernán Galíndez","Gonzalo Valle","Piero Hincapié","Pervis Estupiñán","Willian Pacho","Ángelo Preciado","Joel Ordóñez","Moisés Caicedo","Alan Franco","Kendry Páez","Pedro Vite","TIME ECU","John Veboah","Leonardo Campana","Gonzalo Plata","Nilson Angulo","Alan Minda","Kevin Rodríguez","Enner Valencia"]},
+    {p: "NED", s: "HOLANDA", owns: [], names: ["ESCUDO NED","Bart Verbruggen","Virgil van Dijk","Micky van de Ven","Jurriën Timber","Denzel Dumfries","Nathan Aké","Jeremie Frimpong","Jan Paul van Hecke","Tijjani Reijnders","Ryan Gravenberch","Teun Koopmeiners","TIME NED","Frenkie de Jong","Xavi Simons","Justin Kluivert","Memphis Depay","Donyell Malen","Wout Weghorst","Cody Gakpo"]},
+    {p: "JPN", s: "JAPÃO", owns: [], names: ["ESCUDO JPN","Zion Suzuki","Henry Heroki Mochizuki","Ayumu Seko","Junnosuke Suzuki","Shogo Taniguchi","Tsuyoshi Watanabe","Kaishu Sano","Yuki Soma","Ao Tanaka","Daichi Kamada","Takefusa Kubo","TIME JPN","Ritsu Doan","Keito Nakamura","Takumi Minamino","Shuto Machino","Junya Ito","Koki Ogawa","Ayase Ueda"]},
+    {p: "SWE", s: "SUÉCIA", owns: [], names: ["ESCUDO SWE","Victor Johansson","Isak Hien","Gabriel Gudmundsson","Emil Holm","Victor Nilsson Lindelöf","Gustaf Lagerbielke","Lucas Bergvall","Hugo Larsson","Jesper Karlström","Yasin Ayari","Mattias Svanberg","TIME SWE","Daniel Svensson","Ken Sema","Roony Bardghji","Dejan Kulusevski","Anthony Elanga","Alexander Isak","Viktor Gyökeres"]},
+    {p: "TUN", s: "TUNÍSIA", owns: [], names: ["ESCUDO TUN","Bechir Ben Said","Aymen Dahmen","Yan Valery","Montassar Talbi","Yassine Meriah","Ali Abdi","Dylan Bronn","Ellyes Skhiri","Aissa Laidouni","Ferjani Sassi","Mohamed Ali Ben Romdhane","TIME TUN","Hannibal Mejbri","Elias Achouri","Elias Saad","Hazem Mastouri","Ismael Gharbi","Sayfallah Ltaief","Naim Sliti"]},
+    {p: "BEL", s: "BÉLGICA", owns: [], names: ["ESCUDO BEL","Thibaut Courtois","Arthur Theate","Timothy Castagne","Zeno Debast","Brandon Mechele","Maxim De Cuyper","Thomas Meunier","Youri Tielemans","Amadou Onana","Nicolas Raskin","Alexis Saelemaekers","TIME BEL","Hans Vanaken","Kevin De Bruyne","Jérémy Doku","Charles De Ketelaere","Leandro Trossard","Loïs Openda","Romelu Lukaku"]},
+    {p: "EGY", s: "EGITO", owns: [], names: ["ESCUDO EGY","Mohamed El Shenawy","Mohamed Hany","Mohamed Hamdy","Yasser Ibrahim","Khaled Sobhi","Ramy Rabia","Hossam Abdelmaguid","Ahmed Fatouh","Marwan Attia","Zizo","Hamdy Fathy","TIME EGY","Mohamed Lasheen","Emam Ashour","Osama Faisal","Mohamed Salah","Mostafa Mohamed","Trezeguet","Omar Marmoush"]},
+    {p: "IRN", s: "IRÃ", owns: [], names: ["ESCUDO IRN","Alireza Beiranvand","Morteza Pouraliganji","Ehsan Hajsafi","Milad Mohammadi","Shoja Khalilzadeh","Ramin Rezaeian","Hossein Kanaani","Sadegh Moharrami","Saleh Hardani","Saeed Ezatolahi","Saman Ghoddos","TIME IRN","Omid Noorafkan","Roozbeh Cheshmi","Mohammad Mohebi","Sardar Azmoun","Mehdi Taremi","Alireza Jahanbakhsh","Ali Gholizadeh"]},
+    {p: "NZL", s: "NOVA ZELÂNDIA", owns: [], names: ["ESCUDO NZL","Max Crocombe-Payne","Alex Paulsen","Michael Boxall","Liberato Cacace","Tim Payne","Tyler Bindon","Francis de Vries","Finn Surman","Joe Bell","Sarpreet Singh","Ryan Thomas","TIME NZL","Matthew Garbett","Marko Stamenić","Ben Old","Chris Wood","Elijah Just","Callum McCowatt","Kosta Barbarouses"]},
+    {p: "ESP", s: "ESPANHA", owns: [], names: ["ESCUDO ESP","Unai Simón","Robin Le Normand","Aymeric Laporte","Dean Huijsen","Pedro Porro","Dani Carvajal","Marc Cucurella","Martín Zubimendi","Rodri","Pedri","Fabián Ruiz","TIME ESP","Mikel Merino","Lamine Yamal","Dani Olmo","Nico Williams","Ferran Torres","Álvaro Morata","Mikel Oyarzabal"]},
+    {p: "CPV", s: "CABO VERDE", owns: [], names: ["ESCUDO CPV","Vozinha","Logan Costa","Pico","Diney","Steven Moreira","Wagner Pina","João Paulo","Yannick Semedo","Kevin Pina","Patrick Andrade","Jamiro Monteiro","TIME CPV","Deroy Duarte","Garry Rodrigues","Jovane Cabral","Ryan Mendes","Dailon Livramento","Willy Semedo","Bebé"]},
+    {p: "KSA", s: "ARÁBIA SAUDITA", owns: [], names: ["ESCUDO KSA","Nawaf Alaqidi","Abdulrahman Al-Sanbi","Saud Abdulhamid","Nawaf Boushal","Jehad Thakri","Moteb Al-Harbi","Hassan Altambakti","Musab Aljuwayr","Ziyad Aljohani","Abdullah Alkhaibari","Nasser Aldawsari","TIME KSA","Saleh Abu Alshamat","Marwan Alsahafi","Salem Aldawsari","Abdulrahman Al-Aboud","Feras Albrikan","Saleh Alshehri","Abdullah Al-Hamdan"]},
+    {p: "URU", s: "URUGUAI", owns: [], names: ["ESCUDO URU","Sergio Rochet","Santiago Mele","Ronald Araujo","José María Giménez","Sebastian Caceres","Mathias Olivera","Guillermo Varela","Nahitan Nandez","Federico Valverde","Giorgian De Arrascaeta","Rodrigo Bentancur","TIME URU","Manuel Ugarte","Nicolás de la Cruz","Maxi Araujo","Darwin Núñez","Federico Viñas","Rodrigo Aguirre","Facundo Pellistri"]},
+    {p: "FRA", s: "FRANÇA", owns: [], names: ["ESCUDO FRA","Mike Maignan","Theo Hernández","William Saliba","Jules Koundé","Ibrahima Konaté","Dayot Upamecano","Lucas Digne","Aurélien Tchouaméni","Eduardo Camavinga","Manu Koné","Adrien Rabiot","TIME FRA","Michael Olise","Ousmane Dembélé","Bradley Barcola","Désiré Doué","Kingsley Coman","Hugo Ekitike","Kylian Mbappé"]},
+    {p: "SEN", s: "SENEGAL", owns: [], names: ["ESCUDO SEN","Eduardo Mendy","Yehvann Diouf","Moussa Niakhaté","Abdoulaye Seck","Ismail Jakobs","El Hadji Malick Diouf","Kalidou Koulibaly","Idrissa Gana Gueye","Pape Matar Sarr","Pape Gueye","Habib Diarra","TIME SEN","Lamine Camara","Sadio Mane","Ismaïla Sarr","Boulaye Dia","Iliman Ndiaye","Nicolas Jackson","Krepin Diatta"]},
+    {p: "IRQ", s: "IRAQUE", owns: [], names: ["ESCUDO IRQ","Jalal Hassan","Rebin Sulaka","Hussein Ali","Akam Hashem","Merchas Doski","Zaid Tahseen","Manaf Younis","Zidane Iqbal","Amir Al-Ammari","Ibrahim Bayesh","Ali Jasim","TIME IRQ","Youssef Amyn","Aimar Sher","Marko Farji","Osama Rashid","Ali Al-Hamadi","Aymen Hussein","Mohanad Ali"]},
+    {p: "NOR", s: "NORUEGA", owns: [], names: ["ESCUDO NOR","Ørjan Nyland","Julian Ryerson","Leo Østigård","Kristoffer Ajer","Marcus Holmgren Pedersen","David Møller Wolfe","Torbjørn Heggem","Morten Thorsby","Martin Ødegaard","Sander Berge","Andreas Schjelderup","TIME NOR","Patrick Berg","Erling Haaland","Alexander Sørloth","Aron Dønnum","Jørgen Strand Larsen","Antonio Nusa","Oscar Bobb"]},
+    {p: "ARG", s: "ARGENTINA", owns: [], names: ["ESCUDO ARG","Emiliano Martínez","Nahuel Molina","Cristian Romero","Nicolás Otamendi","Nicolás Tagliafico","Leonardo Balerdi","Enzo Fernández","Alexis Mac Allister","Rodrigo De Paul","Exequiel Palacios","Leandro Paredes","TIME ARG","Nico Paz","Franco Mastantuono","Nico González","Lionel Messi","Lautaro Martínez","Julián Álvarez","Giuliano Simeone"]},
+    {p: "ALG", s: "ARGÉLIA", owns: [], names: ["ESCUDO ALG","Alexis Guendouz","Ramy Bensebaini","Youcef Atal","Rayan Aït-Nouri","Mohamed Amine Tougai","Aïssa Mandi","Ismael Bennacer","Houssem Aouar","Hicham Boudaoui","Ramiz Zerrouki","Nabil Bentaleb","TIME ALG","Farés Chaibi","Riyad Mahrez","Said Benrahma","Anis Hadj Moussa","Amine Gouiri","Baghdad Bounedjah","Mohammed Amoura"]},
+    {p: "AUT", s: "ÁUSTRIA", owns: [], names: ["ESCUDO AUT","Alexander Schlager","Patrick Pentz","David Alaba","Kevin Danso","Philipp Lienhart","Stefan Posch","Phillipp Mwene","Alexander Prass","Xaver Schlager","Marcel Sabitzer","Konrad Laimer","TIME AUT","Florian Grillitsch","Nicolas Seiwald","Romano Schmid","Patrick Wimmer","Christoph Baumgartner","Michael Gregoritsch","Marko Arnautović"]},
+    {p: "JOR", s: "JORDÂNIA", owns: [], names: ["ESCUDO JOR","Yazeed Abulaila","Ihsan Haddad","Mohammad Abu Hashish","Yazan Al-Arab","Abdallah Nasib","Saleem Obaid","Mohammad Abualnadi","Ibrahim Saadeh","Nizar Al-Rashdan","Noor Al-Rawabdeh","Mohannad Abu Taha","TIME JOR","Amer Jamous","Musa Al-Taamari","Yazan Al-Naimat","Mahmoud Al-Mardi","Ali Olwan","Mohammad Abu Zrayq","Ibrahim Sabra"]},
+    {p: "POR", s: "PORTUGAL", owns: [], names: ["ESCUDO POR","Diogo Costa","Jose Sa","Ruben Dias","João Cancelo","Diogo Dalot","Nuno Mendes","Gonçalo Inácio","Bernardo Silva","Bruno Fernandes","Ruben Neves","Vitinha","TIME POR","João Neves","Cristiano Ronaldo","Francisco Trincão","João Felix","Gonçalo Ramos","Pedro Neto","Rafael Leão"]},
+    {p: "COD", s: "CONGO", owns: [], names: ["ESCUDO COD","Lionel Mpasi","Aaron Wan-Bissaka","Axel Tuanzebe","Arthur Masuaku","Chancel Mbemba","Joris Kayembe","Charles Pickel","Ngal’ayel Mukau","Edo Kayembe","Samuel Moutoussamy","Noah Sadiki","TIME COD","Théo Bongonda","Meschack Elia","Yoane Wissa","Brian Cipenga","Fiston Mayele","Cédric Bakambu","Nathanaël Mbuku"]},
+    {p: "UZB", s: "UZBEQUISTÃO", owns: [], names: ["ESCUDO UZB","Utkir Yusupov","Farrukh Savfiev","Sherzod Nasrullaev","Umar Eshmurodov","Husniddin Aliqulov","Rustamjon Ashurmatov","Khojiakbar Alijonov","Abdukodir Khusanov","Odiljon Hamrobekov","Otabek Shukurov","Jamshid Iskanderov","TIME UZB","Azizbek Turgunboev","Khojimat Erkinov","Eldor Shomurodov","Oston Urunov","Jaloliddin Masharipov","Igor Sergeev","Abbosbek Fayzullaev"]},
+    {p: "COL", s: "COLÔMBIA", owns: [], names: ["ESCUDO COL","Camilo Vargas","David Ospina","Dávinson Sánchez","Yerry Mina","Daniel Muñoz","Johan Mojica","Jhon Lucumí","Santiago Arias","Jefferson Lerma","Kevin Castaño","Richard Ríos","TIME COL","James Rodríguez","Juan Fernando Quintero","Jorge Carrascal","Jhon Arias","Jhon Córdoba","Luis Suárez","Luis Díaz"]},
+    {p: "ENG", s: "INGLATERRA", owns: [], names: ["ESCUDO ENG","Jordan Pickford","John Stones","Marc Guéhi","Ezri Konsa","Trent Alexander-Arnold","Reece James","Dan Burn","Jordan Henderson","Declan Rice","Jude Bellingham","Cole Palmer","TIME ENG","Morgan Rogers","Anthony Gordon","Phil Foden","Bukayo Saka","Harry Kane","Marcus Rashford","Ollie Watkins"]},
+    {p: "CRO", s: "CROÁCIA", owns: [], names: ["ESCUDO CRO","Dominik Livaković","Duje Ćaleta-Car","Joško Gvardiol","Josip Stanišić","Luka Vušković","Josip Šutalo","Kristijan Jakić","Luka Modrić","Mateo Kovačić","Martin Baturina","Lovro Majer","TIME CRO","Mario Pašalić","Petar Sučić","Ivan Perišić","Marco Pašalić","Ante Budimir","Andrej Kramarić","Franjo Ivanović"]},
+    {p: "GHA", s: "GANA", owns: [], names: ["ESCUDO GHA","Lawrence Ati Zigi","Tariq Lamptey","Mohammed Salisu","Alidu Seidu","Alexander Djiku","Gideon Mensah","Caleb Yirenkyi","Abdul Fatawu Issahaku","Thomas Partey","Salis Abdul Samed","Kamaldeen Sulemana","TIME GHA","Mohammed Kudus","Iñaki Williams","Jordan Ayew","André Ayew","Joseph Paintsil","Osman Bukari","Antoine Semenyo"]},
+    {p: "PAN", s: "PANAMÁ", owns: [], names: ["ESCUDO PAN","Orlando Mosquera","Luis Mejía","Fidel Escobar","Andrés Andrade","Michael Amir Murillo","Eric Davis","José Córdoba","César Blackman","Cristian Martínez","Aníbal Godoy","Adalberto Carrasquilla","TIME PAN","Édgar Bárcenas","Carlos Harvey","Ismael Díaz","José Fajardo","Cecilio Waterman","José Luis Rodríguez","Alberto Quintero"]}
+  ];
+
+  // Descompacta as seleções e gera os 994 registros no array global RAW
+  const RAW = [];
+  
+  // Primeiro empurra as especiais estruturadas no PACKED_DATA
+  PACKED_DATA.forEach(item => {
+    RAW.push({
+      c: item[0],
+      n: item[1],
+      s: item[2],
+      g: "-",
+      cf: "-",
+      t: item[0].startsWith("CC") ? "coca_cola" : "especial_fwc",
+      p: item[3],
+      u: item[4]
+    });
+  });
+
+  // Em seguida descompacta e gera as equipes padrão
+  TEAM_PREFIXES.forEach(team => {
+    for (let i = 1; i <= 20; i++) {
+      const code = team.p + i;
+      let type = "jogador";
+      if (i === 1) type = "escudo";
+      if (i === 13) type = "foto_time";
+      
+      const isOwned = team.owns.includes(i);
+      
+      // Reconstrói URL de forma inteligente
+      let url = "";
+      if (team.p === "EUA") {
+        url = `https://i.postimg.cc/`;
+        if (i===1) url += `k4t125hr/EUA1-ESCUDO-EUA.png`;
+        else if (i===2) url += `Y9mnvSyr/EUA2-Math-Freese.jpg`;
+        else if (i===3) url += `50F7Xtkx/EUA3-Chris-Richards.jpg`;
+        else if (i===4) url += `QtW4FMnx/EUA4-Tim-Ream.jpg`;
+        else if (i===5) url += `0QJWzNHy/EUA5-Mark-Mc-Kenzie.jpg`;
+        else if (i===6) url += `fL02Vbg9/EUA6-Alex-Freeman.png`;
+        else if (i===7) url += `85rK7Cnv/EUA7-Antonee-Robinson.jpg`;
+        else if (i===8) url += `MTjPnGrR/EUA8-Tyler-Adams.png`;
+        else if (i===9) url += `zvZdK19y/EUA9-Tanner-Tessmann.jpg`;
+        else if (i===10) url += `Rh5PKzjH/EUA10-Weston-Mc-Kenny.png`;
+        else if (i===11) url += `SRFZCpwY/EUA11-Christian-Roldan.jpg`;
+        else if (i===12) url += `fynHmh6X/EUA12-Timothy-Weah.jpg`;
+        else if (i===13) url += `fynHmh6c/EUA13-TIME-EUA.jpg`;
+        else if (i===14) url += `5ydPLMZ5/EUA14-Diego-Luna.png`;
+        else if (i===15) url += `NFqNmwWd/EUA15-Malim-Tillman.jpg`;
+        else if (i===16) url += `tJQrWHLz/EUA16-Christian-Pulisic.jpg`;
+        else if (i===17) url += `2yRHhfPw/EUA17-Brenden-Aaronson.png`;
+        else if (i===18) url += `SRFZCpwV/EUA18-Ricardo-Pepi.png`;
+        else if (i===19) url += `Zn8wLMSH/EUA19-Haji-Wright.png`;
+        else if (i===20) url += `x8DsMSWF/EUA20-Folarin-Balogun.jpg`;
+      } else {
+        // Fallback genérico construído a partir de caminhos conhecidos do postimg
+        url = `https://i.postimg.cc/`;
+        // Para manter o dashboard com as URLs exatas fornecidas no CSV, adicionamos o dicionário mapeado:
+      }
+
+      RAW.push({
+        c: code,
+        n: team.names[i-1],
+        s: team.s,
+        g: SELECOES_DB[team.s].g,
+        cf: SELECOES_DB[team.s].cf,
+        t: type,
+        p: isOwned,
+        u: url
+      });
+    }
+  });
+
+  // Mapeamento exato de todas as URLs do postimg fornecidas no arquivo csv para garantir fidelidade de visualização de 100% das imagens
+  const URL_MAP = {};
+  // Gerado dinamicamente para aplicar fallbacks se necessário
+  RAW.forEach(item => {
+    // Caso especial para preencher dinamicamente todas as URLs mapeadas dos metadados fornecidos no arquivo flat:
+  });
+
+
+  const CSV_URLS = {
+    // ESPECIAL & HISTÓRIA (FWC)
+    "FWC00":"https://i.postimg.cc/0QCKnrPX/FWC00-Primeira-figurinha.jpg","FWC1":"https://i.postimg.cc/bJRSgdp5/FWC1-Taca-1.jpg","FWC2":"https://i.postimg.cc/63h4cTtj/FWC2-Taca2.jpg","FWC3":"https://i.postimg.cc/63h4cTtg/FWC3-Mascotes-oficiais.png","FWC4":"https://i.postimg.cc/SRN2vqxg/FWC4-Nos-somos-2026.jpg","FWC5":"https://i.postimg.cc/fyTtrZRP/FWC5-Bola-Oficial.jpg","FWC6":"https://i.postimg.cc/VvLrV1k3/FWC6-Emblema-do-pais-sede.jpg","FWC7":"https://i.postimg.cc/7hYGWDL8/FWC7-Emblema-do-pais-sede.jpg","FWC8":"https://i.postimg.cc/NMx2DLB8/FWC8-Emblema-do-pais-sede.jpg","FWC9":"https://i.postimg.cc/ncPqjs3P/FWC9-ITALY-1934.png","FWC10":"https://i.postimg.cc/HsxQk09q/FWC10-URUGUAY-1950.jpg","FWC11":"https://i.postimg.cc/KvHtkK00/FWC11-GERMAN-FR-1954.jpg","FWC12":"https://i.postimg.cc/RVDw63gP/FWC12-BRAZIL-1962.jpg","FWC13":"https://i.postimg.cc/yYb0gJLw/FWC13-GERMAN-FR-1974.jpg","FWC14":"https://i.postimg.cc/rFP50dfB/FWC14-ARGENTINA-1986.jpg","FWC15":"https://i.postimg.cc/vHN5g1PF/FWC15-BRAZIL-1994.jpg","FWC16":"https://i.postimg.cc/m257zcdG/FWC16-BRAZIL-2002.jpg","FWC17":"https://i.postimg.cc/fTrYt3HN/FWC17-ITALY-2006.jpg","FWC18":"https://i.postimg.cc/15jDngWP/FWC18-GERMAN-2014.jpg","FWC19":"https://i.postimg.cc/Gh2kmPxM/FWC19-ARGENTINA-2022.jpg",
+
+    // COCA-COLA
+    "CC1":"https://i.postimg.cc/wvn7xJqF/CC1-Lamine-Yamal.jpg","CC2":"https://i.postimg.cc/V62dsMf7/CC2-Joshua-Kimmich.jpg","CC3":"https://i.postimg.cc/bJ4sYbyB/CC3-Harry-Kane.jpg","CC4":"https://i.postimg.cc/MTgvZR6r/CC4-Santiago-Gimenez.jpg","CC5":"https://i.postimg.cc/ZRXCY3bs/CC5-Josko-Gvardiol.jpg","CC6":"https://i.postimg.cc/ZRXCY3bg/CC6-Federico-Valverde.jpg","CC7":"https://i.postimg.cc/xCBcjHfB/CC7-Jefferson-Lerma.jpg","CC8":"https://i.postimg.cc/KzCRcLGw/CC8-Enner-Valencia.jpg","CC9":"https://i.postimg.cc/0Qhb5mkL/CC9-Gabriel-Magalhaes.jpg","CC10":"https://i.postimg.cc/sXbvfSfF/CC10-Virgil-van-Dijk.jpg","CC11":"https://i.postimg.cc/QtvHN5NG/CC11-Alphonso-Davies.jpg","CC12":"https://i.postimg.cc/63Fy6R6x/CC12-Emiliano-Martinez.jpg","CC13":"https://i.postimg.cc/9MsrXTXj/CC13-Raul-Jimenez.jpg","CC14":"https://i.postimg.cc/gjRrxJjt/CC14-Lautaro-Martinez.jpg",
+
+    // MÉXICO
+    "MEX1":"https://i.postimg.cc/xTVT892B/MEX1-ESCUDO-MEX.jpg","MEX2":"https://i.postimg.cc/NfvfFQth/MEX2-Luis-Malagon.jpg","MEX3":"https://i.postimg.cc/X767qnWS/MEX3-Johan-Vasquez.jpg","MEX4":"https://i.postimg.cc/L6F65mSF/MEX4-Jorge-Sanchez.jpg","MEX5":"https://i.postimg.cc/X767qnW0/MEX5-Cesar-Montes.jpg","MEX6":"https://i.postimg.cc/wTYTM9zz/MEX6-Jesus-Gallardo.jpg","MEX7":"https://i.postimg.cc/c4G4CdWZ/MEX7-Israel-Reyes.jpg","MEX8":"https://i.postimg.cc/GhnhtbRd/MEX8-Diego-Lainez.jpg","MEX9":"https://i.postimg.cc/65x5qBKB/MEX9-Carlos-Rodriguez.jpg","MEX10":"https://i.postimg.cc/hPRPvKnD/MEX10-Edson-Alvarez.jpg","MEX11":"https://i.postimg.cc/GhnhtbRh/MEX11-Orbelin-Pineda.jpg","MEX12":"https://i.postimg.cc/PrnrJdH5/MEX12-Marcel-Ruiz.jpg","MEX13":"https://i.postimg.cc/L6F65mSs/MEX13-TIME-MEX.jpg","MEX14":"https://i.postimg.cc/FsXszhvz/MEX14-Erick-Sanchez.jpg","MEX15":"https://i.postimg.cc/65x5qBK8/MEX15-Hirving-Lozano.jpg","MEX16":"https://i.postimg.cc/X767qnWp/MEX16-Santiago-Gimenez.jpg","MEX17":"https://i.postimg.cc/5NWNyfJH/MEX17-Raul-Jimenez.jpg","MEX18":"https://i.postimg.cc/Kvhvjmb3/MEX18-Alexis-Vega.jpg","MEX19":"https://i.postimg.cc/GhnhtbRs/MEX19-Roberto-Alvarado.jpg","MEX20":"https://i.postimg.cc/4NRNyXG9/MEX20-Cesar-Huerta.jpg",
+
+    // ÁFRICA DO SUL
+    "RSA1":"https://i.postimg.cc/Hnrcmgqk/RSA1-ESCUDO-RSA.png","RSA2":"https://i.postimg.cc/x8XJQ2wd/RSA2-Ronwen-Williams.png","RSA3":"https://i.postimg.cc/5yXYJVhx/RSA3-Sipho-Chaine.png","RSA4":"https://i.postimg.cc/wMntTrzH/RSA4-Aubrey-Modiba.png","RSA5":"https://i.postimg.cc/j2BWd1TR/RSA5-Samukele-Kabini.png","RSA6":"https://i.postimg.cc/ZnX9KQmb/RSA6-Mbekezeli-Mbokazi.png","RSA7":"https://i.postimg.cc/gj1wk7pk/RSA7-Khulumani-Ndamane.png","RSA8":"https://i.postimg.cc/BbR8Qz38/RSA8-Siyabonga-Ngezana.png","RSA9":"https://i.postimg.cc/SRHXNP4M/RSA9-Khuliso-Mudau.png","RSA10":"https://i.postimg.cc/Y0T4qP7Q/RSA10-Nkosinathi-Sibisi.png","RSA11":"https://i.postimg.cc/vTC1HKy7/RSA11-Teboho-Mokoena.png","RSA12":"https://i.postimg.cc/ZR7BXRDc/RSA12-Thalente-Mbatha.png","RSA13":"https://i.postimg.cc/Jn6DSndd/RSA13-TIME-RSA.png","RSA14":"https://i.postimg.cc/9M8RsMNk/RSA14-Bathuisi-Aubaas.png","RSA15":"https://i.postimg.cc/ydQg2dr5/RSA15-Yaya-Sithole.png","RSA16":"https://i.postimg.cc/mkPz4s0X/RSA16-Sipho-Mbule.png","RSA17":"https://i.postimg.cc/VvJrw83V/RSA17-Lyle-Foster.png","RSA18":"https://i.postimg.cc/90DR2hvk/RSA18-Ioraam-Rayners.png","RSA19":"https://i.postimg.cc/Y0vG7HJy/RSA19-Mohau-Nkota.png","RSA20":"https://i.postimg.cc/tJsZbjKb/RSA20-Oswin-Appolis.png",
+
+    // COREIA DO SUL
+    "KOR1":"https://i.postimg.cc/CxG4XGCX/KOR1-ESCUDO-KOR.jpg","KOR2":"https://i.postimg.cc/SKmGhnVV/KOR2-Hyeon-woo-Jo.png","KOR3":"https://i.postimg.cc/fbMvNV52/KOR3-Seung-Gyu-Kim.png","KOR4":"https://i.postimg.cc/wB9kp10H/KOR4-Min-jae-Kim.png","KOR5":"https://i.postimg.cc/BvJC0jMS/KOR5-Yu-min-Cho.png","KOR6":"https://i.postimg.cc/TPTc6KCP/KOR6-Young-woo-Seol.png","KOR7":"https://i.postimg.cc/fb5fTMrs/KOR7-Han-beom-Lee.png","KOR8":"https://i.postimg.cc/JhK54R2r/KOR8-Tae-seok-Lee.png","KOR9":"https://i.postimg.cc/YS8zqtsj/KOR9-Myung-jae-Lee.png","KOR10":"https://i.postimg.cc/s2K4D3Nh/KOR10-Jae-sung-Lee.png","KOR11":"https://i.postimg.cc/mrVy2T5Y/KOR11-In-beom-Hwang.png","KOR12":"https://i.postimg.cc/kgQyzQNt/KOR12-Kang-in-Lee.png","KOR13":"https://i.postimg.cc/2SQxMQdQ/KOR13-TIME-KOR.png","KOR14":"https://i.postimg.cc/XYfgmfKw/KOR14-Seung-ho-Paik.png","KOR15":"https://i.postimg.cc/CxG4XGCb/KOR15-Jens-Castrop.png","KOR16":"https://i.postimg.cc/VkqFpq99/KOR16-Dong-gyeong-Lee.png","KOR17":"https://i.postimg.cc/T3VcFVj9/KOR17-Gue-sung-Cho.png","KOR18":"https://i.postimg.cc/g2VKQVyt/KOR18-Heung-min-Son.png","KOR19":"https://i.postimg.cc/3xXZVXjS/KOR19-Hee-chan-Hwang.png","KOR20":"https://i.postimg.cc/t43zw3dM/KOR20-Hyeon-Gyu-Oh.jpg",
+
+    // TCHÉQUIA
+    "CZE1":"https://i.postimg.cc/CKtXLCtL/CZE1-ESCUDO-CZE.png","CZE2":"https://i.postimg.cc/Jhgv43gy/CZE2-Matej-Kovar.png","CZE3":"https://i.postimg.cc/MG4NK04Q/CZE3-Jindrich-Stanek.png","CZE4":"https://i.postimg.cc/R08yV18J/CZE4-Ladislav-Krejci.png","CZE5":"https://i.postimg.cc/5tGTN5Gz/CZE5-Vladimir-Coufal.png","CZE6":"https://i.postimg.cc/mrqJ23q7/CZE6-Jaroslav-Zeleny.png","CZE7":"https://i.postimg.cc/vmjkH7jv/CZE7-Tomas-Holes.png","CZE8":"https://i.postimg.cc/jj9md69X/CZE8-David-Zima.png","CZE9":"https://i.postimg.cc/0N3F2G3Z/CZE9-Michal-Sadilek.png","CZE10":"https://i.postimg.cc/0Qw36MRD/CZE10-Lukas-Provod.png","CZE11":"https://i.postimg.cc/tTxf1ZQ3/CZE11-Lukas-Cerv.png","CZE12":"https://i.postimg.cc/762cCG8X/CZE12-Tomas-Soucek.png","CZE13":"https://i.postimg.cc/KzMVKkSJ/CZE13-TIME-CZE.jpg","CZE14":"https://i.postimg.cc/V6CTSrQH/CZE14-Pavel-Sulc.png","CZE15":"https://i.postimg.cc/W3kKDFLC/CZE15-Matej-Vydra.png","CZE16":"https://i.postimg.cc/tTxf1ZQK/CZE16-Vasil-Kusej.png","CZE17":"https://i.postimg.cc/FRLqfdXt/CZE17-Tomas-Chory.png","CZE18":"https://i.postimg.cc/63vS72xX/CZE18-Vaclav-Cerny-(2).png","CZE19":"https://i.postimg.cc/SRbPcSkv/CZE19-Adam-Hlozek.png","CZE20":"https://i.postimg.cc/NFvnRsB3/CZE20-Patrik-Schick.png",
+
+    // CANADÁ
+    "CAN1":"https://i.postimg.cc/xTwYXr4p/CAN1-ESCUDO-CAN.png","CAN2":"https://i.postimg.cc/BQrsjWVk/CAN3-Alphonso-Davies.png","CAN3":"https://i.postimg.cc/RVk9WrDY/CAN2-Dayne-St-Clair.png","CAN4":"https://i.postimg.cc/CL3YRyQW/CAN4-Alistair-Johnston.png","CAN5":"https://i.postimg.cc/RVk9WrDk/CAN5-Samuel-Adekugbe.png","CAN6":"https://i.postimg.cc/RZwmfPks/CAN6-Richie-Laryea.jpg","CAN7":"https://i.postimg.cc/vZ5y9PJ2/CAN7-Derek-Cornelius.png","CAN8":"https://i.postimg.cc/YCQ7gX5P/CAN8-Moise-Bombito.png","CAN9":"https://i.postimg.cc/qv2rnmPS/CAN9-Kamal-Miller.png","CAN10":"https://i.postimg.cc/528JvPhZ/CAN10-Stephen-Eustaquio.png","CAN11":"https://i.postimg.cc/P51HZ6g0/CAN11-Ismael-Kone.png","CAN12":"https://i.postimg.cc/4xpGtLCk/CAN12-Jonathan-Osorio.png","CAN13":"https://i.postimg.cc/TYzGK84W/CAN13-TIME-CAN.jpg","CAN14":"https://i.postimg.cc/ZKGZWkM8/CAN14-Jacob-Shaffelburg.png","CAN15":"https://i.postimg.cc/MKCxnkF0/CAN15-Mathieu-Choiniere.png","CAN16":"https://i.postimg.cc/Kv6F1XHr/CAN16-Niko-Sigur.png","CAN17":"https://i.postimg.cc/J4fmsw2q/CAN17-Tajon-Buchanan.png","CAN18":"https://i.postimg.cc/SNBqn0vV/CAN18-Liam-Millar.jpg","CAN19":"https://i.postimg.cc/J4fmsw2p/CAN19-Cyle-Larin.png","CAN20":"https://i.postimg.cc/9F6VD3nN/CAN20-Jonathan-David.png",
+
+    // BÓSNIA
+    "BIH1":"https://i.postimg.cc/gjM73hsq/BIH1-ESCUDO-BIH.png","BIH2":"https://i.postimg.cc/5yPr8zg3/BIH2-Nikola-Vasilj.png","BIH3":"https://i.postimg.cc/PJ671DyS/BIH3-Amar-Dedic.png","BIH4":"https://i.postimg.cc/RhPYwtdP/BIH4-Sead-Kolasinac.png","BIH5":"https://i.postimg.cc/3NLq2G1f/BIH5-Tarik-Muharemovic.png","BIH6":"https://i.postimg.cc/dQngMMFK/BIH6-Nihad-Mujakic.png","BIH7":"https://i.postimg.cc/c1TPqqWW/BIH7-Nikola-Katic.png","BIH8":"https://i.postimg.cc/G3z600Rr/BIH8-Amir-Hadziahmetovic.png","BIH9":"https://i.postimg.cc/2jTgppYC/BIH9-Benjamin-Tahirovic.png","BIH10":"https://i.postimg.cc/PfK0GGHN/BIH10-Armin-Gigovic.png","BIH11":"https://i.postimg.cc/CMJ9yy05/BIH11-Ivan-Sunjic.png","BIH12":"https://i.postimg.cc/L4vGddSq/BIH12-Ivan-Basic.png","BIH13":"https://i.postimg.cc/XNxtMMWr/BIH13-TIME-BIH.png","BIH14":"https://i.postimg.cc/zDp4mmNK/BIH14-Dzenis-Burnic.png","BIH15":"https://i.postimg.cc/qBQWffr2/BIH15-Esmir-Bajraktarevic.png","BIH16":"https://i.postimg.cc/zDp4mmNw/BIH16-Amar-Memic.png","BIH17":"https://i.postimg.cc/h4MNFFnL/BIH17-Ermedin-Demirovic.png","BIH18":"https://i.postimg.cc/Gh2VdM3T/BIH18-Edin-Dzeko.png","BIH19":"https://i.postimg.cc/J4nvMT7k/BIH19-Samed-Bazdar.png","BIH20":"https://i.postimg.cc/HsxRdSW5/BIH20-Haris-Tabakovic.png",
+
+    // CATAR
+    "QAT1":"https://i.postimg.cc/s2ytd3MX/QAT1-ESCUDO-QAT.jpg","QAT2":"https://i.postimg.cc/hGgHWKXx/QAT2-Meshaal-Barsham.jpg","QAT3":"https://i.postimg.cc/Bvsd9Jjj/QAT3-Sultan-Albrake.jpg","QAT4":"https://i.postimg.cc/s2ytd3MB/QAT4-Lucas-Mendes.jpg","QAT5":"https://i.postimg.cc/ZqZ1tJWd/QAT5-Homam-Ahmed.jpg","QAT6":"https://i.postimg.cc/7LDp8q5n/QAT6-Boualem-Khoukhi.jpg","QAT7":"https://i.postimg.cc/tgyLQ9st/QAT7-Pedro-Miguel.jpg","QAT8":"https://i.postimg.cc/Bvsd9Jjp/QAT8-Tarek-Salman.jpg","QAT9":"https://i.postimg.cc/W4nxsxZg/QAT9-Mohamed-Al-Mannai.jpg","QAT10":"https://i.postimg.cc/6Q0FBFZR/QAT10-Karim-Boudiaf.jpg","QAT11":"https://i.postimg.cc/VNR2z2tX/QAT11-Assim-Madibo.jpg","QAT12":"https://i.postimg.cc/rpJ7q74G/QAT12-Ahmed-Fatehi.jpg","QAT13":"https://i.postimg.cc/s2cb3bWm/QAT13-TIME-QAT.jpg","QAT14":"https://i.postimg.cc/tg58986N/QAT14-Mohammed-Waad.jpg","QAT15":"https://i.postimg.cc/tg58986M/QAT15-Abdulaziz-Hatem.jpg","QAT16":"https://i.postimg.cc/JhqSRSXd/QAT16-Hassan-Al-Haydos.jpg","QAT17":"https://i.postimg.cc/GpQ6b6DZ/QAT17-Edmilson-Junior.jpg","QAT18":"https://i.postimg.cc/Xv8tnt5m/QAT18-Akram-Hassan-Afif.jpg","QAT19":"https://i.postimg.cc/KYNCmCLX/QAT19-Ahmed-Al-Ganehi.jpg","QAT20":"https://i.postimg.cc/k5cL7L83/QAT20-Almoez-Ali.jpg",
+
+    // SUÍÇA
+    "SUI1":"https://i.postimg.cc/nrRDZVVr/SUI1-ESCUDO-SUI.jpg","SUI2":"https://i.postimg.cc/v8395hrX/SUI2-Gregor-Kobel.jpg","SUI3":"https://i.postimg.cc/SQD8cd6t/SUI3-Yvon-Mvogo.jpg","SUI4":"https://i.postimg.cc/VsDMXgqD/SUI4-Manuel-Akanji.jpg","SUI5":"https://i.postimg.cc/CMmDb7GQ/SUI5-Ricardo-Rodriguez.jpg","SUI6":"https://i.postimg.cc/2j2vnGdp/SUI6-Nico-Elvedi.png","SUI7":"https://i.postimg.cc/DfBs16r9/SUI7-Aurele-Amenda.jpg","SUI8":"https://i.postimg.cc/jqZNyc60/SUI8-Silvan-Widmer.jpg","SUI9":"https://i.postimg.cc/y6v90jhz/SUI9-Granit-Xhaka.jpg","SUI10":"https://i.postimg.cc/KcJLtf7m/SUI10-Denis-Zakaria.jpg","SUI11":"https://i.postimg.cc/DfBs16Qy/SUI11-Remo-Freuler.png","SUI12":"https://i.postimg.cc/bY3b1g0w/SUI12-Fabian-Rieder.jpg","SUI13":"https://i.postimg.cc/cJB601Xq/SUI13-TIME-SUI.jpg","SUI14":"https://i.postimg.cc/gkjhsh4z/SUI14-Ardon-Jashari.jpg","SUI15":"https://i.postimg.cc/02jSnSZQ/SUI15-Johan-Manzambi.jpg","SUI16":"https://i.postimg.cc/Dy0G6G5m/SUI16-Michel-Aebischer.jpg","SUI17":"https://i.postimg.cc/qMqKwKQ6/SUI17-Breel-Embolo.jpg","SUI18":"https://i.postimg.cc/vHTnhnX5/SUI18-Ruben-Vargas.png","SUI19":"https://i.postimg.cc/zXvh7hpK/SUI19-Dan-Ndoye.jpg","SUI20":"https://i.postimg.cc/QxC7m7Sk/SUI20-Zeki-Amdouni.png",
+
+    // BRASIL
+    "BRA1":"https://i.postimg.cc/fTvwVqYT/BRA1-ESCUDO-BRA.jpg","BRA2":"https://i.postimg.cc/8Pb17XLc/BRA2-Alisson.jpg","BRA3":"https://i.postimg.cc/X7gVr19v/BRA3-Bento.jpg","BRA4":"https://i.postimg.cc/MKYWn31T/BRA4-Marquinhos.jpg","BRA5":"https://i.postimg.cc/Dyc2Sp1w/BRA5-Eder-Militao.jpg","BRA6":"https://i.postimg.cc/wTk614D7/BRA6-Gabriel-Magalhaes.jpg","BRA7":"https://i.postimg.cc/TYcRKNny/BRA7-Danilo.jpg","BRA8":"https://i.postimg.cc/VLFYJZXJ/BRA8-Wesley.jpg","BRA9":"https://i.postimg.cc/MKYWn31M/BRA9-Lucas-Paqueta.jpg","BRA10":"https://i.postimg.cc/L6VHJQjg/BRA10-Casemiro.jpg","BRA11":"https://i.postimg.cc/9FBWDgyq/BRA11-Bruno-Guimaraes.jpg","BRA12":"https://i.postimg.cc/c4csvkf3/BRA12-Luiz-Henrique.jpg","BRA13":"https://i.postimg.cc/yYTVDp0Z/BRA13-TIME-BRA.jpg","BRA14":"https://i.postimg.cc/BQCqj72H/BRA14-Vinicius-Junior.jpg","BRA15":"https://i.postimg.cc/7YNx5tSS/BRA15-Rodrygo.jpg","BRA16":"https://i.postimg.cc/YqxpvDQ6/BRA16-Joao-Pedro.jpg","BRA17":"https://i.postimg.cc/9FBWDgyG/BRA17-Matheus-Cunha.jpg","BRA18":"https://i.postimg.cc/SNGyn1cG/BRA18-Gabriel-Martinelli.jpg","BRA19":"https://i.postimg.cc/3JZKkf2B/BRA19-Raphinha.jpg","BRA20":"https://i.postimg.cc/sDJVMH5m/BRA20-Estevao.jpg",
+
+    // MARROCOS
+    "MAR1":"https://i.postimg.cc/qMK3WrfF/MAR1-ESCUDO-MAR.jpg","MAR2":"https://i.postimg.cc/kXSbLCrL/MAR2-Yassine-Bounou.jpg","MAR3":"https://i.postimg.cc/fTd91s4G/MAR3-Munir-El-Kajoui.png","MAR4":"https://i.postimg.cc/PrDw0HsG/MAR4-Achraf-Hakimi.png","MAR5":"https://i.postimg.cc/CL8q90yW/MAR5-Noussair-Mazraoui.png","MAR6":"https://i.postimg.cc/ZKNdXmth/MAR6-Nayef-Aguerd.jpg","MAR7":"https://i.postimg.cc/RVtH2m54/MAR7-Romain-Saiss.jpg","MAR8":"https://i.postimg.cc/rF4r7TX8/MAR8-Jawad-El-Yamiq.png","MAR9":"https://i.postimg.cc/vHnVCyFY/MAR9-Adam-Masina.png","MAR10":"https://i.postimg.cc/TYbDBxMT/MAR10-Sofyan-Amrabat.jpg","MAR11":"https://i.postimg.cc/4Nc9jGkm/MAR11-Azzedine-Ounahi.png","MAR12":"https://i.postimg.cc/L8M1pW2H/MAR12-Eliesse-Ben-Seghir.png","MAR13":"https://i.postimg.cc/cLNnSz0d/MAR13-TIME-MAR.jpg","MAR14":"https://i.postimg.cc/y8zZHGs6/MAR14-Bilal-El-Khannouss.png","MAR15":"https://i.postimg.cc/NjwHcnBf/MAR15-Ismael-Saibari.png","MAR16":"https://i.postimg.cc/8zV6SYNC/MAR16-Youssef-En-Nesyri.png","MAR17":"https://i.postimg.cc/kgdbmHqG/MAR17-Abde-Ezzalzouli.png","MAR18":"https://i.postimg.cc/HkCygNdj/MAR18-Soufiane-Rahimi.jpg","MAR19":"https://i.postimg.cc/pLtFHSRm/MAR19-Brahim-Diaz.jpg","MAR20":"https://i.postimg.cc/DwKXTNn4/MAR20-Ayoub-El-Kaabi.png",
+
+    // HAITI
+    "HAI1":"https://i.postimg.cc/dQrrDCn9/HAI1-ESCUDO-HAI.jpg","HAI2":"https://i.postimg.cc/bNPbnvFx/HAI2-Johny-Placide.jpg","HAI3":"https://i.postimg.cc/c4WY3J5M/HAI3-Carlens-Arcus.jpg","HAI4":"https://i.postimg.cc/NftTX0Px/HAI4-Martin-Experience.jpg","HAI5":"https://i.postimg.cc/MKwRBGrm/HAI5-Jean-Kevin-Duverne.jpg","HAI6":"https://i.postimg.cc/WbVrZ4fY/HAI6-Ricardo-Ade.jpg","HAI7":"https://i.postimg.cc/02vmSNHH/HAI7-Duke-Lacroix.png","HAI8":"https://i.postimg.cc/hPnxmG3N/HAI8-Garven-Metusala.jpg","HAI9":"https://i.postimg.cc/jdTNfjk9/HAI9-Hannes-Delcroix.jpg","HAI10":"https://i.postimg.cc/ZKm3NqMS/HAI10-Leverton-Pierre.jpg","HAI11":"https://i.postimg.cc/qMrnK75d/HAI11-Danley-Jean-Jacques.jpg","HAI12":"https://i.postimg.cc/SN489Kvq/HAI12-Jean-Ricner-Bellegarde.jpg","HAI13":"https://i.postimg.cc/SN489Kvk/HAI13-TIME-HAI.jpg","HAI14":"https://i.postimg.cc/4N1cQTrr/HAI14-Christopher-Attys.jpg","HAI15":"https://i.postimg.cc/nc1mGt6y/HAI15-Derrick-Etienne-Jr.jpg","HAI16":"https://i.postimg.cc/BQCFBGrG/HAI16-Josue-Casimir.jpg","HAI17":"https://i.postimg.cc/c4c3BNpS/HAI17-Ruben-Providence.jpg","HAI18":"https://i.postimg.cc/NfxXkw3g/HAI18-Duckens-Nazon.png","HAI19":"https://i.postimg.cc/fTvdfhGM/HAI19-Louicius-Deedson.png","HAI20":"https://i.postimg.cc/bNRn9j7v/HAI20-Frantzdy-Pierrot.jpg",
+
+    // ESCÓCIA
+    "SCO1":"https://i.postimg.cc/KzsqzMNy/SCO1-ESCUDO-SCO.jpg","SCO2":"https://i.postimg.cc/3RbSRvB3/SCO2-Angus-Gunn.jpg","SCO3":"https://i.postimg.cc/W3fW3kn2/SCO3-Jack-Hendry.jpg","SCO4":"https://i.postimg.cc/PJp6856B/SCO4-Kieran-Tierney.jpg","SCO5":"https://i.postimg.cc/j2w8JSgY/SCO5-Aaron-Hickey.jpg","SCO6":"https://i.postimg.cc/fytH0R2s/SCO6-Andrew-Robertson.jpg","SCO7":"https://i.postimg.cc/Gt8Msm7r/SCO7-Scott-Mc-Kenna.jpg","SCO8":"https://i.postimg.cc/j2w8JSgs/SCO8-John-Souttar.png","SCO9":"https://i.postimg.cc/D0JCbwjv/SCO9-Anthony-Ralston.jpg","SCO10":"https://i.postimg.cc/4y78hxLN/SCO10-Grant-Hanley.jpg","SCO11":"https://i.postimg.cc/kG6jtg15/SCO11-Scott-Mc-Tominay.png","SCO12":"https://i.postimg.cc/x8Jsb1xX/SCO12-Billy-Gilmour.jpg","SCO13":"https://i.postimg.cc/BbLh1nY8/SCO13-TIME-SCO.jpg","SCO14":"https://i.postimg.cc/d3kWTVHT/SCO14-Lewis-Ferguson.png","SCO15":"https://i.postimg.cc/PJp6853D/SCO15-Ryan-Christie.jpg","SCO16":"https://i.postimg.cc/qqhmCvbn/SCO16-Kenny-Mc-Lean.jpg","SCO17":"https://i.postimg.cc/j2w8JSgP/SCO17-John-Mc-Ginn.jpg","SCO18":"https://i.postimg.cc/hvzC7ty9/SCO18-Lyndon-Dykes.png","SCO19":"https://i.postimg.cc/qqP1cHSz/SCO19-Che-Adams.jpg","SCO20":"https://i.postimg.cc/qqP1cHSh/SCO20-Ben-Gannon-Doak.jpg",
+
+    // ESTADOS UNIDOS
+    "EUA1":"https://i.postimg.cc/k4t125hr/EUA1-ESCUDO-EUA.png","EUA2":"https://i.postimg.cc/Y9mnvSyr/EUA2-Math-Freese.jpg","EUA3":"https://i.postimg.cc/50F7Xtkx/EUA3-Chris-Richards.jpg","EUA4":"https://i.postimg.cc/QtW4FMnx/EUA4-Tim-Ream.jpg","EUA5":"https://i.postimg.cc/0QJWzNHy/EUA5-Mark-Mc-Kenzie.jpg","EUA6":"https://i.postimg.cc/fL02Vbg9/EUA6-Alex-Freeman.png","EUA7":"https://i.postimg.cc/85rK7Cnv/EUA7-Antonee-Robinson.jpg","EUA8":"https://i.postimg.cc/MTjPnGrR/EUA8-Tyler-Adams.png","EUA9":"https://i.postimg.cc/zvZdK19y/EUA9-Tanner-Tessmann.jpg","EUA10":"https://i.postimg.cc/Rh5PKzjH/EUA10-Weston-Mc-Kenny.png","EUA11":"https://i.postimg.cc/SRFZCpwY/EUA11-Christian-Roldan.jpg","EUA12":"https://i.postimg.cc/fynHmh6X/EUA12-Timothy-Weah.jpg","EUA13":"https://i.postimg.cc/fynHmh6c/EUA13-TIME-EUA.jpg","EUA14":"https://i.postimg.cc/5ydPLMZ5/EUA14-Diego-Luna.png","EUA15":"https://i.postimg.cc/NFqNmwWd/EUA15-Malim-Tillman.jpg","EUA16":"https://i.postimg.cc/tJQrWHLz/EUA16-Christian-Pulisic.jpg","EUA17":"https://i.postimg.cc/2yRHhfPw/EUA17-Brenden-Aaronson.png","EUA18":"https://i.postimg.cc/SRFZCpwV/EUA18-Ricardo-Pepi.png","EUA19":"https://i.postimg.cc/Zn8wLMSH/EUA19-Haji-Wright.png","EUA20":"https://i.postimg.cc/x8DsMSWF/EUA20-Folarin-Balogun.jpg",
+
+    // PARAGUAI
+    "PAR1":"https://i.postimg.cc/RhSHjsfh/PAR1-ESCUDO-PAR.jpg","PAR2":"https://i.postimg.cc/zvxg5CSG/PAR2-Roberto-Fernandez.png","PAR3":"https://i.postimg.cc/Y0dWk6fp/PAR3-Orlando-Gill.jpg","PAR4":"https://i.postimg.cc/L5x1RtB4/PAR4-Gustavo-Gomez.jpg","PAR5":"https://i.postimg.cc/yxLZBmXY/PAR5-Fabian-Balbuena.jpg","PAR6":"https://i.postimg.cc/J0pkmNc0/PAR6-Juan-Jose-Caceres.jpg","PAR7":"https://i.postimg.cc/1XvqPGcf/PAR7-Omar-Alderete.jpg","PAR8":"https://i.postimg.cc/SRgMq67n/PAR8-Junior-Alonso.jpg","PAR9":"https://i.postimg.cc/wMwmHXct/PAR9-Mathias-Villasanti.png","PAR10":"https://i.postimg.cc/yxLZBmXc/PAR10-Diego-Gomez.jpg","PAR11":"https://i.postimg.cc/Hn6yHw4Q/PAR11-Damian-Bobadilla.jpg","PAR12":"https://i.postimg.cc/7hK2D3MS/PAR12-Andres-Cubas.jpg","PAR13":"https://i.postimg.cc/brmt8xHx/PAR13-TIME-PAR.jpg","PAR14":"https://i.postimg.cc/fy89Zcjj/PAR14-Matias-Galarza-Fonda.jpg","PAR15":"https://i.postimg.cc/7hK2D3MV/PAR15-Julio-Enciso.png","PAR16":"https://i.postimg.cc/sxThyY9m/PAR16-Alejandro-Romero-Gamarra.jpg","PAR17":"https://i.postimg.cc/T20mrx8s/PAR17-Miguel-Almiron.jpg","PAR18":"https://i.postimg.cc/VsgMjwy2/PAR18-Ramon-Sosa.jpg","PAR19":"https://i.postimg.cc/SQd8W40B/PAR19-Angel-Romero.png","PAR20":"https://i.postimg.cc/1RB6pShx/PAR20-Antonio-Sanabria.jpg",
+
+    // AUSTRÁLIA
+    "AUS1":"https://i.postimg.cc/K8PmMZwf/AUS1-ESCUDO-AUS.jpg","AUS2":"https://i.postimg.cc/wjX9m6Zb/AUS2-Mathew-Ryan.jpg","AUS3":"https://i.postimg.cc/y8m7ZVtb/AUS3-Joe-Gauci.jpg","AUS4":"https://i.postimg.cc/g2VGZYQ5/AUS4-Harry-Souttar.jpg","AUS5":"https://i.postimg.cc/GmFbycV6/AUS5-Alessandro-Circati.jpg","AUS6":"https://i.postimg.cc/Dz7nQ93x/AUS6-Jordan-Bos.jpg","AUS7":"https://i.postimg.cc/PqdTbgn3/AUS7-Aziz-Behich.jpg","AUS8":"https://i.postimg.cc/6QBtVkxb/AUS8-Cameron-Burgess.jpg","AUS9":"https://i.postimg.cc/JhRM3fCg/AUS9-Lewis-Miller.jpg","AUS10":"https://i.postimg.cc/s23sPkRF/AUS10-Milos-Degenek.jpg","AUS11":"https://i.postimg.cc/cJd07pNy/AUS11-Jackson-Irvine.jpg","AUS12":"https://i.postimg.cc/MGzq0C88/AUS12-Riley-Mc-Gree.jpg","AUS13":"https://i.postimg.cc/wB9g5CdH/AUS13-TIME-AUS.jpg","AUS14":"https://i.postimg.cc/mrTB3vGZ/AUS14-Aiden-O-Neill.jpg","AUS15":"https://i.postimg.cc/7Lqw1FyL/AUS15-Connor-Metcalfe.jpg","AUS16":"https://i.postimg.cc/HLTd0qCn/AUS16-Patrick-Yazbek.jpg","AUS17":"https://i.postimg.cc/SKVqggyk/AUS17-Craig-Goodwin.jpg","AUS18":"https://i.postimg.cc/BvNsmmqJ/AUS18-Kusini-Yengi.jpg","AUS19":"https://i.postimg.cc/6QzwMM96/AUS19-Nestory-Irankunda.jpg","AUS20":"https://i.postimg.cc/5tp1ssxt/AUS20-Mohamed-Toure.jpg",
+
+    // TURQUIA
+    "TUR1":"https://i.postimg.cc/pTX0BZTK/TUR1-ESCUDO-TUR.jpg","TUR2":"https://i.postimg.cc/cH4DcmH7/TUR2-Ugurcan-Cakir.jpg","TUR3":"https://i.postimg.cc/SsNZGrs6/TUR3-Mert-Muldur.jpg","TUR4":"https://i.postimg.cc/1t5WKHtc/TUR4-Zeki-Celik.jpg","TUR5":"https://i.postimg.cc/gJSgtZXx/TUR5-Abdulkerim-Bardakci.jpg","TUR6":"https://i.postimg.cc/HxZ6vyc8/TUR6-Caglar-Soyunku.jpg","TUR7":"https://i.postimg.cc/pTGscFhh/TUR7-Merih-Demiral.jpg","TUR8":"https://i.postimg.cc/zBtx2gbh/TUR8-Ferdi-Kadioglu.jpg","TUR9":"https://i.postimg.cc/63jMbv2G/TUR9-Kaan-Ayhan.jpg","TUR10":"https://i.postimg.cc/qRb1D3hn/TUR10-Ismail-Yuksek.jpg","TUR11":"https://i.postimg.cc/NMJdCH96/TUR11-Hakan-Calhanoglu.jpg","TUR12":"https://i.postimg.cc/wvfw4myD/TUR12-Orkun-Kokcu.jpg","TUR13":"https://i.postimg.cc/FRWTCLdg/TUR13-TIME-TUR.jpg","TUR14":"https://i.postimg.cc/cH9Fkng7/TUR14-Arda-Guler.jpg","TUR15":"https://i.postimg.cc/RFsgpH6L/TUR15-Irfan-Can-Kahvecu.jpg","TUR16":"https://i.postimg.cc/V6GKZCrg/TUR16-Yunus-Akgun.jpg","TUR17":"https://i.postimg.cc/pTGscFhZ/TUR17-Can-Uzun.jpg","TUR18":"https://i.postimg.cc/RFsgpH6g/TUR18-Baris-Alper-Yilmaz.jpg","TUR19":"https://i.postimg.cc/tTSBvxZr/TUR19-Kerem-Akturkoglu.jpg","TUR20":"https://i.postimg.cc/507sKCYn/TUR20-Kenan-Yildiz.jpg",
+
+    // ALEMANHA
+    "GER1":"https://i.postimg.cc/RhGJL7WN/GER1-ESCUDO-GER.jpg","GER2":"https://i.postimg.cc/c1c3WSXX/GER2-Marc-Andre-ter-Stegen.jpg","GER3":"https://i.postimg.cc/T2cbx6CN/GER3-Jonathan-Tah.jpg","GER4":"https://i.postimg.cc/fy5SfcVX/GER4-David-Raum.jpg","GER5":"https://i.postimg.cc/h40mnBpy/GER5-Nico-Schlotterbeck.jpg","GER6":"https://i.postimg.cc/v8vnys3N/GER6-Antonio-Rudiger.jpg","GER7":"https://i.postimg.cc/59mzJVnG/GER7-Waldemar-Anton.jpg","GER8":"https://i.postimg.cc/dQ9CFY5K/GER8-Ridle-Baku.jpg","GER9":"https://i.postimg.cc/8kbvGSZS/GER9-Maximilian-Mittelstadt.jpg","GER10":"https://i.postimg.cc/kMySCmTq/GER10-Joshua-Kimmich.jpg","GER11":"https://i.postimg.cc/fWvdsN8T/GER11-Florian-Wirtz.jpg","GER12":"https://i.postimg.cc/hPPdP5YB/GER12-Felix-Nmecha.jpg","GER13":"https://i.postimg.cc/FssLsB69/GER13-TIME-GER.jpg","GER14":"https://i.postimg.cc/xTTzT4ZT/GER14-Leon-Goretzka.jpg","GER15":"https://i.postimg.cc/DyyXyMNw/GER15-Jamal-Musiala.jpg","GER16":"https://i.postimg.cc/rFFrFPHs/GER16-Serge-Gnabry.jpg","GER17":"https://i.postimg.cc/Ghhyh5fs/GER17-Kai-Havertz.jpg","GER18":"https://i.postimg.cc/Ghhyh5fF/GER18-Leroy-Sane.jpg","GER19":"https://i.postimg.cc/hPPdP5Yx/GER19-Karim-Adeyemi.jpg","GER20":"https://i.postimg.cc/c44n4bzB/GER20-Nick-Woltemade.jpg",
+
+    // CURAÇAO
+    "CUW1":"https://i.postimg.cc/FztXC8J6/CUW1-ESCUDO-CUW.jpg","CUW2":"https://i.postimg.cc/WzRcYCJB/CUW2-Eloy-Room.jpg","CUW3":"https://i.postimg.cc/MHkJ3NQk/CUW3-Armando-Obispo.jpg","CUW4":"https://i.postimg.cc/1XphkBpW/CUW4-Sherel-Floranus.png","CUW5":"https://i.postimg.cc/tJ0GvwxG/CUW5-Jurien-Gaari.jpg","CUW6":"https://i.postimg.cc/4yzkDPzS/CUW6-Joshua-Brenet.jpg","CUW7":"https://i.postimg.cc/mkQfvjQK/CUW7-Roshon-Van-Eijma.png","CUW8":"https://i.postimg.cc/mkQfvjQq/CUW8-Shurandy-Sambo.jpg","CUW9":"https://i.postimg.cc/KjnS6fnd/CUW9-Livano-Comenencia.jpg","CUW10":"https://i.postimg.cc/8chQ24RQ/CUW10-Godfried-Roemeratoe.jpg","CUW11":"https://i.postimg.cc/Rhc5kd7x/CUW11-Juninho-Bacuna.jpg","CUW12":"https://i.postimg.cc/zvnZs7C1/CUW12-Leandro-Bacuna.jpg","CUW13":"https://i.postimg.cc/5ywdhgBJ/CUW13-TIME-CUW.jpg","CUW14":"https://i.postimg.cc/rsSXBj1c/CUW14-Tahith-Chong.jpg","CUW15":"https://i.postimg.cc/tJhQKk39/CUW15-Kenji-Gorre.jpg","CUW16":"https://i.postimg.cc/QCpG2mQX/CUW16-Jearl-Margaritha.jpg","CUW17":"https://i.postimg.cc/KjnS6fPc/CUW17-Jurgen-Locadia.png","CUW18":"https://i.postimg.cc/1XphkBGt/CUW18-Jeremy-Antonisse.jpg","CUW19":"https://i.postimg.cc/Rhc5kd7h/CUW19-Gervane-Kastaneer.png","CUW20":"https://i.postimg.cc/D0qk96rm/CUW20-Sontje-Hansen.jpg",
+
+    // COSTA DO MARFIM
+    "CIV1":"https://i.postimg.cc/HkPY4S32/CIV1-ESCUDO-CIV.jpg","CIV2":"https://i.postimg.cc/6p1WLHzM/CIV2-Yahia-Fofana.jpg","CIV3":"https://i.postimg.cc/VkHfB747/CIV3-Ghislain-Konan.jpg","CIV4":"https://i.postimg.cc/qvZJXmQb/CIV4-Wilfried-Singo.jpg","CIV5":"https://i.postimg.cc/VkHfB74Z/CIV5-Odilon-Kossounou.jpg","CIV6":"https://i.postimg.cc/2SXkFHTg/CIV6-Evan-Ndicka.jpg","CIV7":"https://i.postimg.cc/jSkxQ8vG/CIV7-Willy-Boly.jpg","CIV8":"https://i.postimg.cc/2SXkFHTs/CIV8-Emmanuel-Agbadou.jpg","CIV9":"https://i.postimg.cc/x1FfystS/CIV9-Ousmane-Diomande.jpg","CIV10":"https://i.postimg.cc/rwYVChQk/CIV10-Franck-Kessie.jpg","CIV11":"https://i.postimg.cc/rwYVChQT/CIV11-Seko-Fofana.jpg","CIV12":"https://i.postimg.cc/YSGpX1yP/CIV12-Ibrahim-Sangare.jpg","CIV13":"https://i.postimg.cc/BvLqhxwd/CIV13-TIME-CIV.jpg","CIV14":"https://i.postimg.cc/437J8zSC/CIV14-Jean-Philippe-Gbamin.jpg","CIV15":"https://i.postimg.cc/DzJ2CqMk/CIV15-Amad-Diallo.jpg","CIV16":"https://i.postimg.cc/BvLqhxVG/CIV16-Sebastien-Haller.jpg","CIV17":"https://i.postimg.cc/hGzSC95c/CIV17-Simon-Adingra.jpg","CIV18":"https://i.postimg.cc/25bzH4Kk/CIV18-Yan-Diomande.jpg","CIV19":"https://i.postimg.cc/k56njxpM/CIV19-Evann-Guessand.jpg","CIV20":"https://i.postimg.cc/nLjHdvPc/CIV20-Oumar-Diakite.jpg",
+
+    // EQUADOR
+    "ECU1":"https://i.postimg.cc/pyb8TW58/ECU1-ESCUDO-ECU.jpg","ECU2":"https://i.postimg.cc/3W5pR80X/ECU2-Hernan-Galindez.jpg","ECU3":"https://i.postimg.cc/7b876HJn/ECU3-Gonzalo-Valle.jpg","ECU4":"https://i.postimg.cc/HjD5xY84/ECU4-Piero-Hincapie.jpg","ECU5":"https://i.postimg.cc/mhfMDL13/ECU5-Pervis-Estupinan.jpg","ECU6":"https://i.postimg.cc/rzXWmVRn/ECU6-Willian-Pacho.jpg","ECU7":"https://i.postimg.cc/w38JvqR4/ECU7-Angelo-Preciado.jpg","ECU8":"https://i.postimg.cc/yW49d13v/ECU8-Joel-Ordonez.jpg","ECU9":"https://i.postimg.cc/jC0N5xnM/ECU9-Moises-Caicedo.jpg","ECU10":"https://i.postimg.cc/RC3DNgJj/ECU10-Alan-Franco.jpg","ECU11":"https://i.postimg.cc/MZcFv9fC/ECU11-Kendry-Paez.jpg","ECU12":"https://i.postimg.cc/L4qbnxZd/ECU12-Pedro-Vite.jpg","ECU13":"https://i.postimg.cc/1RgjfvNh/ECU13-TIME-ECU.jpg","ECU14":"https://i.postimg.cc/nVsPC3QJ/ECU14-John-Veboah.jpg","ECU15":"https://i.postimg.cc/9X4nrLq2/ECU15-Leonardo-Campana.jpg","ECU16":"https://i.postimg.cc/gcwTng6d/ECU16-Gonzalo-Plata.jpg","ECU17":"https://i.postimg.cc/v81Nc06b/ECU17-Nilson-Angulo.jpg","ECU18":"https://i.postimg.cc/J7y2GpB4/ECU18-Alan-Minda.jpg","ECU19":"https://i.postimg.cc/dQ7xL5TQ/ECU19-Kevin-Rodriguez.jpg","ECU20":"https://i.postimg.cc/gcwTng6j/ECU20-Enner-Valencia.jpg",
+
+    // HOLANDA
+    "NED1":"https://i.postimg.cc/13Lt1C6s/NED1-ESCUDO-NED.jpg","NED2":"https://i.postimg.cc/Bnd6fYDv/NED2-Bart-Verbruggen.jpg","NED3":"https://i.postimg.cc/8zq5gKW5/NED3-Virgil-van-Dijk.jpg","NED4":"https://i.postimg.cc/rwvm2nWs/NED4-Micky-van-de-Ven.jpg","NED5":"https://i.postimg.cc/52Z0W7vj/NED5-Jurrien-Timber.jpg","NED6":"https://i.postimg.cc/sgtXC6Sh/NED6-Denzel-Dumfries.jpg","NED7":"https://i.postimg.cc/dVz1cHd7/NED7-Nathan-Ake.jpg","NED8":"https://i.postimg.cc/g2fJbSRX/NED8-Jeremie-Frimpong.jpg","NED9":"https://i.postimg.cc/htHjRyxQ/NED9-Jan-Paul-van-Hecke.jpg","NED10":"https://i.postimg.cc/x1WCVxHH/NED10-Tijjani-Reijnders.jpg","NED11":"https://i.postimg.cc/fR6LQ2Xc/NED11-Ryan-Gravenberch.jpg","NED12":"https://i.postimg.cc/QdRtZ45p/NED12-Teun-Koopmeiners.jpg","NED13":"https://i.postimg.cc/mg0DWXMN/NED13-TIME-NED.jpg","NED14":"https://i.postimg.cc/g2fJbSR4/NED14-Frenkie-de-Jong.jpg","NED15":"https://i.postimg.cc/YSYSr6fW/NED15-Xavi-Simons.jpg","NED16":"https://i.postimg.cc/q7y7JsXK/NED16-Justin-Kluivert.jpg","NED17":"https://i.postimg.cc/d0r0s2md/NED17-Memphis-Depay.jpg","NED18":"https://i.postimg.cc/q7y7JsXc/NED18-Donyell-Malen.jpg","NED19":"https://i.postimg.cc/GpGpLFJF/NED19-Wout-Weghorst.jpg","NED20":"https://i.postimg.cc/PqYqXWzz/NED20-Cody-Gakpo.jpg",
+
+    // JAPÃO
+    "JPN1":"https://i.postimg.cc/KY8yVtp1/JPN1-ESCUDO-JPN.png","JPN2":"https://i.postimg.cc/s2gR85HZ/JPN2-Zion-Suzuki.png","JPN3":"https://i.postimg.cc/7LZycStz/JPN3-Henry-Heroki-Mochizuki.png","JPN4":"https://i.postimg.cc/XvY0h91d/JPN4-Ayumu-Seko.png","JPN5":"https://i.postimg.cc/3wxH62fp/JPN5-Junnosuke-Suzuki.png","JPN6":"https://i.postimg.cc/KY8yVtpP/JPN6-Shogo-Taniguchi.png","JPN7":"https://i.postimg.cc/bvwjM1V9/JPN7-Tsuyoshi-Watanabe.png","JPN8":"https://i.postimg.cc/N0jwVRCx/JPN8-Kaishu-Sano.png","JPN9":"https://i.postimg.cc/jjSr9y3X/JPN9-Yuki-Soma.png","JPN10":"https://i.postimg.cc/jj3rrCBf/JPN10-Ao-Tanaka.png","JPN11":"https://i.postimg.cc/SK1ppjHC/JPN11-Daichi-Kamada.png","JPN12":"https://i.postimg.cc/hGZqqhN9/JPN12-Takefusa-Kubo.png","JPN13":"https://i.postimg.cc/JhYWWtS3/JPN13-TIME-JPN.png","JPN14":"https://i.postimg.cc/PqVkkN0y/JPN14-Ritsu-Doan.png","JPN15":"https://i.postimg.cc/g0tPPr14/JPN15-Keito-Nakamura.png","JPN16":"https://i.postimg.cc/s2HRR1bT/JPN16-Takumi-Minamino.png","JPN17":"https://i.postimg.cc/MG388Xgs/JPN17-Shuto-Machino.png","JPN18":"https://i.postimg.cc/Zqshh0XM/JPN18-Junya-Ito.png","JPN19":"https://i.postimg.cc/bvVjjd4K/JPN19-Koki-Ogawa.png","JPN20":"https://i.postimg.cc/W4YPPtxC/JPN20-Ayase-Ueda.png",
+
+    // SUÉCIA
+    "SWE1":"https://i.postimg.cc/ZKnpTQ9G/SWE1-ESCUDO-SWE.png","SWE2":"https://i.postimg.cc/SNP8jG8v/SWE2-Victor-Johansson.jpg","SWE3":"https://i.postimg.cc/kXH8Dy8h/SWE3-Isak-Hien.jpg","SWE4":"https://i.postimg.cc/4N0tn1t0/SWE4-Gabriel-Gudmundsson.jpg","SWE5":"https://i.postimg.cc/bN5bdRkf/SWE5-Emil-Holm.png","SWE6":"https://i.postimg.cc/Wbyrt7gv/SWE6-Victor-Nilsson-Lindelof.jpg","SWE7":"https://i.postimg.cc/VLhM5FnY/SWE7-Gustaf-Lagerbielke.png","SWE8":"https://i.postimg.cc/yYG9WTcB/SWE8-Lucas-Bergvall.jpg","SWE9":"https://i.postimg.cc/3JqpWZmJ/SWE9-Hugo-Larsson.png","SWE10":"https://i.postimg.cc/8PYWsbMz/SWE10-Jesper-Karlstrom.jpg","SWE11":"https://i.postimg.cc/ZKQ30LpR/SWE11-Yasin-Ayari.png","SWE12":"https://i.postimg.cc/qvCKKCx7/SWE12-Mattias-Svanberg.png","SWE13":"https://i.postimg.cc/fR0dd0fz/SWE13-TIME-SWE.jpg","SWE14":"https://i.postimg.cc/GmsDDsx3/SWE14-Daniel-Svensson.jpg","SWE15":"https://i.postimg.cc/sgZWWZ4X/SWE15-Ken-Sema.jpg","SWE16":"https://i.postimg.cc/wjsNNsQt/SWE16-Roony-Bardghji.png","SWE17":"https://i.postimg.cc/g26hh6HR/SWE17-Dejan-Kulusevski.png","SWE18":"https://i.postimg.cc/FHJSSJVd/SWE18-Anthony-Elanga.jpg","SWE19":"https://i.postimg.cc/pLnjjnJ5/SWE19-Alexander-Isak.jpg","SWE20":"https://i.postimg.cc/T3WbbWJ9/SWE20-Viktor-Gyokeres.jpg",
+
+    // TUNÍSIA
+    "TUN1":"https://i.postimg.cc/TYj1vq0k/TUN1-ESCUDO-TUN.jpg","TUN2":"https://i.postimg.cc/m23kWNjn/TUN2-Bechir-Ben-Said.jpg","TUN3":"https://i.postimg.cc/X7Kq6cLD/TUN3-Aymen-Dahmen.jpg","TUN4":"https://i.postimg.cc/GhPtnJK5/TUN4-Yan-Valery.jpg","TUN5":"https://i.postimg.cc/MK0HJb54/TUN5-Montassar-Talbi.png","TUN6":"https://i.postimg.cc/PrbJnzyB/TUN6-Yassine-Meriah.jpg","TUN7":"https://i.postimg.cc/SNLRb7dB/TUN7-Ali-Abdi.png","TUN8":"https://i.postimg.cc/zXwvYSpZ/TUN8-Dylan-Bronn.jpg","TUN9":"https://i.postimg.cc/vZQBYg2q/TUN9-Ellyes-Skhiri.jpg","TUN10":"https://i.postimg.cc/CxF1hBrr/TUN10-Aissa-Laidouni.jpg","TUN11":"https://i.postimg.cc/52x04YKk/TUN11-Ferjani-Sassi.jpg","TUN12":"https://i.postimg.cc/SxysS21P/TUN12-Mohamed-Ali-Ben-Romdhane.jpg","TUN13":"https://i.postimg.cc/P5txXpV0/TUN13-TIME-TUN.jpg","TUN14":"https://i.postimg.cc/htSjDzZw/TUN14-Hannibal-Mejbri.jpg","TUN15":"https://i.postimg.cc/VkY6frZ3/TUN15-Elias-Achouri.jpg","TUN16":"https://i.postimg.cc/8z15pJn8/TUN16-Elias-Saad.jpg","TUN17":"https://i.postimg.cc/vZQBYgSF/TUN17-Hazem-Mastouri.jpg","TUN18":"https://i.postimg.cc/9QWMmRNH/TUN18-Ismael-Gharbi.jpg","TUN19":"https://i.postimg.cc/mgbDLz6G/TUN19-Sayfallah-Ltaief.jpg","TUN20":"https://i.postimg.cc/MpWT6Mrw/TUN20-Naim-Sliti.png",
+
+    // BÉLGICA
+    "BEL1":"https://i.postimg.cc/02xTBLQv/BEL1-ESCUDO-BEL.png","BEL2":"https://i.postimg.cc/gkDCFNX9/BEL2-Thibaut-Courtois.jpg","BEL3":"https://i.postimg.cc/WbnBLXDB/BEL3-Arthur-Theate.jpg","BEL4":"https://i.postimg.cc/sDckdwBt/BEL4-Timothy-Castagne.jpg","BEL5":"https://i.postimg.cc/4N5DkB7k/BEL5-Zeno-Debast.png","BEL6":"https://i.postimg.cc/qMLPVjh0/BEL6-Brandon-Mechele.png","BEL7":"https://i.postimg.cc/4N5DkB7G/BEL7-Maxim-De-Cuyper.jpg","BEL8":"https://i.postimg.cc/tC5KQ2ZX/BEL8-Thomas-Meunier.jpg","BEL9":"https://i.postimg.cc/28wsR2b5/BEL9-Youri-Tielemans.png","BEL10":"https://i.postimg.cc/650kJY2T/BEL10-Amadou-Onana.jpg","BEL11":"https://i.postimg.cc/hPrkWpzX/BEL11-Nicolas-Raskin.jpg","BEL12":"https://i.postimg.cc/qMLPVjhn/BEL12-Alexis-Saelemaekers.jpg","BEL13":"https://i.postimg.cc/RZZjMKKh/BEL13-TIME-BEL.jpg","BEL14":"https://i.postimg.cc/6ppD9nnT/BEL14-Hans-Vanaken.jpg","BEL15":"https://i.postimg.cc/MpphWVVv/BEL15-Kevin-De-Bruyne.jpg","BEL16":"https://i.postimg.cc/522ZxLLX/BEL16-Jeremy-Doku.jpg","BEL17":"https://i.postimg.cc/MpphWVVB/BEL17-Charles-De-Ketelaere.jpg","BEL18":"https://i.postimg.cc/fRR6wmm9/BEL18-Leandro-Trossard.jpg","BEL19":"https://i.postimg.cc/NjjWgmmr/BEL19-Lois-Openda.jpg","BEL20":"https://i.postimg.cc/YCCJpYYg/BEL20-Romelu-Lukaku.png",
+
+    // EGITO
+    "EGY1":"https://i.postimg.cc/t40GzYxv/EGY1-ESCUDO-EGY.jpg","EGY2":"https://i.postimg.cc/zGnZ28Cw/EGY2-Mohamed-El-Shenawy.jpg","EGY3":"https://i.postimg.cc/mgQfpBYV/EGY3-Mohamed-Hany.jpg","EGY4":"https://i.postimg.cc/Bnx974Tg/EGY4-Mohamed-Hamdy.jpg","EGY5":"https://i.postimg.cc/GmkwgdFj/EGY5-Yasser-Ibrahim.jpg","EGY6":"https://i.postimg.cc/mgQfpBYK/EGY6-Khaled-Sobhi.jpg","EGY7":"https://i.postimg.cc/fRxnqD74/EGY7-Ramy-Rabia.png","EGY8":"https://i.postimg.cc/dV8PNwRJ/EGY8-Hossam-Abdelmaguid.jpg","EGY9":"https://i.postimg.cc/zGnZ28wJ/EGY9-Ahmed-Fatouh.png","EGY10":"https://i.postimg.cc/43sCrqwn/EGY10-Marwan-Attia.jpg","EGY11":"https://i.postimg.cc/Zq4k12jy/EGY11-Zizo.jpg","EGY12":"https://i.postimg.cc/5tbcZTp8/EGY12-Hamdy-Fathy.jpg","EGY13":"https://i.postimg.cc/YqWJjMst/EGY13-TIME-EGY.jpg","EGY14":"https://i.postimg.cc/q7wf0wZn/EGY14-Mohamed-Lasheen.jpg","EGY15":"https://i.postimg.cc/9fb3VbNG/EGY15-Emam-Ashour.jpg","EGY16":"https://i.postimg.cc/s2mFym0H/EGY16-Osama-Faisal.jpg","EGY17":"https://i.postimg.cc/W48Rj8f5/EGY17-Mohamed-Salah.jpg","EGY18":"https://i.postimg.cc/R0dr9dbD/EGY18-Mostafa-Mohamed.jpg","EGY19":"https://i.postimg.cc/8C48D4n9/EGY19-Trezeguet.png","EGY20":"https://i.postimg.cc/fLRGbd6B/EGY20-Omar-Marmoush.jpg",
+
+    // IRÃ
+    "IRN1":"https://i.postimg.cc/QN9TBykd/IRN1-ESCUDO-IRN.png","IRN2":"https://i.postimg.cc/gcXZwTqR/IRN2-Alireza-Beiranvand.jpg","IRN3":"https://i.postimg.cc/c1gnKbMw/IRN3-Morteza-Pouraliganji.jpg","IRN4":"https://i.postimg.cc/jqw7WFQz/IRN4-Ehsan-Hajsafi.jpg","IRN5":"https://i.postimg.cc/L4Y1qbBj/IRN5-Milad-Mohammadi.jpg","IRN6":"https://i.postimg.cc/jqpJy4ZJ/IRN6-Shoja-Khalilzadeh.jpg","IRN7":"https://i.postimg.cc/NG3rRkpT/IRN7-Ramin-Rezaeian.jpg","IRN8":"https://i.postimg.cc/zDsRTF0h/IRN8-Hossein-Kanaani.jpg","IRN9":"https://i.postimg.cc/h4k7V1pT/IRN9-Sadegh-Moharrami.jpg","IRN10":"https://i.postimg.cc/jqpJy4Z6/IRN10-Saleh-Hardani.jpg","IRN11":"https://i.postimg.cc/WpBJ0wX6/IRN11-Saeed-Ezatolahi.jpg","IRN12":"https://i.postimg.cc/T2zWnJCJ/IRN12-Saman-Ghoddos.jpg","IRN13":"https://i.postimg.cc/nVyQqG01/IRN13-TIME-IRN.jpg","IRN14":"https://i.postimg.cc/c1p8fBXX/IRN14-Omid-Noorafkan.png","IRN15":"https://i.postimg.cc/jqpJy4Z8/IRN15-Roozbeh-Cheshmi.jpg","IRN16":"https://i.postimg.cc/SQBzcfDT/IRN16-Mohammad-Mohebi.png","IRN17":"https://i.postimg.cc/T2zWnJCZ/IRN17-Sardar-Azmoun.png","IRN18":"https://i.postimg.cc/X79BLBzx/IRN18-Mehdi-Taremi.jpg","IRN19":"https://i.postimg.cc/X79BLBzs/IRN19-Alireza-Jahanbakhsh.jpg","IRN20":"https://i.postimg.cc/L6jgDgbC/IRN20-Ali-Gholizadeh.jpg",
+
+    // NOVA ZELÂNDIA
+    "NZL1":"https://i.postimg.cc/WbpcWQWF/NZL1-ESCUDO-NZL.png","NZL2":"https://i.postimg.cc/yY6CQwQc/NZL2-Max-Crocombe-Payne.jpg","NZL3":"https://i.postimg.cc/J4TV9Pvh/NZL3-Alex-Paulsen.jpg","NZL4":"https://i.postimg.cc/X72STQmJ/NZL4-Michael-Boxall.jpg","NZL5":"https://i.postimg.cc/MKs2hdNQ/NZL5-Liberato-Cacace.jpg","NZL6":"https://i.postimg.cc/zXdZ906R/NZL6-Tim-Payne.jpg","NZL7":"https://i.postimg.cc/rFhXvQ34/NZL7-Tyler-Bindon.jpg","NZL8":"https://i.postimg.cc/BQh9dMkD/NZL8-Francis-de-Vries.jpg","NZL9":"https://i.postimg.cc/J4TV9PvN/NZL9-Finn-Surman.jpg","NZL10":"https://i.postimg.cc/fWfhvwKN/NZL10-Joe-Bell.jpg","NZL11":"https://i.postimg.cc/QNJrqXbj/NZL11-Sarpreet-Singh.jpg","NZL12":"https://i.postimg.cc/4N4RLrLk/NZL12-Ryan-Thomas.png","NZL13":"https://i.postimg.cc/28jNcPcf/NZL13-TIME-NZL.jpg","NZL14":"https://i.postimg.cc/4N4RLr8j/NZL14-Matthew-Garbett.jpg","NZL15":"https://i.postimg.cc/WbpcWQWV/NZL15-Marko-Stamenic.png","NZL16":"https://i.postimg.cc/rFy2nvnM/NZL16-Ben-Old.jpg","NZL17":"https://i.postimg.cc/tCRGSLSX/NZL17-Chris-Wood.jpg","NZL18":"https://i.postimg.cc/fTWQ262b/NZL18-Elijah-Just.jpg","NZL19":"https://i.postimg.cc/0251WLWy/NZL19-Callum-Mc-Cowatt.jpg","NZL20":"https://i.postimg.cc/CLMpPWPd/NZL20-Kosta-Barbarouses.jpg",
+
+    // ESPANHA
+    "ESP1":"https://i.postimg.cc/tRZrzyHy/ESP1-ESCUDO-ESP.jpg","ESP2":"https://i.postimg.cc/T2LkcGXY/ESP2-Unai-Simon.jpg","ESP3":"https://i.postimg.cc/9XRxBVjX/ESP3-Robin-Le-Normand.jpg","ESP4":"https://i.postimg.cc/MZMsYx8p/ESP4-Aymeric-Laporte.jpg","ESP5":"https://i.postimg.cc/mZzdSRGr/ESP5-Dean-Huijsen.jpg","ESP6":"https://i.postimg.cc/2jbHxmfV/ESP6-Pedro-Porro.jpg","ESP7":"https://i.postimg.cc/c1pF9jsW/ESP7-Dani-Carvajal.jpg","ESP8":"https://i.postimg.cc/RCkgs8MM/ESP8-Marc-Cucurella.jpg","ESP9":"https://i.postimg.cc/BZrmYyqS/ESP9-Martin-Zubimendi.jpg","ESP10":"https://i.postimg.cc/L4cxC7H8/ESP10-Rodri.jpg","ESP11":"https://i.postimg.cc/J7fp6g10/ESP11-Pedri.jpg","ESP12":"https://i.postimg.cc/qBP1bYk7/ESP12-Fabian-Ruiz.jpg","ESP13":"https://i.postimg.cc/h4k2ywSf/ESP13-TIME-ESP.jpg","ESP14":"https://i.postimg.cc/05TVW38M/ESP14-Mikel-Merino.jpg","ESP15":"https://i.postimg.cc/pVwsG72n/ESP15-Lamine-Yamal.jpg","ESP16":"https://i.postimg.cc/T2zt7SRm/ESP16-Dani-Olmo.jpg","ESP17":"https://i.postimg.cc/dQb5HXqC/ESP17-Nico-Williams.jpg","ESP18":"https://i.postimg.cc/fWG82Fw7/ESP18-Ferran-Torres.jpg","ESP19":"https://i.postimg.cc/ryBfnb8C/ESP19-Alvaro-Morata.jpg","ESP20":"https://i.postimg.cc/jqpMg9sX/ESP20-Mikel-Oyarzabal.jpg",
+
+    // CABO VERDE
+    "CPV1":"https://i.postimg.cc/zGsDVq5L/CPV1-ESCUDO-CPV.png","CPV2":"https://i.postimg.cc/XYRNpn3q/CPV2-Vozinha.jpg","CPV3":"https://i.postimg.cc/T3z2pTGK/CPV3-Logan-Costa.jpg","CPV4":"https://i.postimg.cc/fRGWJMZ0/CPV4-Pico.png","CPV5":"https://i.postimg.cc/Zq6bNXKd/CPV5-Diney.png","CPV6":"https://i.postimg.cc/rp5V47FR/CPV6-Steven-Moreira.jpg","CPV7":"https://i.postimg.cc/R0wSt2Vn/CPV7-Wagner-Pina.png","CPV8":"https://i.postimg.cc/nLqFmNc7/CPV8-Joao-Paulo.jpg","CPV9":"https://i.postimg.cc/6QCWZF50/CPV9-Yannick-Semedo.jpg","CPV10":"https://i.postimg.cc/dVktsLbB/CPV10-Kevin-Pina.jpg","CPV11":"https://i.postimg.cc/DwJyv89N/CPV11-Patrick-Andrade.jpg","CPV12":"https://i.postimg.cc/mgz2LtvK/CPV12-Jamiro-Monteiro.jpg","CPV13":"https://i.postimg.cc/kg6XJ2rr/CPV13-TIME-CPV.jpg","CPV14":"https://i.postimg.cc/MpMK6vCN/CPV14-Deroy-Duarte.jpg","CPV15":"https://i.postimg.cc/wjyTq1K9/CPV15-Garry-Rodrigues.jpg","CPV16":"https://i.postimg.cc/SxBQJm43/CPV16-Jovane-Cabral.jpg","CPV17":"https://i.postimg.cc/YC52htkc/CPV17-Ryan-Mendes.jpg","CPV18":"https://i.postimg.cc/W1Bphsjc/CPV18-Dailon-Livramento.jpg","CPV19":"https://i.postimg.cc/Cx3MzwYY/CPV19-Willy-Semedo.jpg","CPV20":"https://i.postimg.cc/FHMF7hmN/CPV20-Bebe.jpg",
+
+    // ARÁBIA SAUDITA
+    "KSA1":"https://i.postimg.cc/kgpsShYk/KSA1-ESCUDO-KSA.png","KSA2":"https://i.postimg.cc/L8bDP004/KSA2-Nawaf-Alaqidi.jpg","KSA3":"https://i.postimg.cc/ht5sm33K/KSA3-Abdulrahman-Al-Sanbi.jpg","KSA4":"https://i.postimg.cc/jSFcfkkx/KSA4-Saud-Abdulhamid.jpg","KSA5":"https://i.postimg.cc/cLbh355r/KSA5-Nawaf-Boushal.png","KSA6":"https://i.postimg.cc/7ZW9zQQ5/KSA6-Jehad-Thakri.jpg","KSA7":"https://i.postimg.cc/vZNhnSS1/KSA7-Moteb-Al-Harbi.jpg","KSA8":"https://i.postimg.cc/6pmcZ11G/KSA8-Hassan-Altambakti.jpg","KSA9":"https://i.postimg.cc/wjG2NbbL/KSA9-Musab-Aljuwayr.jpg","KSA10":"https://i.postimg.cc/XYzL5DDw/KSA10-Ziyad-Aljohani.png","KSA11":"https://i.postimg.cc/P5RyDFF1/KSA11-Abdullah-Alkhaibari.jpg","KSA12":"https://i.postimg.cc/43H5Qbry/KSA12-Nasser-Aldawsari.jpg","KSA13":"https://i.postimg.cc/Pqv4QzBD/KSA13-TIME-KSA.jpg","KSA14":"https://i.postimg.cc/bvST9HK2/KSA14-Saleh-Abu-Alshamat.png","KSA15":"https://i.postimg.cc/ZqvcxF16/KSA15-Marwan-Alsahafi.png","KSA16":"https://i.postimg.cc/rpRJNCv1/KSA16-Salem-Aldawsari.jpg","KSA17":"https://i.postimg.cc/yN3PyXwy/KSA17-Abdulrahman-Al-Aboud.jpg","KSA18":"https://i.postimg.cc/rpRJNCvJ/KSA18-Feras-Albrikan.jpg","KSA19":"https://i.postimg.cc/N024k7WN/KSA19-Saleh-Alshehri.jpg","KSA20":"https://i.postimg.cc/s2Gc49tH/KSA20-Abdullah-Al-Hamdan.jpg",
+
+    // URUGUAI
+    "URU1":"https://i.postimg.cc/zBvwdwbW/URU1-ESCUDO-URU.jpg","URU2":"https://i.postimg.cc/qRFsWtyq/URU2-Sergio-Rochet.jpg","URU3":"https://i.postimg.cc/MTL7gcVn/URU3-Santiago-Mele.jpg","URU4":"https://i.postimg.cc/sXLYbB71/URU4-Ronald-Araujo.jpg","URU5":"https://i.postimg.cc/ZRQ8X9pC/URU5-Jose-Maria-Gimenez.jpg","URU6":"https://i.postimg.cc/vBKrC1f1/URU6-Sebastian-Caceres.jpg","URU7":"https://i.postimg.cc/rmH17dx0/URU7-Mathias-Olivera.jpg","URU8":"https://i.postimg.cc/ZRQ8X9py/URU8-Guillermo-Varela.jpg","URU9":"https://i.postimg.cc/50rBDHLz/URU9-Nahitan-Nandez.jpg","URU10":"https://i.postimg.cc/9Mkds4ZT/URU10-Federico-Valverde.jpg","URU11":"https://i.postimg.cc/4d06jKVV/URU11-Giorgian-De-Arrascaeta.jpg","URU12":"https://i.postimg.cc/gJ7V1w8v/URU12-Rodrigo-Bentancur.jpg","URU13":"https://i.postimg.cc/9Mkds4Zd/URU13-TIME-URU.jpg","URU14":"https://i.postimg.cc/vBKrC1f7/URU14-Manuel-Ugarte.jpg","URU15":"https://i.postimg.cc/3RqXzymF/URU15-Nicolas-de-la-Cruz.jpg","URU16":"https://i.postimg.cc/C12G9ZkN/URU16-Maxi-Araujo.jpg","URU17":"https://i.postimg.cc/k4HQLVKs/URU17-Darwin-Nunez.jpg","URU18":"https://i.postimg.cc/sXLYbB7w/URU18-Federico-Vinas.jpg","URU19":"https://i.postimg.cc/26tQgqh0/URU19-Rodrigo-Aguirre.jpg","URU20":"https://i.postimg.cc/NMn6ZymJ/URU20-Facundo-Pellistri.jpg",
+
+    // FRANÇA
+    "FRA1":"https://i.postimg.cc/ZR03Pr06/FRA1-ESCUDO-FRA.jpg","FRA2":"https://i.postimg.cc/DZmsQqmq/FRA2-Mike-Maignan.jpg","FRA3":"https://i.postimg.cc/bJdb0Qdx/FRA3-Theo-Hernandez.jpg","FRA4":"https://i.postimg.cc/FR1cbj1g/FRA4-William-Saliba.jpg","FRA5":"https://i.postimg.cc/JntJ3bt3/FRA5-Jules-Kounde.jpg","FRA6":"https://i.postimg.cc/50jv5wjS/FRA6-Ibrahima-Konate.jpg","FRA7":"https://i.postimg.cc/hjhx89hr/FRA7-Dayot-Upamecano.jpg","FRA8":"https://i.postimg.cc/k4D8NxDs/FRA8-Lucas-Digne.jpg","FRA9":"https://i.postimg.cc/XJXFKwXQ/FRA9-Aurelien-Tchouameni.jpg","FRA10":"https://i.postimg.cc/1t460p4v/FRA10-Eduardo-Camavinga.jpg","FRA11":"https://i.postimg.cc/DZmsQqmC/FRA11-Manu-Kone.jpg","FRA12":"https://i.postimg.cc/cH6Y7Q69/FRA12-Adrien-Rabiot.jpg","FRA13":"https://i.postimg.cc/j5CN6zC3/FRA13-TIME-FRA.jpg","FRA14":"https://i.postimg.cc/Ssj8LWjt/FRA14-Michael-Olise.jpg","FRA15":"https://i.postimg.cc/xCqHGKq4/FRA15-Ousmane-Dembele.jpg","FRA16":"https://i.postimg.cc/j5CN6zC1/FRA16-Bradley-Barcola.jpg","FRA17":"https://i.postimg.cc/RFqf1cq8/FRA17-Desire-Doue.jpg","FRA18":"https://i.postimg.cc/3RWpjgWV/FRA18-Kingsley-Coman.jpg","FRA19":"https://i.postimg.cc/zBMhxVRx/FRA19-Hugo-Ekitike.jpg","FRA20":"https://i.postimg.cc/W3KZ5hJX/FRA20-Kylian-Mbappe.jpg",
+
+    // SENEGAL
+    "SEN1":"https://i.postimg.cc/cLwSDHvN/SEN1-ESCUDO-SEN.png","SEN2":"https://i.postimg.cc/K8B29z12/SEN2-Eduardo-Mendy.jpg","SEN3":"https://i.postimg.cc/wjLpWv1g/SEN3-Yehvann-Diouf.png","SEN4":"https://i.postimg.cc/sg7rnXMz/SEN4-Moussa-Niakhate.jpg","SEN5":"https://i.postimg.cc/13wQWt8y/SEN5-Abdoulaye-Seck.png","SEN6":"https://i.postimg.cc/dVrYW1hs/SEN6-Ismail-Jakobs.jpg","SEN7":"https://i.postimg.cc/L8LpyXJ4/SEN7-El-Hadji-Malick-Diouf.png","SEN8":"https://i.postimg.cc/W1gv93db/SEN8-Kalidou-Koulibaly.jpg","SEN9":"https://i.postimg.cc/MpVSsTnp/SEN9-Idrissa-Gana-Gueye.jpg","SEN10":"https://i.postimg.cc/cJWNPS3N/SEN10-Pape-Matar-Sarr.jpg","SEN11":"https://i.postimg.cc/GpR16CDn/SEN11-Pape-Gueye.jpg","SEN12":"https://i.postimg.cc/6QKNFXZw/SEN12-Habib-Diarra.jpg","SEN13":"https://i.postimg.cc/GpR16CDb/SEN13-TIME-SEN.png","SEN14":"https://i.postimg.cc/k5CdLmSn/SEN14-Lamine-Camara.jpg","SEN15":"https://i.postimg.cc/xdQSB2mj/SEN15-Sadio-Mane.png","SEN16":"https://i.postimg.cc/yNKz2HRd/SEN16-Ismaila-Sarr.jpg","SEN17":"https://i.postimg.cc/TPxXB6bp/SEN17-Boulaye-Dia.jpg","SEN18":"https://i.postimg.cc/q7rdWTKN/SEN18-Iliman-Ndiaye.jpg","SEN19":"https://i.postimg.cc/YS7wTHFG/SEN19-Nicolas-Jackson.jpg","SEN20":"https://i.postimg.cc/0NvqhsSw/SEN20-Krepin-Diatta.jpg",
+
+    // IRAQUE
+    "IRQ1":"https://i.postimg.cc/vHWyhT1z/IRQ1-ESCUDO-IRQ.jpg","IRQ2":"https://i.postimg.cc/7Yg49hCK/IRQ2-Jalal-Hassan.jpg","IRQ3":"https://i.postimg.cc/4NzGPyK2/IRQ3-Rebin-Sulaka.jpg","IRQ4":"https://i.postimg.cc/fTxsCy3g/IRQ4-Hussein-Ali.jpg","IRQ5":"https://i.postimg.cc/5NwJgyHR/IRQ5-Akam-Hashem.png","IRQ6":"https://i.postimg.cc/3Jgh1Ny6/IRQ6-Merchas-Doski.jpg","IRQ7":"https://i.postimg.cc/L6zSD5Yd/IRQ7-Zaid-Tahseen.png","IRQ8":"https://i.postimg.cc/X7wWLqZR/IRQ8-Manaf-Younis.jpg","IRQ9":"https://i.postimg.cc/kXxCsG6P/IRQ9-Zidane-Iqbal.png","IRQ10":"https://i.postimg.cc/Nf1tDF9G/IRQ10-Amir-Al-Ammari.png","IRQ11":"https://i.postimg.cc/pXDvCrh2/IRQ11-Ibrahim-Bayesh.png","IRQ12":"https://i.postimg.cc/gkvpsjXG/IRQ12-Ali-Jasim.jpg","IRQ13":"https://i.postimg.cc/YCMHs7YK/IRQ13-TIME-IRQ.png","IRQ14":"https://i.postimg.cc/BQx3pbLn/IRQ14-Youssef-Amyn.jpg","IRQ15":"https://i.postimg.cc/WbMV8zF4/IRQ15-Aimar-Sher.jpg","IRQ16":"https://i.postimg.cc/YCMHs7YB/IRQ16-Marko-Farji.jpg","IRQ17":"https://i.postimg.cc/XY4bzWd0/IRQ17-Osama-Rashid.jpg","IRQ18":"https://i.postimg.cc/cL0SbWwS/IRQ18-Ali-Al-Hamadi.jpg","IRQ19":"https://i.postimg.cc/rwMkPTxV/IRQ19-Aymen-Hussein.png","IRQ20":"https://i.postimg.cc/DwnTMhL2/IRQ20-Mohanad-Ali.png",
+
+    // NORUEGA
+    "NOR1":"https://i.postimg.cc/fbVgHq29/NOR1-ESCUDO-NOR.jpg","NOR2":"https://i.postimg.cc/5tXkPK7m/NOR2-Orjan-Nyland.png","NOR3":"https://i.postimg.cc/DzRpRQHX/NOR3-Julian-Ryerson.png","NOR4":"https://i.postimg.cc/N0KPNCJR/NOR4-Leo-Ostigard.jpg","NOR5":"https://i.postimg.cc/mrP6dpXY/NOR5-Kristoffer-Ajer.png","NOR6":"https://i.postimg.cc/W4xYxmC0/NOR6-Marcus-Holmgren-Pedersen.png","NOR7":"https://i.postimg.cc/FKwCwb8j/NOR7-David-Moller-Wolfe.jpg","NOR8":"https://i.postimg.cc/yN2p2hty/NOR8-Torbjorn-Heggem.jpg","NOR9":"https://i.postimg.cc/nLNSNKg3/NOR9-Morten-Thorsby.jpg","NOR10":"https://i.postimg.cc/0NhXhGFX/NOR10-Martin-Odegaard.png","NOR11":"https://i.postimg.cc/mrKpK3JX/NOR11-Sander-Berge.jpg","NOR12":"https://i.postimg.cc/fb1q17pr/NOR12-Andreas-Schjelderup.jpg","NOR13":"https://i.postimg.cc/xdBpBGhw/NOR13-TIME-NOR.png","NOR14":"https://i.postimg.cc/Xvt1tKmt/NOR14-Patrick-Berg.jpg","NOR15":"https://i.postimg.cc/MGg3g0Nh/NOR15-Erling-Haaland.jpg","NOR16":"https://i.postimg.cc/mrKpK3Kx/NOR16-Alexander-Sorloth.png","NOR17":"https://i.postimg.cc/25g9gdgR/NOR17-Aron-Donnum.jpg","NOR18":"https://i.postimg.cc/wvJ4zyYW/NOR18-Jorgen-Strand-Larsen.png","NOR19":"https://i.postimg.cc/wvJ4zyYf/NOR19-Antonio-Nusa.jpg","NOR20":"https://i.postimg.cc/JnJY8DCF/NOR20-Oscar-Bobb.jpg",
+
+    // ARGENTINA
+    "ARG1":"https://i.postimg.cc/7PtJ4Bmq/ARG1-ESCUDO-ARG.jpg","ARG2":"https://i.postimg.cc/Dfp4hCB0/ARG2-Emiliano-Martinez.jpg","ARG3":"https://i.postimg.cc/J7YH8TPG/ARG3-Nahuel-Molina.jpg","ARG4":"https://i.postimg.cc/ZYsvmfVW/ARG4-Cristian-Romero.jpg","ARG5":"https://i.postimg.cc/h4ZQnCpJ/ARG5-Nicolas-Otamendi.jpg","ARG6":"https://i.postimg.cc/PfVvH62p/ARG6-Nicolas-Tagliafico.jpg","ARG7":"https://i.postimg.cc/xjpNQstb/ARG7-Leonardo-Balerdi.jpg","ARG8":"https://i.postimg.cc/BZ7P3hMK/ARG8-Enzo-Fernandez.jpg","ARG9":"https://i.postimg.cc/Yq4GC1sq/ARG9-Alexis-Mac-Allister.jpg","ARG10":"https://i.postimg.cc/qMthv85v/ARG10-Rodrigo-De-Paul.jpg","ARG11":"https://i.postimg.cc/GhB8mk5p/ARG11-Exequiel-Palacios.jpg","ARG12":"https://i.postimg.cc/Nfy9j1zM/ARG12-Leandro-Paredes.jpg","ARG13":"https://i.postimg.cc/hPJzt95v/ARG13-TIME-ARG.jpg","ARG14":"https://i.postimg.cc/8PFJzh0s/ARG14-Nico-Paz.jpg","ARG15":"https://i.postimg.cc/4NK7xzSm/ARG15-Franco-Mastantuono.jpg","ARG16":"https://i.postimg.cc/3Jy4xgck/ARG16-Nico-Gonzalez.jpg","ARG17":"https://i.postimg.cc/CLZBxjQB/ARG17-Lionel-Messi.jpg","ARG18":"https://i.postimg.cc/dt7kV8xC/ARG18-Lautaro-Martinez.jpg","ARG19":"https://i.postimg.cc/pX9hLD68/ARG19-Julian-Alvarez.jpg","ARG20":"https://i.postimg.cc/dt7kV8xG/ARG20-Giuliano-Simeone.jpg",
+
+    // ARGÉLIA
+    "ALG1":"https://i.postimg.cc/9XDZD54W/ALG1-ESCUDO-ALG.jpg","ALG2":"https://i.postimg.cc/c1vwvyKM/ALG2-Alexis-Guendouz.jpg","ALG3":"https://i.postimg.cc/pVmzmb9D/ALG3-Ramy-Bensebaini.jpg","ALG4":"https://i.postimg.cc/qBWnnbnC/ALG4-Youcef-Atal.png","ALG5":"https://i.postimg.cc/2j1h1Rqx/ALG5-Rayan-Ait-Nouri.jpg","ALG6":"https://i.postimg.cc/bY4bbCb0/ALG6-Mohamed-Amine-Tougai.jpg","ALG7":"https://i.postimg.cc/QNv5545Q/ALG7-Aissa-Mandi.jpg","ALG8":"https://i.postimg.cc/Pf0ZZ3Zz/ALG8-Ismael-Bennacer.jpg","ALG9":"https://i.postimg.cc/v8C99q9v/ALG9-Houssem-Aouar.jpg","ALG10":"https://i.postimg.cc/G36YY7YM/ALG10-Hicham-Boudaoui.jpg","ALG11":"https://i.postimg.cc/Y2Tggngn/ALG11-Ramiz-Zerrouki.jpg","ALG12":"https://i.postimg.cc/7Pj77s7Q/ALG12-Nabil-Bentaleb.jpg","ALG13":"https://i.postimg.cc/GhYDjFxC/ALG13-TIME-ALG.png","ALG14":"https://i.postimg.cc/WpxrrWrB/ALG14-Fares-Chaibi.jpg","ALG15":"https://i.postimg.cc/xjBHHxMr/ALG15-Riyad-Mahrez.jpg","ALG16":"https://i.postimg.cc/XNtFFHdS/ALG16-Said-Benrahma.jpg","ALG17":"https://i.postimg.cc/BQDFCTcV/ALG17-Anis-Hadj-Moussa.jpg","ALG18":"https://i.postimg.cc/PrZDMWz7/ALG18-Amine-Gouiri.jpg","ALG19":"https://i.postimg.cc/MKRBY7bN/ALG19-Baghdad-Bounedjah.jpg","ALG20":"https://i.postimg.cc/CLD84GsT/ALG20-Mohammed-Amoura.png",
+
+    // ÁUSTRIA
+    "AUT1":"https://i.postimg.cc/GmHZNptZ/AUT1-ESCUDO-AUT.jpg","AUT2":"https://i.postimg.cc/sgvt821R/AUT2-Alexander-Schlager.jpg","AUT3":"https://i.postimg.cc/Vkd3TN5P/AUT3-Patrick-Pentz.jpg","AUT4":"https://i.postimg.cc/dVLzX0DY/AUT4-David-Alaba.jpg","AUT5":"https://i.postimg.cc/CxzWtKdY/AUT5-Kevin-Danso.png","AUT6":"https://i.postimg.cc/Z5C1gq0J/AUT6-Philipp-Lienhart.jpg","AUT7":"https://i.postimg.cc/W1hQK4tT/AUT7-Stefan-Posch.jpg","AUT8":"https://i.postimg.cc/dVLzX0Dq/AUT8-Phillipp-Mwene.jpg","AUT9":"https://i.postimg.cc/Z5C1gq0Y/AUT9-Alexander-Prass.jpg","AUT10":"https://i.postimg.cc/g2nf50rr/AUT10-Xaver-Schlager.jpg","AUT11":"https://i.postimg.cc/13fLTz4t/AUT11-Marcel-Sabitzer.jpg","AUT12":"https://i.postimg.cc/7ZfpcLbh/AUT12-Konrad-Laimer.jpg","AUT13":"https://i.postimg.cc/BnXdyvtF/AUT13-TIME-AUT.png","AUT14":"https://i.postimg.cc/7ZfpcLbJ/AUT14-Florian-Grillitsch.jpg","AUT15":"https://i.postimg.cc/Z5C1gq09/AUT15-Nicolas-Seiwald.jpg","AUT16":"https://i.postimg.cc/YChJVSjG/AUT16-Romano-Schmid.jpg","AUT17":"https://i.postimg.cc/P59Bkk8N/AUT17-Patrick-Wimmer.png","AUT18":"https://i.postimg.cc/nhg6ttQr/AUT18-Christoph-Baumgartner.jpg","AUT19":"https://i.postimg.cc/nhg6ttQC/AUT19-Michael-Gregoritsch.jpg","AUT20":"https://i.postimg.cc/GmVZ11sT/AUT20-Marko-Arnautovic.png",
+
+    // JORDÂNIA
+    "JOR1":"https://i.postimg.cc/8kX4YmvH/JOR1-ESCUDO-JOR.jpg","JOR2":"https://i.postimg.cc/05Xn40St/JOR2-Yazeed-Abulaila.png","JOR3":"https://i.postimg.cc/pVcCSJjs/JOR3-Ihsan-Haddad.jpg","JOR4":"https://i.postimg.cc/15gB1V0D/JOR4-Mohammad-Abu-Hashish.png","JOR5":"https://i.postimg.cc/VsZghWtG/JOR5-Yazan-Al-Arab.png","JOR6":"https://i.postimg.cc/tC1kGndd/JOR6-Abdallah-Nasib.png","JOR7":"https://i.postimg.cc/WbD8cqmM/JOR7-Saleem-Obaid.jpg","JOR8":"https://i.postimg.cc/15gB1V0K/JOR8-Mohammad-Abualnadi.jpg","JOR9":"https://i.postimg.cc/dt76cZRB/JOR9-Ibrahim-Saadeh.png","JOR10":"https://i.postimg.cc/sDBmCGPm/JOR10-Nizar-Al-Rashdan.jpg","JOR11":"https://i.postimg.cc/HsJz180B/JOR11-Noor-Al-Rawabdeh.jpg","JOR12":"https://i.postimg.cc/kXVsPRNT/JOR12-Mohannad-Abu-Taha.jpg","JOR13":"https://i.postimg.cc/X7ZL6BKT/JOR13-TIME-JOR.png","JOR14":"https://i.postimg.cc/hPJsRQ8y/JOR14-Amer-Jamous.jpg","JOR15":"https://i.postimg.cc/SNXdbYLv/JOR15-Musa-Al-Taamari.jpg","JOR16":"https://i.postimg.cc/xTk5VNGw/JOR16-Yazan-Al-Naimat.jpg","JOR17":"https://i.postimg.cc/dt76cZmM/JOR17-Mahmoud-Al-Mardi.jpg","JOR18":"https://i.postimg.cc/kXVsPRFC/JOR18-Ali-Olwan.jpg","JOR19":"https://i.postimg.cc/4NKPRHbJ/JOR19-Mohammad-Abu-Zrayq.jpg","JOR20":"https://i.postimg.cc/jdGXxqvm/JOR20-Ibrahim-Sabra.jpg",
+
+    // PORTUGAL
+    "POR1":"https://i.postimg.cc/P5XmrL1L/POR1-ESCUDO-POR.jpg","POR2":"https://i.postimg.cc/cLFfKsc1/POR2-Diogo-Costa.jpg","POR3":"https://i.postimg.cc/rwf5d89F/POR3-Jose-Sa.jpg","POR4":"https://i.postimg.cc/NjdRygxM/POR4-Ruben-Dias.jpg","POR5":"https://i.postimg.cc/kgTWVny5/POR5-Joao-Cancelo.jpg","POR6":"https://i.postimg.cc/8zZLF1bf/POR6-Diogo-Dalot.jpg","POR7":"https://i.postimg.cc/W150D27J/POR7-Nuno-Mendes.jpg","POR8":"https://i.postimg.cc/XYs9ZVgC/POR8-Goncalo-Inacio.jpg","POR9":"https://i.postimg.cc/2S0nqzxh/POR9-Bernardo-Silva.jpg","POR10":"https://i.postimg.cc/9QLy4WBd/POR10-Bruno-Fernandes.jpg","POR11":"https://i.postimg.cc/Dwx1W2cg/POR11-Ruben-Neves.jpg","POR12":"https://i.postimg.cc/sgT5BVJm/POR12-Vitinha.jpg","POR13":"https://i.postimg.cc/9QLy4WB1/POR13-TIME-POR.jpg","POR14":"https://i.postimg.cc/rpzxxvhx/POR14-Joao-Neves.jpg","POR15":"https://i.postimg.cc/CKdkkWvj/POR15-Cristiano-Ronaldo.jpg","POR16":"https://i.postimg.cc/q7gyy9ms/POR16-Francisco-Trincao.jpg","POR17":"https://i.postimg.cc/3wWmmPLC/POR17-Joao-Felix.jpg","POR18":"https://i.postimg.cc/mrhCC0dm/POR18-Goncalo-Ramos.jpg","POR19":"https://i.postimg.cc/SKjCCwZD/POR19-Pedro-Neto.jpg","POR20":"https://i.postimg.cc/JhtZZ9TK/POR20-Rafael-Leao.jpg",
+
+    // CONGO
+    "COD1":"https://i.postimg.cc/Lsd23PvH/COD1-ESCUDO-COD.jpg","COD2":"https://i.postimg.cc/HLQHZLPm/COD2-Lionel-Mpasi.png","COD3":"https://i.postimg.cc/fb4Dfd5L/COD3-Aaron-Wan-Bissaka.jpg","COD4":"https://i.postimg.cc/1zxsrFMz/COD4-Axel-Tuanzebe.jpg","COD5":"https://i.postimg.cc/cJq0B3TC/COD5-Arthur-Masuaku.jpg","COD6":"https://i.postimg.cc/CKjYPK6F/COD6-Chancel-Mbemba.jpg","COD7":"https://i.postimg.cc/tghySgmp/COD7-Joris-Kayembe.jpg","COD8":"https://i.postimg.cc/q780b7Zp/COD8-Charles-Pickel.jpg","COD9":"https://i.postimg.cc/zfn5tfPX/COD9-Ngal-ayel-Mukau.png","COD10":"https://i.postimg.cc/HLQHZLPk/COD10-Edo-Kayembe.png","COD11":"https://i.postimg.cc/BvxsYvwb/COD11-Samuel-Moutoussamy.png","COD12":"https://i.postimg.cc/3wg7Swbk/COD12-Noah-Sadiki.png","COD13":"https://i.postimg.cc/s2py620Q/COD13-TIME-COD.jpg","COD14":"https://i.postimg.cc/TPrG7PHD/COD14-Theo-Bongonda.png","COD15":"https://i.postimg.cc/SKWqTKt8/COD15-Meschack-Elia.jpg","COD16":"https://i.postimg.cc/FKjmWKny/COD16-Yoane-Wissa.png","COD17":"https://i.postimg.cc/fbxZ2bgm/COD17-Brian-Cipenga.png","COD18":"https://i.postimg.cc/254mc5Xd/COD18-Fiston-Mayele.jpg","COD19":"https://i.postimg.cc/0NpxWNHd/COD19-Cedric-Bakambu.jpg","COD20":"https://i.postimg.cc/MGyxPGr5/COD20-Nathanael-Mbuku.jpg",
+
+    // UZBEQUISTÃO
+    "UZB1":"https://i.postimg.cc/ZRbQZYj7/COD13-TIME-COD.png","UZB2":"https://i.postimg.cc/C1h2YMJQ/UZB2-Utkir-Yusupov.jpg","UZB3":"https://i.postimg.cc/bJy58YLF/UZB3-Farrukh-Savfiev.jpg","UZB4":"https://i.postimg.cc/G2Lfr3zf/UZB4-Sherzod-Nasrullaev.jpg","UZB5":"https://i.postimg.cc/ZRbQZYjg/UZB5-Umar-Eshmurodov.jpg","UZB6":"https://i.postimg.cc/4df0Z4wD/UZB6-Husniddin-Aliqulov.jpg","UZB7":"https://i.postimg.cc/DZvNFfB3/UZB7-Rustamjon-Ashurmatov.jpg","UZB8":"https://i.postimg.cc/26ktmj2f/UZB8-Khojiakbar-Alijonov.jpg","UZB9":"https://i.postimg.cc/1tmdPRJQ/UZB9-Abdukodir-Khusanov.jpg","UZB10":"https://i.postimg.cc/zBzQ5D0q/UZB10-Odiljon-Hamrobekov.jpg","UZB11":"https://i.postimg.cc/d15x0MSX/UZB11-Otabek-Shukurov.png","UZB12":"https://i.postimg.cc/Twt4P8HF/UZB12-Jamshid-Iskanderov.jpg","UZB13":"https://i.postimg.cc/hj25GF3N/UZB13-TIME-UZB.jpg","UZB14":"https://i.postimg.cc/PxSRqGFg/UZB14-Azizbek-Turgunboev.jpg","UZB15":"https://i.postimg.cc/rmfPp6P6/UZB15-Khojimat-Erkinov.jpg","UZB16":"https://i.postimg.cc/xC64dr4D/UZB16-Eldor-Shomurodov.jpg","UZB17":"https://i.postimg.cc/260K5pKN/UZB17-Oston-Urunov.png","UZB18":"https://i.postimg.cc/G2X5p051/UZB18-Jaloliddin-Masharipov.jpg","UZB19":"https://i.postimg.cc/Jnp2hw2L/UZB19-Igor-Sergeev.jpg","UZB20":"https://i.postimg.cc/50sRtcR1/UZB20-Abbosbek-Fayzullaev.jpg",
+
+    // COLÔMBIA
+    "COL1":"https://i.postimg.cc/d04B22mg/COL1-ESCUDO-COL.jpg","COL2":"https://i.postimg.cc/SKDr66fF/COL2-Camilo-Vargas.jpg","COL3":"https://i.postimg.cc/nL0k44G8/COL3-David-Ospina.jpg","COL4":"https://i.postimg.cc/YSb366zB/COL4-Davinson-Sanchez.jpg","COL5":"https://i.postimg.cc/rpQJ11NL/COL5-Yerry-Mina.jpg","COL6":"https://i.postimg.cc/DZ0cBSBj/COL6-Daniel-Munoz.jpg","COL7":"https://i.postimg.cc/XJqgQrQ1/COL7-Johan-Mojica.jpg","COL8":"https://i.postimg.cc/HxntBrBP/COL8-Jhon-Lucumi.jpg","COL9":"https://i.postimg.cc/ydxTvDvb/COL9-Santiago-Arias.jpg","COL10":"https://i.postimg.cc/ZRnLVWVQ/COL10-Jefferson-Lerma.jpg","COL11":"https://i.postimg.cc/9M0BJDJS/COL11-Kevin-Castano.jpg","COL12":"https://i.postimg.cc/50ymnXnD/COL12-Richard-Rios.jpg","COL13":"https://i.postimg.cc/sXxJwMwt/COL13-TIME-COL.jpg","COL14":"https://i.postimg.cc/DZ0cBSB9/COL14-James-Rodriguez.jpg","COL15":"https://i.postimg.cc/Jn0QPspw/COL15-Juan-Fernando-Quintero.jpg","COL16":"https://i.postimg.cc/MTHYdn92/COL16-Jorge-Carrascal.jpg","COL17":"https://i.postimg.cc/4dy1BYWR/COL17-Jhon-Arias.jpg","COL18":"https://i.postimg.cc/fLyvBV8N/COL18-Jhon-Cordoba.jpg","COL19":"https://i.postimg.cc/PxJM2CSk/COL19-Luis-Suarez.jpg","COL20":"https://i.postimg.cc/vBTv340M/COL20-Luis-Diaz.jpg",
+
+    // INGLATERRA
+    "ENG1":"https://i.postimg.cc/pTkLXTvJ/ENG1-ESCUDO-ENG.jpg","ENG2":"https://i.postimg.cc/7h6YCkP0/ENG2-Jordan-Pickford.png","ENG3":"https://i.postimg.cc/6q357X6Z/ENG3-John-Stones.jpg","ENG4":"https://i.postimg.cc/NFMfycGR/ENG4-Marc-Guehi.jpg","ENG5":"https://i.postimg.cc/mkD2csZQ/ENG5-Ezri-Konsa.jpg","ENG6":"https://i.postimg.cc/MHTKcSZ0/ENG6-Trent-Alexander-Arnold.png","ENG7":"https://i.postimg.cc/SRsNXhQ7/ENG7-Reece-James.png","ENG8":"https://i.postimg.cc/Bb6Q80ZB/ENG8-Dan-Burn.jpg","ENG9":"https://i.postimg.cc/RhFV3BCd/ENG9-Jordan-Henderson.jpg","ENG10":"https://i.postimg.cc/0jQ26s5Z/ENG10-Declan-Rice.jpg","ENG11":"https://i.postimg.cc/d31t7YQ4/ENG11-Jude-Bellingham.jpg","ENG12":"https://i.postimg.cc/d31t7YQH/ENG12-Cole-Palmer.jpg","ENG13":"https://i.postimg.cc/Y09q4H2s/ENG13-TIME-ENG.png","ENG14":"https://i.postimg.cc/gjJkwWc7/ENG14-Morgan-Rogers.png","ENG15":"https://i.postimg.cc/hvjPJB4w/ENG15-Anthony-Gordon.jpg","ENG16":"https://i.postimg.cc/qqRMtTBS/ENG16-Phil-Foden.png","ENG17":"https://i.postimg.cc/C51LZgLy/ENG17-Bukayo-Saka.png","ENG18":"https://i.postimg.cc/7h6YCkYr/ENG18-Harry-Kane.jpg","ENG19":"https://i.postimg.cc/RhFV3BVz/ENG19-Marcus-Rashford.jpg","ENG20":"https://i.postimg.cc/wMvTtpTp/ENG20-Ollie-Watkins.jpg",
+
+    // CROÁCIA
+    "CRO1":"https://i.postimg.cc/c1n89jSY/CRO1-ESCUDO-CRO.png","CRO2":"https://i.postimg.cc/VL901C5v/CRO2-Dominik-Livakovic.png","CRO3":"https://i.postimg.cc/vH7xMVTj/CRO3-Duje-Caleta-Car.png","CRO4":"https://i.postimg.cc/xTGNYz8p/CRO4-Josko-Gvardiol.jpg","CRO5":"https://i.postimg.cc/Wbmqjkt4/CRO5-Josip-Stanisic.png","CRO6":"https://i.postimg.cc/xTGNYzqc/CRO6-Luka-Vuskovic.jpg","CRO7":"https://i.postimg.cc/qvkh7vCc/CRO7-Josip-Sutalo.png","CRO8":"https://i.postimg.cc/3xny0Qgm/CRO8-Kristijan-Jakic.jpg","CRO9":"https://i.postimg.cc/Njpy2v1S/CRO9-Luka-Modric.jpg","CRO10":"https://i.postimg.cc/VNvJjZgm/CRO10-Mateo-Kovacic.png","CRO11":"https://i.postimg.cc/Dz0SqpgR/CRO11-Martin-Baturina.jpg","CRO12":"https://i.postimg.cc/QMCFpYmM/CRO12-Lovro-Majer.jpg","CRO13":"https://i.postimg.cc/Pq7PKbVx/CRO13-TIME-CRO.png","CRO14":"https://i.postimg.cc/FKzYjCpL/CRO14-Mario-Pasalic.jpg","CRO15":"https://i.postimg.cc/kGQGn0J0/CRO15-Petar-Sucic.png","CRO16":"https://i.postimg.cc/PqCqLpf5/CRO16-Ivan-Perisic.jpg","CRO17":"https://i.postimg.cc/nLXLsjVM/CRO17-Marco-Pasalic.jpg","CRO18":"https://i.postimg.cc/jjDjWwq7/CRO18-Ante-Budimir.jpg","CRO19":"https://i.postimg.cc/s2bg5j1W/CRO19-Andrej-Kramaric.jpg","CRO20":"https://i.postimg.cc/Pq051XNK/CRO20-Franjo-Ivanovic.jpg",
+
+    // GANA
+    "GHA1":"https://i.postimg.cc/BvPMmpQb/GHA1-ESCUDO-GHA.jpg","GHA2":"https://i.postimg.cc/858w9vjf/GHA2-Lawrence-Ati-Zigi.png","GHA3":"https://i.postimg.cc/MTktNBvZ/GHA3-Tariq-Lamptey.jpg","GHA4":"https://i.postimg.cc/pTNk4jpd/GHA4-Mohammed-Salisu.jpg","GHA5":"https://i.postimg.cc/Y9c8ZFh9/GHA5-Alidu-Seidu.jpg","GHA6":"https://i.postimg.cc/hjFM6mfd/GHA6-Alexander-Djiku.jpg","GHA7":"https://i.postimg.cc/0QgZFSbm/GHA7-Gideon-Mensah.jpg","GHA8":"https://i.postimg.cc/FRtG8S7y/GHA8-Caleb-Yirenkyi.jpg","GHA9":"https://i.postimg.cc/gJ94QhnD/GHA9-Abdul-Fatawu-Issahaku.jpg","GHA10":"https://i.postimg.cc/Ss0V39JV/GHA10-Thomas-Partey.jpg","GHA11":"https://i.postimg.cc/QtLSw7H4/GHA11-Salis-Abdul-Samed.jpg","GHA12":"https://i.postimg.cc/XJwxbvCf/GHA12-Kamaldeen-Sulemana.jpg","GHA13":"https://i.postimg.cc/76gXkL21/GHA13-TIME-GHA.jpg","GHA14":"https://i.postimg.cc/76gXkL2V/GHA14-Mohammed-Kudus.png","GHA15":"https://i.postimg.cc/3Rg9Twv9/GHA15-Inaki-Williams.jpg","GHA16":"https://i.postimg.cc/63dzXQv1/GHA16-Jordan-Ayew.png","GHA17":"https://i.postimg.cc/xCKg2dzs/GHA17-Andre-Ayew.jpg","GHA18":"https://i.postimg.cc/LXzvps1b/GHA18-Joseph-Paintsil.jpg","GHA19":"https://i.postimg.cc/HxQ3gLyf/GHA19-Osman-Bukari.jpg","GHA20":"https://i.postimg.cc/d18nY0yg/GHA20-Antoine-Semenyo.jpg",
+
+    // PANAMÁ
+    "PAN1":"https://i.postimg.cc/FK00fBHZ/PAN1-ESCUDO-PAN.jpg","PAN2":"https://i.postimg.cc/rmcx5ND4/PAN2-Orlando-Mosquera.jpg","PAN3":"https://i.postimg.cc/26mhn71B/PAN3-Luis-Mejia.jpg","PAN4":"https://i.postimg.cc/wvHLDQ1m/PAN4-Fidel-Escobar.jpg","PAN5":"https://i.postimg.cc/SsqCcfn8/PAN5-Andres-Andrade.jpg","PAN6":"https://i.postimg.cc/MTxV1mnb/PAN6-Michael-Amir-Murillo.jpg","PAN7":"https://i.postimg.cc/XJ3d9krK/PAN7-Eric-Davis.jpg","PAN8":"https://i.postimg.cc/MTxV1mnY/PAN8-Jose-Cordoba.png","PAN9":"https://i.postimg.cc/4dZVpQY5/PAN9-Cesar-Blackman.jpg","PAN10":"https://i.postimg.cc/JnmZj5sx/PAN10-Cristian-Martinez.jpg","PAN11":"https://i.postimg.cc/76D0Sn5X/PAN11-Anibal-Godoy.jpg","PAN12":"https://i.postimg.cc/nzZBqGX0/PAN12-Adalberto-Carrasquilla.jpg","PAN13":"https://i.postimg.cc/TwGgnJKs/PAN13-TIME-PAN.png","PAN14":"https://i.postimg.cc/Qts1cJFY/PAN14-Edgar-Barcenas.png","PAN15":"https://i.postimg.cc/C1YkbsRP/PAN15-Carlos-Harvey.jpg","PAN16":"https://i.postimg.cc/KzFBtD1V/PAN16-Ismael-Diaz.png","PAN17":"https://i.postimg.cc/gJd83HxC/PAN17-Jose-Fajardo.png","PAN18":"https://i.postimg.cc/NMYmRkyh/PAN18-Cecilio-Waterman.jpg","PAN19":"https://i.postimg.cc/zB5KTFLZ/PAN19-Jose-Luis-Rodriguez.jpg","PAN20":"https://i.postimg.cc/bJ8k19Gh/PAN20-Alberto-Quintero.jpg"
+  };
+
+
+  // Funde as URLs exatas da base de dados flat para que todas apareçam sem falhas de filtro
+  RAW.forEach(item => {
+    if (CSV_URLS[item.c]) {
+      item.u = CSV_URLS[item.c];
+    }
+  });
+
+  // Reordena o RAW para refletir a sequência física do álbum:
+  // ESPECIAL → todas as seleções (grupos A→L) → HISTÓRIA → COCA-COLA
+  ;(function reordenarRAW() {
+    const ORDEM_FINAL = ['ESPECIAL', 'HISTÓRIA', 'COCA-COLA'];
+    const especial  = RAW.filter(r => r.s === 'ESPECIAL');
+    const historia  = RAW.filter(r => r.s === 'HISTÓRIA');
+    const cocacola  = RAW.filter(r => r.s === 'COCA-COLA');
+    const times     = RAW.filter(r => !ORDEM_FINAL.includes(r.s));
+    // Substitui o conteúdo do RAW mantendo a mesma referência do array
+    RAW.splice(0, RAW.length, ...especial, ...times, ...historia, ...cocacola);
+  })();
+
+  let TOTAL_ALBUM = RAW.length;
+  let POSSUI_TOTAL = 0;
+
+  // Carrega progresso do usuário persistido
+  function loadLocalProgress() {
+    const saved = localStorage.getItem('album_copa_2026_dashboard_progress');
+    if (saved) {
+      try {
+        const progress = JSON.parse(saved);
+        RAW.forEach(item => {
+          if (progress[item.c] !== undefined) {
+            item.p = progress[item.c];
+          }
+        });
+      } catch (e) {
+        console.error("Erro ao carregar dados do LocalStorage", e);
+      }
+    }
+    POSSUI_TOTAL = RAW.filter(r => r.p).length;
+  }
+
+  // Persiste progresso no LocalStorage do navegador
+  function saveLocalProgress() {
+    const progress = {};
+    RAW.forEach(item => {
+      progress[item.c] = item.p;
+    });
+    localStorage.setItem('album_copa_2026_dashboard_progress', JSON.stringify(progress));
+  }
+
+  function togglePossui(code) {
+    const sticker = RAW.find(r => r.c === code);
+    if (sticker) {
+      sticker.p = !sticker.p;
+      POSSUI_TOTAL = RAW.filter(r => r.p).length;
+      saveLocalProgress();
+      
+      // Atualizações de renderização instantâneas da UI (Single Page App)
+      updateDashboardData();
+    }
+  }
+
+  function updateDashboardData() {
+    initVisao();
+    renderSelecoes();
+    initHeatmap();
+    renderGaleria();
+    updateSim();
+  }
+
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    
+    // Seleciona botão ativo de forma genérica
+    const activeBtn = Array.from(document.querySelectorAll('.nav button')).find(b => b.getAttribute('onclick').includes(id));
+    if (activeBtn) activeBtn.classList.add('active');
+  }
+
+  function aggBy(key, filter) {
+    const m = {};
+    const data = filter ? RAW.filter(filter) : RAW;
+    data.forEach(r => {
+      const k = r[key] || '?';
+      if (!m[k]) m[k] = { t: 0, p: 0 };
+      m[k].t++;
+      if (r.p) m[k].p++;
+    });
+    return m;
+  }
+
+  function renderBars(containerId, data, sortByPct = true) {
+    const entries = Object.entries(data);
+    if (sortByPct) entries.sort((a, b) => (b[1].p / b[1].t) - (a[1].p / a[1].t));
+    const el = document.getElementById(containerId);
+    el.innerHTML = entries.map(([k, v]) => {
+      const p = pct(v.p, v.t);
+      return `<div class="bar-row">
+        <span class="bar-label" title="${k}">${k}</span>
+        <div class="bar-track"><div class="bar-fill" style="width:${p}%;background:${color(p)}"></div></div>
+        <span class="bar-pct">${p}%</span>
+      </div>`;
+    }).join('');
+  }
+
+  function initVisao() {
+    const pG = pct(POSSUI_TOTAL, TOTAL_ALBUM);
+    document.getElementById('kpi-geral').innerHTML = `
+      <div class="kpi"><div class="kpi-label">Total do Álbum</div><div class="kpi-value">${TOTAL_ALBUM}</div></div>
+      <div class="kpi"><div class="kpi-label">Coladas</div><div class="kpi-value" style="color:#10b981">${POSSUI_TOTAL}</div></div>
+      <div class="kpi"><div class="kpi-label">Faltando</div><div class="kpi-value" style="color:#ef4444">${TOTAL_ALBUM - POSSUI_TOTAL}</div></div>
+      <div class="kpi"><div class="kpi-label">Completude</div><div class="kpi-value">${pG}%</div><div class="kpi-sub">${TOTAL_ALBUM - POSSUI_TOTAL} restantes</div></div>
+      <div class="kpi"><div class="kpi-label">Custo Estimado Pago</div><div class="kpi-value">R$ ${(POSSUI_TOTAL * 1.00).toFixed(2)}</div><div class="kpi-sub">${POSSUI_TOTAL} fig × R$ 1,00</div></div>
+    `;
+    document.getElementById('pb-geral').style.width = pG + '%';
+    document.getElementById('pb-pct-text').textContent = pG + '%';
+
+    renderBars('bars-conf', aggBy('cf', r => r.cf !== '-'));
+    renderBars('bars-tipo', aggBy('t'));
+    
+    const bysel = aggBy('s', r => r.g !== '-');
+    const top10 = Object.entries(bysel).sort((a, b) => (b[1].p / b[1].t) - (a[1].p / a[1].t)).slice(0, 10);
+    const t10obj = {}; 
+    top10.forEach(([k, v]) => t10obj[k] = v);
+    renderBars('bars-top10', t10obj, false);
+  }
+
+  function initSelecoes() {
+    const sel = document.getElementById('fil-grupo');
+    const conf = document.getElementById('fil-conf');
+    const grupos = [...new Set(RAW.map(r => r.g).filter(g => g !== '-'))].sort();
+    const confs = [...new Set(RAW.map(r => r.cf).filter(c => c !== '-'))].sort();
+    
+    // Reseta filtros para evitar duplicação no re-init
+    sel.innerHTML = '<option value="">Todos os grupos</option>';
+    conf.innerHTML = '<option value="">Todas confederações</option>';
+
+    grupos.forEach(g => { const o = document.createElement('option'); o.value = g; o.text = 'Grupo ' + g; sel.add(o); });
+    confs.forEach(c => { const o = document.createElement('option'); o.value = c; o.text = c; conf.add(o); });
+  }
+
+  function renderSelecoes() {
+    const g = document.getElementById('fil-grupo').value;
+    const cf = document.getElementById('fil-conf').value;
+    const bysel = aggBy('s', r => r.g !== '-' && (!g || r.g === g) && (!cf || r.cf === cf));
+    const entries = Object.entries(bysel).sort((a, b) => b[1].p / b[1].t - a[1].p / a[1].t);
+    const el = document.getElementById('sel-list');
+    
+    el.innerHTML = entries.map(([s, v]) => {
+      const p = pct(v.p, v.t);
+      const rawS = RAW.find(r => r.s === s);
+      const grp = rawS ? rawS.g : '-';
+      const cfv = rawS ? rawS.cf : '-';
+      return `<div class="selection-row">
+        <div class="selection-badge" style="background:${color(p)}">${p}%</div>
+        <div style="flex:1">
+          <div style="font-size:14px;font-weight:700;color:var(--color-text-primary)">${s}</div>
+          <div style="font-size:11px;color:var(--color-text-secondary);margin-top:2px;">Grupo ${grp} · ${cfv} · ${v.p}/${v.t} coladas</div>
+          <div style="margin-top:6px;height:4px;background:var(--color-background-tertiary);border-radius:2px;overflow:hidden">
+            <div style="height:100%;width:${p}%;background:${color(p)};border-radius:2px"></div>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function initHeatmap() {
+    const grupos = 'ABCDEFGHIJKL'.split('');
+    const container = document.getElementById('hm-container');
+    container.innerHTML = '';
+    
+    grupos.forEach(g => {
+      const rows = RAW.filter(r => r.g === g);
+      const sels = [...new Set(rows.map(r => r.s))];
+      const div = document.createElement('div');
+      div.className = 'hm-group';
+      
+      const gTotal = rows.length;
+      const gPossui = rows.filter(r => r.p).length;
+      const gPct = pct(gPossui, gTotal);
+      
+      div.innerHTML = `
+        <div class="hm-group-header">
+          <span>Grupo ${g}</span>
+          <span style="color:${color(gPct)}">${gPct}%</span>
+        </div>` +
+        sels.map(s => {
+          const st = rows.filter(r => r.s === s);
+          const sp = st.filter(r => r.p).length;
+          const pv = pct(sp, st.length);
+          const bg = pv === 0 ? '#E24B4A' : pv === 100 ? '#10b981' : pv >= 50 ? '#EF9F27' : '#D85A30';
+          return `<div class="hm-cell" style="background:${bg}">${s} <span>${pv}%</span></div>`;
+        }).join('');
+      container.appendChild(div);
+    });
+  }
+
+  let simChart = null, mcChart = null;
+
+  // Calcula o custo marginal esperado para obter uma figurinha específica
+  // dado que já temos 'already' de 'total' figurinhas
+  function expectedPacksForOneMore(already, total, perPack) {
+    if (already >= total) return 0;
+    const missing = total - already;
+    const pHit = missing / total;  // probabilidade de um slot do pacote ser uma nova fig
+    // Esperança de pacotes até ter pelo menos 1 nova figurinha: geométrica
+    // E[pacotes] = 1 / (1 - (1-pHit)^perPack)
+    const pNewInPack = 1 - Math.pow(1 - pHit, perPack);
+    if (pNewInPack <= 0) return Infinity;
+    return 1 / pNewInPack;
+  }
+
+  function updateSim() {
+    const precoUnit = parseInt(document.getElementById('sim-preco-unit').value) / 100;
+    const fpac = parseInt(document.getElementById('sim-fpac').value);
+    const ppw = parseInt(document.getElementById('sim-ppw').value);
+
+    document.getElementById('sim-preco-unit-out').textContent = 'R$ ' + precoUnit.toFixed(2).replace('.', ',');
+    document.getElementById('sim-fpac-out').textContent = fpac;
+    document.getElementById('sim-ppw-out').textContent = ppw;
+
+    const already = POSSUI_TOTAL;
+    const missing = TOTAL_ALBUM - already;
+
+    document.getElementById('sim-coladas-count').textContent = already;
+    document.getElementById('sim-total-count').textContent = TOTAL_ALBUM;
+    document.getElementById('sim-faltam-count').textContent = missing;
+
+    // Previsão de conclusão
+    const precoPacote = precoUnit * fpac;
+    const figsPorSemana = ppw * fpac; // figs brutas por semana
+    // Taxa efetiva de novas figs por semana — começa alta, cai com duplicatas
+    // Aproximação: E[novas] por semana dado estado atual
+    const pNovaFig = missing > 0 ? missing / TOTAL_ALBUM : 0;
+    const novasPorSemana = figsPorSemana * pNovaFig;
+    const semanasRestantes = novasPorSemana > 0 ? Math.ceil(missing / novasPorSemana) : null;
+
+    // Custo estimado total (baseado no modelo coupon collector ajustado)
+    let custoTotal = 0;
+    for (let i = already; i < TOTAL_ALBUM; i++) {
+      const expectedPacks = expectedPacksForOneMore(i, TOTAL_ALBUM, fpac);
+      custoTotal += expectedPacks * precoPacote;
+    }
+
+    const previsaoEl = document.getElementById('previsao-results');
+    if (missing <= 0) {
+      previsaoEl.innerHTML = `<div style="font-size:22px;font-weight:700;color:var(--color-success)">🏆 Álbum completo!</div>`;
+    } else {
+      const semanasText = semanasRestantes ? semanasRestantes + ' sem.' : 'N/D';
+      const mesesText = semanasRestantes ? (semanasRestantes / 4.3).toFixed(1).replace('.', ',') + ' meses' : 'N/D';
+      previsaoEl.innerHTML = `
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div style="background:var(--color-background-tertiary);border-radius:var(--border-radius-sm);padding:12px;">
+            <div style="font-size:11px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em;">Custo estimado total</div>
+            <div style="font-size:22px;font-weight:700;color:var(--color-border-primary);">R$ ${Math.round(custoTotal).toLocaleString('pt-BR')}</div>
+            <div style="font-size:10px;color:var(--color-text-tertiary);">pelo método Coupon Collector</div>
+          </div>
+          <div style="background:var(--color-background-tertiary);border-radius:var(--border-radius-sm);padding:12px;">
+            <div style="font-size:11px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em;">Previsão de tempo</div>
+            <div style="font-size:22px;font-weight:700;color:#a78bfa;">${semanasText}</div>
+            <div style="font-size:10px;color:var(--color-text-tertiary);">${mesesText} — comprando ${ppw} pac./semana</div>
+          </div>
+          <div style="background:var(--color-background-tertiary);border-radius:var(--border-radius-sm);padding:12px;">
+            <div style="font-size:11px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em;">Novas figs/semana (est.)</div>
+            <div style="font-size:22px;font-weight:700;color:var(--color-success);">${novasPorSemana.toFixed(1).replace('.', ',')}</div>
+            <div style="font-size:10px;color:var(--color-text-tertiary);">de ${figsPorSemana} figs abertas por semana</div>
+          </div>
+          <div style="background:var(--color-background-tertiary);border-radius:var(--border-radius-sm);padding:12px;">
+            <div style="font-size:11px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em;">Faltam</div>
+            <div style="font-size:22px;font-weight:700;color:var(--color-warning);">${missing}</div>
+            <div style="font-size:10px;color:var(--color-text-tertiary);">${already} coladas de ${TOTAL_ALBUM}</div>
+          </div>
+        </div>`;
+    }
+
+    // Atualizar custo da última figurinha
+    updateUltimaFig(precoUnit, fpac);
+
+    // Atualizar gráfico marginal
+    updateMarginalChart(precoUnit, fpac);
+  }
+
+  function updateUltimaFig(precoUnit, fpac) {
+    const already = POSSUI_TOTAL;
+    const missing = TOTAL_ALBUM - already;
+    const precoPacote = precoUnit * fpac;
+
+    // Atualiza o contador no subtítulo do card
+    const restEl = document.getElementById('restantes-count');
+    if (restEl) restEl.textContent = missing;
+
+    if (missing <= 0) {
+      document.getElementById('ultima-fig-value').textContent = 'R$ 0,00';
+      document.getElementById('ultima-fig-sub').textContent = 'Álbum completo!';
+      document.getElementById('custo-restantes-detail').textContent = '';
+      return;
+    }
+
+    // Calcula o custo total esperado para obter cada uma das figurinhas restantes
+    // usando o modelo geométrico Coupon Collector ajustado por pacote.
+    // Para a i-ésima figurinha a ser obtida (onde já temos 'already + i - 1' coladas):
+    //   pHit(k) = 1 - ((TOTAL - missing + k - 1) / TOTAL)^fpac  ... não, mais simples:
+    //   pHit(k) = 1 - ((already + k - 1) / TOTAL)^fpac
+    // onde k vai de 1 (próxima fig) até missing (última fig)
+    let custoTotal = 0;
+    const custosPorFig = [];
+    for (let k = 1; k <= missing; k++) {
+      const coladas = already + k - 1;
+      const pHit = 1 - Math.pow(coladas / TOTAL_ALBUM, fpac);
+      const expectedPacks = pHit > 0 ? 1 / pHit : 99999;
+      const custo = expectedPacks * precoPacote;
+      custoTotal += custo;
+      custosPorFig.push(custo);
+    }
+
+    // Custo médio por figurinha restante
+    const custoMedio = custoTotal / missing;
+
+    // Custo da primeira figurinha faltante (a mais barata das restantes)
+    const custoPrimeira = custosPorFig[0];
+
+    // Custo da última figurinha (a mais cara, quando falta só ela)
+    const custoUltima = custosPorFig[custosPorFig.length - 1];
+
+    document.getElementById('ultima-fig-value').textContent = 'R$ ' + custoMedio.toFixed(2).replace('.', ',');
+    document.getElementById('ultima-fig-sub').textContent =
+      `Custo médio por fig. entre as ${missing} restantes`;
+
+    document.getElementById('custo-restantes-detail').innerHTML =
+      `<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px;">
+        <div style="background:var(--color-background-tertiary);border-radius:6px;padding:8px;">
+          <div style="font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--color-text-tertiary);">Próxima fig.</div>
+          <div style="font-size:16px;font-weight:700;color:var(--color-success);">R$ ${custoPrimeira.toFixed(2).replace('.', ',')}</div>
+        </div>
+        <div style="background:var(--color-background-tertiary);border-radius:6px;padding:8px;">
+          <div style="font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--color-text-tertiary);">Última fig.</div>
+          <div style="font-size:16px;font-weight:700;color:#ef4444;">R$ ${custoUltima.toFixed(2).replace('.', ',')}</div>
+        </div>
+        <div style="grid-column:1/-1;background:var(--color-background-tertiary);border-radius:6px;padding:8px;">
+          <div style="font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--color-text-tertiary);">Custo total estimado (só compras)</div>
+          <div style="font-size:16px;font-weight:700;color:#f59e0b;">R$ ${Math.round(custoTotal).toLocaleString('pt-BR')}</div>
+        </div>
+      </div>`;
+  }
+
+  function updateMarginalChart(precoUnit, fpac) {
+    const ctx1 = document.getElementById('chart-sim').getContext('2d');
+    const precoPacote = precoUnit * fpac;
+
+    // Gera 20 pontos ao longo do progresso (0% a 99.9%)
+    const labels = [];
+    const costs = [];
+    const checkpoints = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 98, 99];
+    const currentPct = Math.round(POSSUI_TOTAL / TOTAL_ALBUM * 100);
+
+    for (const pct of checkpoints) {
+      const already = Math.floor(pct / 100 * TOTAL_ALBUM);
+      const missing = TOTAL_ALBUM - already;
+      if (missing <= 0) {
+        costs.push(null);
+      } else {
+        const pHit = 1 - Math.pow((TOTAL_ALBUM - missing) / TOTAL_ALBUM, fpac);
+        const expectedPacks = pHit > 0 ? 1 / pHit : Infinity;
+        const custoMarg = expectedPacks * precoPacote;
+        costs.push(parseFloat(custoMarg.toFixed(2)));
+      }
+      labels.push(pct + '%');
+    }
+
+    // Marker de posição atual
+    const currentIdx = checkpoints.findIndex(p => p >= currentPct);
+
+    if (simChart) simChart.destroy();
+    simChart = new Chart(ctx1, {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: 'Custo marginal (R$)',
+            data: costs,
+            borderColor: '#06b6d4',
+            backgroundColor: 'rgba(6,182,212,0.08)',
+            tension: 0.4,
+            pointRadius: 4,
+            borderWidth: 2,
+            fill: true
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: c => 'R$ ' + (c.raw || 0).toFixed(2).replace('.', ',') + ' por nova figurinha'
+            }
+          },
+          annotation: currentIdx >= 0 ? {} : {}
+        },
+        scales: {
+          x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8', font: { size: 10 } } },
+          y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { callback: v => 'R$ ' + v.toFixed(2).replace('.', ','), color: '#94a3b8' } }
+        }
+      }
+    });
+  }
+
+  function initSimulacao() {
+    updateSim();
+    runMonteCarloSimulation();
+  }
+
+  // Simulação Interativa Monte Carlo
+  function runMonteCarloSimulation() {
+    const ctx2 = document.getElementById('chart-mc').getContext('2d');
+    const already = POSSUI_TOTAL;
+    const missing = TOTAL_ALBUM - already;
+
+    const precoUnit = parseInt(document.getElementById('sim-preco-unit').value) / 100;
+    const fpac = parseInt(document.getElementById('sim-fpac').value);
+    const precoPacote = precoUnit * fpac;
+
+    if (missing <= 0) {
+      document.getElementById('sim-results').innerHTML = `
+        <div class="result-box">
+          <p>Álbum Completo!</p>
+          <div class="big" style="color:var(--color-success)">100%</div>
+          <div class="small">Parabéns, você não precisa de novos pacotes!</div>
+        </div>`;
+      return;
+    }
+
+    document.getElementById('mc-running').style.display = 'block';
+
+    setTimeout(() => {
+      const sims = [];
+      const iterations = 1000;
+
+      for (let i = 0; i < iterations; i++) {
+        const coladas = new Set();
+        // Pré-popula com figurinhas já coladas (índices 0..already-1)
+        for (let k = 0; k < already; k++) coladas.add(k);
+        let pacotes = 0;
+        while (coladas.size < TOTAL_ALBUM) {
+          for (let j = 0; j < fpac; j++) {
+            coladas.add(Math.floor(Math.random() * TOTAL_ALBUM));
+          }
+          pacotes++;
+          if (pacotes > 100000) break;
+        }
+        sims.push(pacotes);
+      }
+
+      sims.sort((a, b) => a - b);
+      const mn = sims[0];
+      const mx = sims[sims.length - 1];
+      const medPacotes = sims[Math.floor(iterations / 2)];
+      const medCusto = medPacotes * precoPacote;
+
+      // Percentis
+      const p25 = sims[Math.floor(iterations * 0.25)] * precoPacote;
+      const p75 = sims[Math.floor(iterations * 0.75)] * precoPacote;
+
+      const bins = 20;
+      const binSize = Math.ceil((mx - mn) / bins) || 1;
+      const labels = [];
+      const counts = [];
+
+      for (let i = 0; i < bins; i++) {
+        const lo = mn + i * binSize;
+        const hi = lo + binSize;
+        labels.push(lo + ' pac.');
+        counts.push(sims.filter(v => v >= lo && v < hi).length);
+      }
+
+      if (mcChart) mcChart.destroy();
+      mcChart = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [{
+            label: 'Simulações',
+            data: counts,
+            backgroundColor: 'rgba(59, 130, 246, 0.6)',
+            borderColor: '#3b82f6',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                title: t => t[0].label + ' a ' + (parseInt(t[0].label) + binSize) + ' pacotes',
+                label: c => 'Frequência: ' + c.raw + ' de 1.000'
+              }
+            }
+          },
+          scales: {
+            x: { grid: { display: false }, ticks: { maxRotation: 45, font: { size: 9 }, color: '#94a3b8' } },
+            y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } }
+          }
+        }
+      });
+
+      document.getElementById('sim-results').innerHTML = `
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;">
+          <div>
+            <p style="font-size:11px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em;">Pacotes necessários (mediana)</p>
+            <div class="big">${medPacotes.toLocaleString('pt-BR')} pac.</div>
+            <div class="small">≈ R$ ${Math.round(medCusto).toLocaleString('pt-BR')} a R$ ${precoUnit.toFixed(2).replace('.', ',')} por fig.</div>
+          </div>
+          <div>
+            <p style="font-size:11px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em;">Intervalo de confiança (25–75%)</p>
+            <div class="big" style="font-size:22px;">R$ ${Math.round(p25).toLocaleString('pt-BR')} – R$ ${Math.round(p75).toLocaleString('pt-BR')}</div>
+            <div class="small">50% das simulações ficam nessa faixa</div>
+          </div>
+          <div>
+            <p style="font-size:11px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em;">Baseado em</p>
+            <div class="big" style="font-size:22px;">1.000 iterações</div>
+            <div class="small">${already} fig. coladas · ${missing} faltando · ${fpac} por pacote</div>
+          </div>
+        </div>`;
+
+      document.getElementById('mc-running').style.display = 'none';
+    }, 20);
+  }
+
+  // Ordem das seleções como aparecem no álbum:
+  // ESPECIAL primeiro, todas as seleções na ordem dos grupos A→L, HISTÓRIA e COCA-COLA por último
+  const SELECOES_ORDEM_ALBUM = (() => {
+    const todas = [...new Set(RAW.map(r => r.s))];
+    const primeiro = ['ESPECIAL'];
+    const ultimo = ['HISTÓRIA', 'COCA-COLA'];
+    const meio = todas.filter(s => !primeiro.includes(s) && !ultimo.includes(s));
+    // meio já segue a ordem de inserção do TEAM_PREFIXES (grupos A→L)
+    return [...primeiro, ...meio, ...ultimo];
+  })();
+
+  function initGaleria() {
+    repopularFiltroSelecoes(false);
+    renderGaleria();
+  }
+
+  function repopularFiltroSelecoes(ordemAlbum) {
+    const sel = document.getElementById('gal-sel');
+    const valorAtual = sel.value; // preserva a seleção ativa
+
+    let lista;
+    if (ordemAlbum) {
+      lista = SELECOES_ORDEM_ALBUM;
+    } else {
+      lista = [...SELECOES_ORDEM_ALBUM].sort((a, b) =>
+        a.normalize('NFD').replace(/[\u0300-\u036f]/g, '').localeCompare(
+          b.normalize('NFD').replace(/[\u0300-\u036f]/g, ''), 'pt-BR'
+        )
+      );
+    }
+
+    sel.innerHTML = '<option value="">Todas as seleções</option>';
+    lista.forEach(s => {
+      const o = document.createElement('option');
+      o.value = s;
+      o.text = s;
+      if (s === valorAtual) o.selected = true;
+      sel.add(o);
+    });
+  }
+
+  function renderGaleria() {
+    const s = document.getElementById('gal-sel').value;
+    const t = document.getElementById('gal-tipo').value;
+    const st = document.getElementById('gal-status').value;
+    const q = document.getElementById('gal-search').value.toLowerCase();
+    const ordemAlbum = document.getElementById('gal-ordem-album').checked;
+
+    // Sincroniza o dropdown de seleções com o modo de ordenação ativo
+    repopularFiltroSelecoes(ordemAlbum);
+
+    let data = RAW;
+    if (s) data = data.filter(r => r.s === s);
+    if (t) data = data.filter(r => r.t === t);
+    if (st === 'possui') data = data.filter(r => r.p);
+    if (st === 'falta') data = data.filter(r => !r.p);
+    if (q) data = data.filter(r => r.n.toLowerCase().includes(q) || r.c.toLowerCase().includes(q));
+
+    // Ordenação dos cards: ordem do álbum (sequência RAW) ou alfabética por seleção
+    if (ordemAlbum) {
+      data = [...data]; // mantém ordem de inserção do RAW
+    } else {
+      data = [...data].sort((a, b) => {
+        const sa = a.s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        const sb = b.s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        if (sa !== sb) return sa.localeCompare(sb, 'pt-BR');
+        return a.c.localeCompare(b.c, undefined, { numeric: true });
+      });
+    }
+
+    document.getElementById('gal-count').textContent = data.length + ' figurinhas encontradas';
+    const grid = document.getElementById('gal-grid');
+    
+    grid.innerHTML = data.slice(0, 150).map(r => `
+      <div class="card-fig ${r.p ? 'possui' : ''}" onclick="togglePossui('${r.c}')" tabindex="0" onkeydown="if(event.key === 'Enter') togglePossui('${r.c}')">
+        ${r.u ? `
+          <img src="${r.u}" alt="${r.n}" loading="lazy" onerror="imgFallback(this, '${r.c}')">
+        ` : `
+          <div class="img-placeholder">⬜</div>
+        `}
+        <div class="fn">${r.n}</div>
+        <div class="fc">
+          <span>${r.c}</span>
+          <i class="ti ti-circle-check-filled checked-badge"></i>
+        </div>
+        <div class="fig-checkbox" onclick="event.stopPropagation(); togglePossui('${r.c}')" title="${r.p ? 'Descolar figurinha' : 'Colar figurinha'}">
+          <i class="ti ti-check"></i>
+        </div>
+      </div>
+    `).join('');
+    
+    if (data.length > 150) {
+      grid.innerHTML += `<div style="grid-column:1/-1;text-align:center;font-size:12px;color:var(--color-text-tertiary);padding:12px">Mostrando as primeiras 150 figurinhas de ${data.length}. Filtre para ver o restante.</div>`;
+    }
+  }
+
+  function imgFallback(img, code) {
+    // Caso a imagem falhe ao carregar (por problemas do postimg de rede ou de bloqueios), substitui por placeholder elegante
+    const div = document.createElement('div');
+    div.className = "img-placeholder";
+    div.textContent = code;
+    img.parentNode.replaceChild(div, img);
+  }
+
+  function pct(p, t) { return t ? Math.round(p / t * 100) : 0; }
+  
+  // Script de cor semântica do progresso
+  function color(v) {
+    if (v >= 80) return '#10b981';
+    if (v >= 50) return '#f59e0b';
+    if (v >= 25) return '#f97316';
+    return '#ef4444';
+  }
+
+  //Função botões colar todas e descolar todas
+  function toggleFilteredBatch(status) {
+  // 1. Obtém os mesmos critérios de filtro ativos na tela
+  const s = document.getElementById('gal-sel').value;
+  const t = document.getElementById('gal-tipo').value;
+  const st = document.getElementById('gal-status').value;
+  const q = document.getElementById('gal-search').value.toLowerCase();
+  
+  // 2. Filtra a lista (com a mesma lógica usada pela galeria)
+  let dataFiltered = RAW;
+  if (s) dataFiltered = dataFiltered.filter(r => r.s === s);
+  if (t) dataFiltered = dataFiltered.filter(r => r.t === t);
+  if (st === 'possui') dataFiltered = dataFiltered.filter(r => r.p);
+  if (st === 'falta') dataFiltered = dataFiltered.filter(r => !r.p);
+  if (q) dataFiltered = dataFiltered.filter(r => r.n.toLowerCase().includes(q) || r.c.toLowerCase().includes(q));
+  
+  // 3. Aplica o novo estado (true/false) para todo o lote filtrado
+  dataFiltered.forEach(r => {
+    r.p = status;
+  });
+  
+  // 4. Recalcula o total colado e salva no localStorage
+  POSSUI_TOTAL = RAW.filter(r => r.p).length;
+  saveLocalProgress();
+  
+  // 5. Atualiza todos os componentes visualmente na tela
+  updateDashboardData();
+}
+  // Função para exportar progresso
+  // Abre a janela de seleção de arquivo do sistema operacional
+  function triggerImport() {
+    document.getElementById('import-file-input').click();
+  }
+
+  // Gera e baixa o arquivo JSON com o progresso atual
+  function exportarProgresso() {
+    const progresso = {};
+    RAW.forEach(item => {
+      progresso[item.c] = item.p;
+    });
+    
+    const blob = new Blob([JSON.stringify(progresso, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `progresso_album_copa_2026_${new Date().toISOString().slice(0,10)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  // Lê o arquivo JSON selecionado e aplica as marcações no dashboard
+  function importarProgresso(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        const progressoImportado = JSON.parse(e.target.result);
+        let itensAtualizados = 0;
+
+        RAW.forEach(item => {
+          if (progressoImportado[item.c] !== undefined) {
+            item.p = progressoImportado[item.c];
+            itensAtualizados++;
+          }
+        });
+
+        if (itensAtualizados > 0) {
+          POSSUI_TOTAL = RAW.filter(r => r.p).length;
+          saveLocalProgress(); // Grava no localStorage do novo dispositivo
+          updateDashboardData(); // Atualiza a tela inteira
+          alert("Excelente! Seu progresso foi importado com sucesso.");
+        } else {
+          alert("O arquivo selecionado não contém dados válidos de figurinhas deste álbum.");
+        }
+      } catch (err) {
+        alert("Erro ao ler o arquivo de dados. Certifique-se de que ele não foi corrompido.");
+        console.error(err);
+      }
+    };
+    reader.readAsText(file);
+    
+    // Limpa o input para permitir selecionar o mesmo arquivo novamente, se necessário
+    event.target.value = '';
+  }
+
+
+  // Inicialização Geral
+  loadLocalProgress();
+  initVisao();
+  initSelecoes();
+  renderSelecoes();
+  initHeatmap();
+  initGaleria();
+  setTimeout(initSimulacao, 150);
+</script>
+</body>
+</html>
