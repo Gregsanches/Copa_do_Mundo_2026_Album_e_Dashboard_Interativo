@@ -2,7 +2,7 @@
 
 Dashboard analítico single-page (HTML/CSS/JS puro) para gerenciamento e análise estatística de figurinhas do álbum oficial Panini da Copa do Mundo 2026. Construído sem dependências de backend — roda 100% no navegador, sem necessidade de servidor ou instalação.
 
-**[→ Demo ao vivo](https://seu-usuario.github.io/album-copa-2026)**
+**[→ Demo ao vivo](https://gregsanches.github.io/Copa_do_Mundo_2026_-Album_e_Dashboard_Interativo/)**
 
 ---
 
