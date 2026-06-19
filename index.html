@@ -617,6 +617,119 @@
       border-radius: 3px;
     }
 
+    /* Tabelas de dados acessíveis — visíveis apenas para leitores de tela */
+    .sr-only-table {
+      position: absolute;
+      left: -9999px;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+
+    /* ── Acessibilidade: foco visível com contraste WCAG AA ── */
+    :focus-visible {
+      outline: 3px solid #06b6d4;
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
+
+    /* Remove outline padrão do browser apenas quando há :focus-visible suportado */
+    :focus:not(:focus-visible) {
+      outline: none;
+    }
+
+    /* Foco em cards de figurinha */
+    .card-fig:focus-visible {
+      outline: 3px solid #06b6d4;
+      outline-offset: 2px;
+      box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.25);
+    }
+
+    /* Foco em botões de aba */
+    .nav button:focus-visible {
+      outline: 3px solid #06b6d4;
+      outline-offset: 2px;
+    }
+
+    /* Foco em selects */
+    select:focus-visible {
+      outline: 3px solid #06b6d4;
+      outline-offset: 2px;
+      border-color: #06b6d4;
+    }
+
+    /* Hover states com contraste suficiente — fundo mais visível */
+    .card-fig:hover {
+      border-color: #7dd3fc !important; /* azul claro — passa AA em fundo escuro */
+    }
+
+    .nav button:hover,
+    .nav button.active {
+      color: #f8fafc; /* texto branco — 15.8:1 em fundo escuro */
+    }
+
+    /* ── Modo de alto contraste (forced-colors / Windows High Contrast) ── */
+    @media (forced-colors: active) {
+      :root {
+        --color-border-primary: Highlight;
+        --color-success: ButtonText;
+        --color-danger: ButtonText;
+        --color-warning: ButtonText;
+        --color-text-primary: CanvasText;
+        --color-text-secondary: CanvasText;
+        --color-background-primary: Canvas;
+        --color-background-secondary: Canvas;
+        --color-background-tertiary: Canvas;
+        --color-border-secondary: ButtonBorder;
+      }
+
+      .card-fig {
+        border: 2px solid ButtonBorder;
+        forced-color-adjust: none;
+      }
+
+      .card-fig.possui {
+        border-color: Highlight;
+        outline: 2px solid Highlight;
+      }
+
+      .fig-checkbox {
+        border: 2px solid ButtonBorder;
+        forced-color-adjust: none;
+      }
+
+      .card-fig.possui .fig-checkbox {
+        background-color: Highlight;
+        border-color: Highlight;
+      }
+
+      .bar-fill {
+        background: Highlight !important;
+        forced-color-adjust: none;
+      }
+
+      .nav button.active {
+        background: Highlight;
+        color: HighlightText;
+        forced-color-adjust: none;
+      }
+
+      /* Gráficos canvas — não controlamos cores internas do Chart.js em forced-colors */
+      canvas {
+        forced-color-adjust: none;
+      }
+    }
+
+    /* ── Acessibilidade: respeita preferência de movimento reduzido ── */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
     /* Skip link para navegação por teclado */
     .skip-link {
       position: absolute;
@@ -639,6 +752,9 @@
 </head>
 <body>
 <a href="#main-content" class="skip-link">Ir para o conteúdo principal</a>
+<!-- Região aria-live: anuncia ações para leitores de tela sem mover o foco -->
+<div id="sr-announce" role="status" aria-live="polite" aria-atomic="true"
+     style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;"></div>
 
 
 <main id="main-content"><div class="container">
@@ -787,12 +903,30 @@
       <div class="plot-card">
         <p class="section-title"><i class="ti ti-chart-line" aria-hidden="true"></i> Custo Marginal Dinâmico por Figurinha (R$)</p>
         <p style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:8px;">Quanto custa, em média, obter uma nova figurinha única conforme o álbum vai sendo completado.</p>
-        <div class="chart-wrap" style="height:250px"><canvas id="chart-sim"></canvas></div>
+        <div class="chart-wrap" style="height:250px">
+          <canvas id="chart-sim" role="img" aria-label="Gráfico de custo marginal por figurinha ao longo do progresso do álbum">
+            <p>Gráfico de linha mostrando o custo marginal esperado (R$) para obter uma nova figurinha única conforme o progresso do álbum aumenta de 0% a 99%. O custo cresce exponencialmente nas fases finais. Dados disponíveis na tabela abaixo.</p>
+          </canvas>
+          <table id="table-sim" class="sr-only-table" aria-label="Dados do custo marginal por progresso">
+            <caption>Custo marginal esperado por figurinha em cada etapa do álbum</caption>
+            <thead><tr><th scope="col">Progresso</th><th scope="col">Custo marginal (R$)</th></tr></thead>
+            <tbody id="table-sim-body"></tbody>
+          </table>
+        </div>
       </div>
       <div class="plot-card">
         <p class="section-title"><i class="ti ti-chart-histogram" aria-hidden="true"></i> Distribuição de Custo Total (Monte Carlo)</p>
         <p style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:8px;">Distribuição das 1.000 simulações de custo total para completar o álbum sem trocas.</p>
-        <div class="chart-wrap" style="height:250px"><canvas id="chart-mc"></canvas></div>
+        <div class="chart-wrap" style="height:250px">
+          <canvas id="chart-mc" role="img" aria-label="Histograma de distribuição de pacotes necessários para completar o álbum — simulação Monte Carlo com 1.000 iterações">
+            <p>Histograma mostrando a distribuição de quantos pacotes seriam necessários para completar o álbum comprando apenas pacotes, sem trocas. Baseado em 1.000 simulações independentes. Dados disponíveis na tabela abaixo.</p>
+          </canvas>
+          <table id="table-mc" class="sr-only-table" aria-label="Dados da simulação Monte Carlo">
+            <caption>Distribuição de pacotes necessários — 1.000 iterações Monte Carlo</caption>
+            <thead><tr><th scope="col">Faixa de pacotes</th><th scope="col">Frequência</th></tr></thead>
+            <tbody id="table-mc-body"></tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -1269,6 +1403,14 @@
       sticker.p = !sticker.p;
       POSSUI_TOTAL = RAW.filter(r => r.p).length;
       saveLocalProgress();
+
+      // Anuncia a ação para leitores de tela via aria-live
+      const announce = document.getElementById('sr-announce');
+      if (announce) {
+        announce.textContent = sticker.p
+          ? `Figurinha ${sticker.n} colada. Total: ${POSSUI_TOTAL} de ${TOTAL_ALBUM}.`
+          : `Figurinha ${sticker.n} removida. Total: ${POSSUI_TOTAL} de ${TOTAL_ALBUM}.`;
+      }
       
       // Atualizações de renderização instantâneas da UI (Single Page App)
       updateDashboardData();
@@ -1322,6 +1464,34 @@
         <span class="bar-pct">${p}%</span>
       </div>`;
     }).join('');
+  }
+
+  // Navegação por setas na galeria (roving tabindex)
+  function handleCardKeydown(event, code) {
+    const grid = document.getElementById('gal-grid');
+    const cards = Array.from(grid.querySelectorAll('.card-fig'));
+    const idx = cards.findIndex(c => c.dataset.code === code);
+
+    if (event.key === 'Enter' || event.key === ' ') {
+      togglePossui(code);
+      return;
+    }
+
+    let next = -1;
+    const cols = Math.round(grid.offsetWidth / (cards[0]?.offsetWidth || 130)) || 4;
+
+    if (event.key === 'ArrowRight') next = Math.min(idx + 1, cards.length - 1);
+    else if (event.key === 'ArrowLeft') next = Math.max(idx - 1, 0);
+    else if (event.key === 'ArrowDown') next = Math.min(idx + cols, cards.length - 1);
+    else if (event.key === 'ArrowUp') next = Math.max(idx - cols, 0);
+    else if (event.key === 'Home') next = 0;
+    else if (event.key === 'End') next = cards.length - 1;
+    else return;
+
+    event.preventDefault();
+    cards[idx].setAttribute('tabindex', '-1');
+    cards[next].setAttribute('tabindex', '0');
+    cards[next].focus();
   }
 
   function initVisao() {
@@ -1627,6 +1797,14 @@
         }
       }
     });
+
+    // Popula tabela acessível do gráfico marginal
+    const simTbody = document.getElementById('table-sim-body');
+    if (simTbody) {
+      simTbody.innerHTML = labels.map((lbl, i) =>
+        `<tr><td>${lbl}</td><td>${costs[i] !== null ? 'R$ ' + costs[i].toFixed(2).replace('.', ',') : '—'}</td></tr>`
+      ).join('');
+    }
   }
 
   function initSimulacao() {
@@ -1749,6 +1927,14 @@
         </div>`;
 
       document.getElementById('mc-running').style.display = 'none';
+
+      // Popula tabela acessível do histograma Monte Carlo
+      const mcTbody = document.getElementById('table-mc-body');
+      if (mcTbody) {
+        mcTbody.innerHTML = labels.map((lbl, i) =>
+          `<tr><td>${lbl}</td><td>${counts[i]} de 1.000 simulações</td></tr>`
+        ).join('');
+      }
     }, 20);
   }
 
@@ -1824,13 +2010,21 @@
 
     document.getElementById('gal-count').textContent = data.length + ' figurinhas encontradas';
     const grid = document.getElementById('gal-grid');
+    const prevFocusCode = document.activeElement?.dataset?.code;
     
-    grid.innerHTML = data.slice(0, 150).map(r => `
-      <div class="card-fig ${r.p ? 'possui' : ''}" onclick="togglePossui('${r.c}')" tabindex="0" onkeydown="if(event.key === 'Enter') togglePossui('${r.c}')">
+    grid.innerHTML = data.slice(0, 150).map((r, idx) => `
+      <div class="card-fig ${r.p ? 'possui' : ''}"
+           data-code="${r.c}"
+           onclick="togglePossui('${r.c}')"
+           tabindex="${idx === 0 ? '0' : '-1'}"
+           onkeydown="handleCardKeydown(event, '${r.c}')">
         ${r.u ? `
-          <img src="${r.u}" alt="${r.n}" loading="lazy" onerror="imgFallback(this, '${r.c}')">
+          <img src="${r.u}"
+               alt="${r.n} — figurinha ${r.c} (${r.s}${r.p ? ', colada' : ', faltando'})"
+               loading="lazy"
+               onerror="imgFallback(this, '${r.c}')">
         ` : `
-          <div class="img-placeholder">⬜</div>
+          <div class="img-placeholder" role="img" aria-label="Imagem não disponível — ${r.n} (${r.c})">⬜</div>
         `}
         <div class="fn">${r.n}</div>
         <div class="fc">
@@ -1845,6 +2039,15 @@
     
     if (data.length > 150) {
       grid.innerHTML += `<div style="grid-column:1/-1;text-align:center;font-size:12px;color:var(--color-text-tertiary);padding:12px">Mostrando as primeiras 150 figurinhas de ${data.length}. Filtre para ver o restante.</div>`;
+    }
+
+    // Roving tabindex: restaura foco no card anterior se ainda estiver visível após re-render
+    if (prevFocusCode) {
+      const prev = grid.querySelector(`[data-code="${prevFocusCode}"]`);
+      if (prev) {
+        prev.setAttribute('tabindex', '0');
+        prev.focus();
+      }
     }
   }
 
