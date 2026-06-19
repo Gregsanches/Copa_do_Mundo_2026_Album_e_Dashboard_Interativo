@@ -18,7 +18,7 @@
       --color-background-tertiary: #1f2b48;
       --color-text-primary: #f8fafc;
       --color-text-secondary: #94a3b8;
-      --color-text-tertiary: #64748b;
+      --color-text-tertiary: #7c8fa8;
       --color-border-primary: #06b6d4;
       --color-border-secondary: #334155;
       --color-border-tertiary: #1e293b;
@@ -616,11 +616,32 @@
       background: var(--color-background-tertiary);
       border-radius: 3px;
     }
+
+    /* Skip link para navegação por teclado */
+    .skip-link {
+      position: absolute;
+      top: -100px;
+      left: 8px;
+      background: var(--color-border-primary);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 0 0 6px 6px;
+      font-size: 14px;
+      font-weight: 600;
+      z-index: 9999;
+      text-decoration: none;
+      transition: top .2s;
+    }
+    .skip-link:focus {
+      top: 0;
+    }
   </style>
 </head>
 <body>
+<a href="#main-content" class="skip-link">Ir para o conteúdo principal</a>
 
-<div class="container">
+
+<main id="main-content"><div class="container">
   <header>
     <div>
       <h1>Álbum Copa do Mundo 2026</h1>
@@ -631,12 +652,12 @@
     </div>
   </header>
 
-  <nav class="nav">
-    <button class="active" onclick="showPage('visao')"><i class="ti ti-chart-pie"></i> Visão Geral</button>
-    <button onclick="showPage('selecoes')"><i class="ti ti-flag"></i> Por Seleção</button>
-    <button onclick="showPage('heatmap')"><i class="ti ti-grid-3x3"></i> Por Grupo</button>
-    <button onclick="showPage('simulacao')"><i class="ti ti-chart-dots"></i> Análise de Dados</button>
-    <button onclick="showPage('galeria')"><i class="ti ti-photo"></i> Galeria</button>
+  <nav class="nav" role="tablist" aria-label="Navegação principal">
+    <button class="active" onclick="showPage('visao')" role="tab" aria-controls="page-visao" aria-selected="false"><i class="ti ti-chart-pie" aria-hidden="true"></i> Visão Geral</button>
+    <button onclick="showPage('selecoes')" role="tab" aria-controls="page-selecoes" aria-selected="false"><i class="ti ti-flag" aria-hidden="true"></i> Por Seleção</button>
+    <button onclick="showPage('heatmap')" role="tab" aria-controls="page-heatmap" aria-selected="false"><i class="ti ti-grid-3x3" aria-hidden="true"></i> Por Grupo</button>
+    <button onclick="showPage('simulacao')" role="tab" aria-controls="page-simulacao" aria-selected="false"><i class="ti ti-chart-dots" aria-hidden="true"></i> Análise de Dados</button>
+    <button onclick="showPage('galeria')" role="tab" aria-controls="page-galeria" aria-selected="false"><i class="ti ti-photo" aria-hidden="true"></i> Galeria</button>
   </nav>
 
   <!-- Visão Geral -->
@@ -651,31 +672,31 @@
     </div>
     <div class="grid-plots">
       <div class="plot-card">
-        <p class="section-title"><i class="ti ti-world"></i> Por Confederação</p>
+        <p class="section-title"><i class="ti ti-world" aria-hidden="true"></i> Por Confederação</p>
         <div id="bars-conf"></div>
       </div>
       <div class="plot-card">
-        <p class="section-title"><i class="ti ti-layout-grid-add"></i> Por Tipo de Categoria</p>
+        <p class="section-title"><i class="ti ti-layout-grid-add" aria-hidden="true"></i> Por Tipo de Categoria</p>
         <div id="bars-tipo"></div>
       </div>
     </div>
     <div class="plot-card" style="margin-top: 4px;">
-      <p class="section-title"><i class="ti ti-trophy"></i> Top 10 Seleções Mais Completas</p>
+      <p class="section-title"><i class="ti ti-trophy" aria-hidden="true"></i> Top 10 Seleções Mais Completas</p>
       <div id="bars-top10"></div>
       <div class="plot-card" style="margin-top: 20px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px;">
   <div>
-    <p class="section-title" style="margin-bottom: 4px;"><i class="ti ti-device-sd-card"></i> Backup e Sincronização</p>
+    <p class="section-title" style="margin-bottom: 4px;"><i class="ti ti-device-sd-card" aria-hidden="true"></i> Backup e Sincronização</p>
     <p style="font-size: 12px; color: var(--color-text-secondary);">Transfira suas figurinhas marcadas para outro computador, celular ou faça uma cópia de segurança.</p>
   </div>
   <div style="display: flex; gap: 10px; align-items: center;">
     <!-- Botão de Exportar -->
-    <button class="btn-action" onclick="exportarProgresso()" title="Baixar arquivo de backup com suas marcações">
-      <i class="ti ti-download"></i> Exportar Dados
+    <button class="btn-action" onclick="exportarProgresso()" aria-label="Exportar progresso" title="Baixar arquivo de backup com suas marcações">
+      <i class="ti ti-download" aria-hidden="true"></i> Exportar Dados
     </button>
     
     <!-- Botão de Importar -->
-    <button class="btn-action" style="background: var(--color-background-tertiary); color: var(--color-text-primary); border: 1px solid var(--color-border-secondary);" onclick="triggerImport()" title="Carregar arquivo de backup salvo">
-      <i class="ti ti-upload"></i> Importar Dados
+    <button class="btn-action" aria-label="Importar progresso" style="background: var(--color-background-tertiary); color: var(--color-text-primary); border: 1px solid var(--color-border-secondary);" onclick="triggerImport()" title="Carregar arquivo de backup salvo">
+      <i class="ti ti-upload" aria-hidden="true"></i> Importar Dados
     </button>
     <input type="file" id="import-file-input" style="display: none;" accept=".json" onchange="importarProgresso(event)">
   </div>
@@ -686,8 +707,8 @@
   <!-- Seleções -->
   <div id="page-selecoes" class="page">
     <div class="filters">
-      <select id="fil-grupo" onchange="renderSelecoes()"><option value="">Todos os grupos</option></select>
-      <select id="fil-conf" onchange="renderSelecoes()"><option value="">Todas confederações</option></select>
+      <select id="fil-grupo" onchange="renderSelecoes()" aria-label="Filtrar por grupo"><option value="">Todos os grupos</option></select>
+      <select id="fil-conf" onchange="renderSelecoes()" aria-label="Filtrar por confederação"><option value="">Todas confederações</option></select>
     </div>
     <div id="sel-list" class="selection-list"></div>
   </div>
@@ -703,7 +724,7 @@
     <!-- Parâmetros Globais -->
     <div class="sim-controls" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));">
       <div class="sim-card">
-        <p class="section-title"><i class="ti ti-adjustments-horizontal"></i> Parâmetros do Modelo</p>
+        <p class="section-title"><i class="ti ti-adjustments-horizontal" aria-hidden="true"></i> Parâmetros do Modelo</p>
         <div class="sim-row">
           <label for="sim-preco-unit">Valor unitário da figurinha (R$)</label>
           <div class="sim-slider-wrap">
@@ -726,13 +747,13 @@
           </div>
         </div>
         <div style="font-size:11px;color:var(--color-text-tertiary);margin-top:4px;padding:8px;background:var(--color-background-tertiary);border-radius:var(--border-radius-sm);">
-          <i class="ti ti-info-circle"></i> Figurinhas coladas: <b id="sim-coladas-count">0</b> / <b id="sim-total-count">994</b> — Faltam: <b id="sim-faltam-count">994</b>
+          <i class="ti ti-info-circle" aria-hidden="true"></i> Figurinhas coladas: <b id="sim-coladas-count">0</b> / <b id="sim-total-count">994</b> — Faltam: <b id="sim-faltam-count">994</b>
         </div>
       </div>
 
       <!-- Previsão de Conclusão -->
       <div class="sim-card">
-        <p class="section-title"><i class="ti ti-calendar-stats"></i> Previsão de Conclusão</p>
+        <p class="section-title"><i class="ti ti-calendar-stats" aria-hidden="true"></i> Previsão de Conclusão</p>
         <div id="previsao-results" style="display:flex;flex-direction:column;gap:10px;">
           <div style="font-size:13px;color:var(--color-text-secondary);">Calculando...</div>
         </div>
@@ -740,7 +761,7 @@
 
       <!-- Indicador: Custo das figurinhas restantes -->
       <div class="sim-card" style="border-left: 3px solid #f59e0b;">
-        <p class="section-title"><i class="ti ti-currency-dollar"></i> Custo das Figurinhas Restantes</p>
+        <p class="section-title"><i class="ti ti-currency-dollar" aria-hidden="true"></i> Custo das Figurinhas Restantes</p>
         <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:12px;">Custo médio esperado por figurinha considerando as <b id="restantes-count">—</b> que ainda faltam. Quanto menos faltam, mais cara fica cada uma.</div>
         <div id="ultima-fig-value" style="font-size:38px;font-weight:700;color:#f59e0b;margin:4px 0;">—</div>
         <div id="ultima-fig-sub" style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:8px;"></div>
@@ -751,11 +772,11 @@
     <!-- Monte Carlo: Completar sem trocas -->
     <div class="grid-plots" style="margin-bottom:24px;">
       <div class="sim-card" style="grid-column: 1 / -1;">
-        <p class="section-title"><i class="ti ti-calculator"></i> Simulação de Completude Apenas por Compras (Sem Trocas)</p>
+        <p class="section-title"><i class="ti ti-calculator" aria-hidden="true"></i> Simulação de Completude Apenas por Compras (Sem Trocas)</p>
         <p style="font-size:12px;color:var(--color-text-secondary);margin-bottom:16px;">Considerando que todas as figurinhas têm a mesma probabilidade de aparecer em um pacote (sem raridades), quantos pacotes seriam necessários para completar o álbum comprando sozinho?</p>
         <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end;margin-bottom:16px;">
-          <button class="btn-action" onclick="runMonteCarloSimulation()"><i class="ti ti-refresh"></i> Rodar Simulação (1.000 iterações)</button>
-          <div id="mc-running" style="font-size:12px;color:var(--color-text-tertiary);display:none;"><i class="ti ti-loader"></i> Simulando...</div>
+          <button class="btn-action" onclick="runMonteCarloSimulation()"><i class="ti ti-refresh" aria-hidden="true"></i> Rodar Simulação (1.000 iterações)</button>
+          <div id="mc-running" style="font-size:12px;color:var(--color-text-tertiary);display:none;"><i class="ti ti-loader" aria-hidden="true"></i> Simulando...</div>
         </div>
         <div id="sim-results" class="result-box" style="margin-bottom:16px;"></div>
       </div>
@@ -764,12 +785,12 @@
     <!-- Gráficos -->
     <div class="grid-plots">
       <div class="plot-card">
-        <p class="section-title"><i class="ti ti-chart-line"></i> Custo Marginal Dinâmico por Figurinha (R$)</p>
+        <p class="section-title"><i class="ti ti-chart-line" aria-hidden="true"></i> Custo Marginal Dinâmico por Figurinha (R$)</p>
         <p style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:8px;">Quanto custa, em média, obter uma nova figurinha única conforme o álbum vai sendo completado.</p>
         <div class="chart-wrap" style="height:250px"><canvas id="chart-sim"></canvas></div>
       </div>
       <div class="plot-card">
-        <p class="section-title"><i class="ti ti-chart-histogram"></i> Distribuição de Custo Total (Monte Carlo)</p>
+        <p class="section-title"><i class="ti ti-chart-histogram" aria-hidden="true"></i> Distribuição de Custo Total (Monte Carlo)</p>
         <p style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:8px;">Distribuição das 1.000 simulações de custo total para completar o álbum sem trocas.</p>
         <div class="chart-wrap" style="height:250px"><canvas id="chart-mc"></canvas></div>
       </div>
@@ -780,13 +801,13 @@
   <div id="page-galeria" class="page">
     <div class="gallery-filters">
       <div style="display:flex;flex-direction:column;gap:4px;">
-        <select id="gal-sel" onchange="renderGaleria()"><option value="">Todas as seleções</option></select>
+        <select id="gal-sel" onchange="renderGaleria()" aria-label="Filtrar por seleção"><option value="">Todas as seleções</option></select>
         <label style="font-size:11px;color:var(--color-text-tertiary);display:flex;align-items:center;gap:5px;cursor:pointer;user-select:none;">
-          <input type="checkbox" id="gal-ordem-album" onchange="renderGaleria()" style="accent-color:var(--color-border-primary);width:12px;height:12px;">
+          <input type="checkbox" id="gal-ordem-album" onchange="renderGaleria()" aria-label="Ordenar por sequência do álbum" style="accent-color:var(--color-border-primary);width:12px;height:12px;">
           Ordem do álbum
         </label>
       </div>
-      <select id="gal-tipo" onchange="renderGaleria()">
+      <select id="gal-tipo" onchange="renderGaleria()" aria-label="Filtrar por tipo de figurinha">
         <option value="">Todos os tipos</option>
         <option value="jogador">Jogador</option>
         <option value="escudo">Escudo</option>
@@ -794,18 +815,18 @@
         <option value="especial_fwc">Especial FWC</option>
         <option value="coca_cola">Coca-Cola</option>
       </select>
-      <select id="gal-status" onchange="renderGaleria()">
+      <select id="gal-status" onchange="renderGaleria()" aria-label="Filtrar por status">
         <option value="">Todos os status</option>
         <option value="possui">Coladas</option>
         <option value="falta">Faltando</option>
       </select>
-      <input type="text" id="gal-search" placeholder="Buscar jogador..." oninput="renderGaleria()">
+      <input type="text" id="gal-search" placeholder="Buscar jogador..." oninput="renderGaleria()" aria-label="Buscar figurinha por nome ou código">
       <div style="display: flex; gap: 8px;">
-  <button class="btn-batch btn-batch-check" onclick="toggleFilteredBatch(true)" title="Colar todas as figurinhas que estão aparecendo no filtro atual">
-    <i class="ti ti-checkbox"></i> Colar Filtradas
+  <button class="btn-batch btn-batch-check" onclick="toggleFilteredBatch(true)" aria-label="Colar todas as figurinhas filtradas" title="Colar todas as figurinhas que estão aparecendo no filtro atual">
+    <i class="ti ti-checkbox" aria-hidden="true"></i> Colar Filtradas
   </button>
-  <button class="btn-batch btn-batch-uncheck" onclick="toggleFilteredBatch(false)" title="Descolar todas as figurinhas que estão aparecendo no filtro atual">
-    <i class="ti ti-square-x"></i> Descolar Filtradas
+  <button class="btn-batch btn-batch-uncheck" onclick="toggleFilteredBatch(false)" aria-label="Descolar todas as figurinhas filtradas" title="Descolar todas as figurinhas que estão aparecendo no filtro atual">
+    <i class="ti ti-square-x" aria-hidden="true"></i> Descolar Filtradas
   </button>
 </div>
       <span id="gal-count" style="font-size:13.5px;color:var(--color-text-secondary);align-self:center;margin-left:auto"></span>
@@ -1263,6 +1284,11 @@
   }
 
   function showPage(id) {
+    // Atualiza aria-selected nas abas
+    document.querySelectorAll('[role="tab"]').forEach(btn => {
+      const ctrl = btn.getAttribute('aria-controls');
+      btn.setAttribute('aria-selected', ctrl === 'page-' + id ? 'true' : 'false');
+    });
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
     document.getElementById('page-' + id).classList.add('active');
@@ -1809,10 +1835,10 @@
         <div class="fn">${r.n}</div>
         <div class="fc">
           <span>${r.c}</span>
-          <i class="ti ti-circle-check-filled checked-badge"></i>
+          <i class="ti ti-circle-check-filled checked-badge" aria-hidden="true"></i>
         </div>
-        <div class="fig-checkbox" onclick="event.stopPropagation(); togglePossui('${r.c}')" title="${r.p ? 'Descolar figurinha' : 'Colar figurinha'}">
-          <i class="ti ti-check"></i>
+        <div class="fig-checkbox" role="checkbox" aria-checked="${r.p ? 'true' : 'false'}" aria-label="${r.p ? 'Descolar ' + r.n : 'Colar ' + r.n}" tabindex="0" onclick="event.stopPropagation(); togglePossui('${r.c}')" onkeydown="if(event.key===' '||event.key==='Enter'){event.stopPropagation();togglePossui('${r.c}');}">
+          <i class="ti ti-check" aria-hidden="true"></i>
         </div>
       </div>
     `).join('');
@@ -1940,5 +1966,6 @@
   initGaleria();
   setTimeout(initSimulacao, 150);
 </script>
+</main>
 </body>
 </html>
