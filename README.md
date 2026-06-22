@@ -232,21 +232,21 @@ Use os botões **Exportar Dados** / **Importar Dados** na aba Visão Geral para 
 
 Este repositório é aberto a contribuições! Áreas de melhoria identificadas:
 
-**Acessibilidade** *(boa parte da base já implementada — ver seção [Acessibilidade](#-acessibilidade))*
+**Acessibilidade** 
 - [ ] Validação com leitores de tela reais (NVDA, JAWS, VoiceOver)
 - [ ] Refinar `aria-describedby` ligando cada gráfico à sua tabela equivalente
 - [ ] Mecanismo "pular para seleção" na navegação por teclado da galeria
 - [ ] Auditar contraste do texto sobre cada estado de cor do heatmap
-- [ ] Internacionalização dos rótulos ARIA (atualmente fixos em português)
 
-**Análise estatística** *(modelos base revisados na v2 — ver [Metodologias](#-metodologias-de-análise))*
+
+**Análise estatística** 
 - [ ] **Modelo com trocas:** quanto se economiza com um grupo de N colecionadores trocando duplicatas? (estimativa: ~40–60% com 3–4 pessoas)
 - [ ] **Probabilidade de completar com orçamento X:** dado R$ Y restantes, qual a chance de completar? (Monte Carlo com corte de orçamento)
 - [ ] **Data de conclusão com intervalo:** usar o Monte Carlo para dar P25/P75 da data prevista, não só um ponto
 - [ ] **Curva de retorno decrescente:** gráfico de figurinhas novas por real gasto — mostra quando parar de comprar e migrar para trocas
 - [ ] **Estratégia de compra em lote vs. gradual:** comparar qual reduz mais o custo esperado
 - [ ] Intervalo de confiança 90% e 95% na simulação Monte Carlo
-- [ ] Modelar o avanço de múltiplas posições por pacote (remover a superestimativa conservadora de ~3–8% descrita na seção 3)
+- [ ] Modelar o avanço de múltiplas posições por pacote 
 
 **Produto / UX**
 - [ ] Modo escuro/claro toggle
@@ -260,9 +260,8 @@ Este repositório é aberto a contribuições! Áreas de melhoria identificadas:
 - [ ] Validação e atualização das URLs de imagem
 - [ ] Validação de integridade na importação (reportar códigos que não correspondem ao álbum atual)
 - [ ] Tratamento de `QuotaExceededError` no localStorage
-- [ ] Suporte a outros álbuns Panini (extensão do modelo de dados)
 - [ ] Adicionar campo de "repetidas" por figurinha
-- [ ] Suporte a outros álbuns Panini (extensão do modelo de dados)
+
 
 Para contribuir:
 ```bash
@@ -292,4 +291,7 @@ MIT — use, modifique e distribua livremente, com atribuição.
 
 ---
 
-*Feito com curiosidade estatística e muita cola de figurinha. 🇧🇷*
+*Feito com curiosidade estatística de um pai para brincar junto com seu filho de álbum da Copa do Mundo 2026.*
+
+![Brasil](https://flagcdn.com/24x18/br.png)
+🇧🇷
