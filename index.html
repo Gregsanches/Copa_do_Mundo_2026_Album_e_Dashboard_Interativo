@@ -748,6 +748,15 @@
     .skip-link:focus {
       top: 0;
     }
+
+    /* Tabpanel — foco programático invisível visualmente mas presente para leitores de tela */
+    .page:focus {
+      outline: none;
+    }
+    .page:focus-visible {
+      outline: 2px solid #06b6d4;
+      outline-offset: -2px;
+    }
   </style>
 </head>
 <body>
@@ -769,15 +778,15 @@
   </header>
 
   <nav class="nav" role="tablist" aria-label="Navegação principal">
-    <button class="active" onclick="showPage('visao')" role="tab" aria-controls="page-visao" aria-selected="false"><i class="ti ti-chart-pie" aria-hidden="true"></i> Visão Geral</button>
-    <button onclick="showPage('selecoes')" role="tab" aria-controls="page-selecoes" aria-selected="false"><i class="ti ti-flag" aria-hidden="true"></i> Por Seleção</button>
-    <button onclick="showPage('heatmap')" role="tab" aria-controls="page-heatmap" aria-selected="false"><i class="ti ti-grid-3x3" aria-hidden="true"></i> Por Grupo</button>
-    <button onclick="showPage('simulacao')" role="tab" aria-controls="page-simulacao" aria-selected="false"><i class="ti ti-chart-dots" aria-hidden="true"></i> Análise de Dados</button>
-    <button onclick="showPage('galeria')" role="tab" aria-controls="page-galeria" aria-selected="false"><i class="ti ti-photo" aria-hidden="true"></i> Galeria</button>
+    <button class="active" id="btn-visao" onclick="showPage('visao')" role="tab" aria-controls="page-visao" aria-selected="false"><i class="ti ti-chart-pie" aria-hidden="true"></i> Visão Geral</button>
+    <button id="btn-selecoes" onclick="showPage('selecoes')" role="tab" aria-controls="page-selecoes" aria-selected="false"><i class="ti ti-flag" aria-hidden="true"></i> Por Seleção</button>
+    <button id="btn-heatmap" onclick="showPage('heatmap')" role="tab" aria-controls="page-heatmap" aria-selected="false"><i class="ti ti-grid-3x3" aria-hidden="true"></i> Por Grupo</button>
+    <button id="btn-simulacao" onclick="showPage('simulacao')" role="tab" aria-controls="page-simulacao" aria-selected="false"><i class="ti ti-chart-dots" aria-hidden="true"></i> Análise de Dados</button>
+    <button id="btn-galeria" onclick="showPage('galeria')" role="tab" aria-controls="page-galeria" aria-selected="false"><i class="ti ti-photo" aria-hidden="true"></i> Galeria</button>
   </nav>
 
   <!-- Visão Geral -->
-  <div id="page-visao" class="page active">
+  <div id="page-visao" class="page active" role="tabpanel" aria-labelledby="btn-visao" tabindex="-1">
     <div class="kpis" id="kpi-geral"></div>
     <div class="progress-container">
       <div class="progress-bar-label">
@@ -821,21 +830,21 @@
   </div>
 
   <!-- Seleções -->
-  <div id="page-selecoes" class="page">
+  <div id="page-selecoes" class="page" role="tabpanel" aria-labelledby="btn-selecoes" tabindex="-1">
     <div class="filters">
       <select id="fil-grupo" onchange="renderSelecoes()" aria-label="Filtrar por grupo"><option value="">Todos os grupos</option></select>
       <select id="fil-conf" onchange="renderSelecoes()" aria-label="Filtrar por confederação"><option value="">Todas confederações</option></select>
     </div>
-    <div id="sel-list" class="selection-list"></div>
+    <div id="sel-list" role="list" aria-label="Lista de seleções e progresso" class="selection-list"></div>
   </div>
 
   <!-- Heatmap -->
-  <div id="page-heatmap" class="page">
+  <div id="page-heatmap" class="page" role="tabpanel" aria-labelledby="btn-heatmap" tabindex="-1">
     <div id="hm-container" class="hm-container"></div>
   </div>
 
   <!-- Análise de Dados -->
-  <div id="page-simulacao" class="page">
+  <div id="page-simulacao" class="page" role="tabpanel" aria-labelledby="btn-simulacao" tabindex="-1">
 
     <!-- Parâmetros Globais -->
     <div class="sim-controls" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));">
@@ -932,7 +941,7 @@
   </div>
 
   <!-- Galeria -->
-  <div id="page-galeria" class="page">
+  <div id="page-galeria" class="page" role="tabpanel" aria-labelledby="btn-galeria" tabindex="-1">
     <div class="gallery-filters">
       <div style="display:flex;flex-direction:column;gap:4px;">
         <select id="gal-sel" onchange="renderGaleria()" aria-label="Filtrar por seleção"><option value="">Todas as seleções</option></select>
@@ -965,7 +974,7 @@
 </div>
       <span id="gal-count" style="font-size:13.5px;color:var(--color-text-secondary);align-self:center;margin-left:auto"></span>
     </div>
-    <div class="gallery-grid" id="gal-grid"></div>
+    <div class="gallery-grid" id="gal-grid" role="grid" aria-label="Galeria de figurinhas"></div>
   </div>
 </div>
 
@@ -1411,6 +1420,18 @@
           ? `Figurinha ${sticker.n} colada. Total: ${POSSUI_TOTAL} de ${TOTAL_ALBUM}.`
           : `Figurinha ${sticker.n} removida. Total: ${POSSUI_TOTAL} de ${TOTAL_ALBUM}.`;
       }
+      // Atualiza atributos ARIA do card e do checkbox sem re-renderizar a galeria inteira
+      const cardEl = document.querySelector(`[data-code="${code}"]`);
+      if (cardEl) {
+        cardEl.classList.toggle('possui', sticker.p);
+        cardEl.setAttribute('aria-selected', sticker.p ? 'true' : 'false');
+        cardEl.setAttribute('aria-label', `${sticker.n} (${sticker.c}) — ${sticker.p ? 'colada' : 'faltando'}`);
+        const cb = cardEl.querySelector('.fig-checkbox');
+        if (cb) {
+          cb.setAttribute('aria-checked', sticker.p ? 'true' : 'false');
+          cb.setAttribute('aria-label', sticker.p ? `Descolar ${sticker.n}` : `Colar ${sticker.n}`);
+        }
+      }
       
       // Atualizações de renderização instantâneas da UI (Single Page App)
       updateDashboardData();
@@ -1431,10 +1452,17 @@
       const ctrl = btn.getAttribute('aria-controls');
       btn.setAttribute('aria-selected', ctrl === 'page-' + id ? 'true' : 'false');
     });
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.page').forEach(p => {
+      p.classList.remove('active');
+      p.setAttribute('tabindex', '-1');
+    });
     document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
-    document.getElementById('page-' + id).classList.add('active');
-    
+    const panel = document.getElementById('page-' + id);
+    panel.classList.add('active');
+    panel.setAttribute('tabindex', '0');
+    // Move foco para o painel — permite navegação imediata por Tab dentro do conteúdo
+    panel.focus();
+
     // Seleciona botão ativo de forma genérica
     const activeBtn = Array.from(document.querySelectorAll('.nav button')).find(b => b.getAttribute('onclick').includes(id));
     if (activeBtn) activeBtn.classList.add('active');
@@ -1460,8 +1488,17 @@
       const p = pct(v.p, v.t);
       return `<div class="bar-row">
         <span class="bar-label" title="${k}">${k}</span>
-        <div class="bar-track"><div class="bar-fill" style="width:${p}%;background:${color(p)}"></div></div>
-        <span class="bar-pct">${p}%</span>
+        <div class="bar-track">
+          <div class="bar-fill"
+               role="progressbar"
+               aria-valuenow="${p}"
+               aria-valuemin="0"
+               aria-valuemax="100"
+               aria-label="${k}: ${p}% completo"
+               style="width:${p}%;background:${color(p)}">
+          </div>
+        </div>
+        <span class="bar-pct" aria-hidden="true">${p}%</span>
       </div>`;
     }).join('');
   }
@@ -1542,13 +1579,21 @@
       const rawS = RAW.find(r => r.s === s);
       const grp = rawS ? rawS.g : '-';
       const cfv = rawS ? rawS.cf : '-';
-      return `<div class="selection-row">
-        <div class="selection-badge" style="background:${color(p)}">${p}%</div>
+      return `<div class="selection-row"
+             role="listitem"
+             tabindex="0"
+             aria-label="${s} — Grupo ${grp} — ${cfv} — ${p}% completo — ${v.p} de ${v.t} figurinhas coladas">
+        <div class="selection-badge" style="background:${color(p)}" aria-hidden="true">${p}%</div>
         <div style="flex:1">
           <div style="font-size:14px;font-weight:700;color:var(--color-text-primary)">${s}</div>
-          <div style="font-size:11px;color:var(--color-text-secondary);margin-top:2px;">Grupo ${grp} · ${cfv} · ${v.p}/${v.t} coladas</div>
+          <div style="font-size:11px;color:var(--color-text-secondary);margin-top:2px;" aria-hidden="true">Grupo ${grp} · ${cfv} · ${v.p}/${v.t} coladas</div>
           <div style="margin-top:6px;height:4px;background:var(--color-background-tertiary);border-radius:2px;overflow:hidden">
-            <div style="height:100%;width:${p}%;background:${color(p)};border-radius:2px"></div>
+            <div role="progressbar"
+                 aria-valuenow="${p}"
+                 aria-valuemin="0"
+                 aria-valuemax="100"
+                 aria-label="${s}: ${p}% completo"
+                 style="height:100%;width:${p}%;background:${color(p)};border-radius:2px"></div>
           </div>
         </div>
       </div>`;
@@ -1559,31 +1604,107 @@
     const grupos = 'ABCDEFGHIJKL'.split('');
     const container = document.getElementById('hm-container');
     container.innerHTML = '';
-    
+    // Torna o container navegável como grade
+    container.setAttribute('role', 'grid');
+    container.setAttribute('aria-label', 'Mapa de calor de completude por grupo e seleção');
+
     grupos.forEach(g => {
       const rows = RAW.filter(r => r.g === g);
       const sels = [...new Set(rows.map(r => r.s))];
       const div = document.createElement('div');
       div.className = 'hm-group';
-      
+      div.setAttribute('role', 'row');
+
       const gTotal = rows.length;
       const gPossui = rows.filter(r => r.p).length;
       const gPct = pct(gPossui, gTotal);
-      
-      div.innerHTML = `
-        <div class="hm-group-header">
-          <span>Grupo ${g}</span>
-          <span style="color:${color(gPct)}">${gPct}%</span>
-        </div>` +
-        sels.map(s => {
-          const st = rows.filter(r => r.s === s);
-          const sp = st.filter(r => r.p).length;
-          const pv = pct(sp, st.length);
-          const bg = pv === 0 ? '#E24B4A' : pv === 100 ? '#10b981' : pv >= 50 ? '#EF9F27' : '#D85A30';
-          return `<div class="hm-cell" style="background:${bg}">${s} <span>${pv}%</span></div>`;
-        }).join('');
+
+      // Header do grupo — acessível como rowheader
+      const header = document.createElement('div');
+      header.className = 'hm-group-header';
+      header.setAttribute('role', 'rowheader');
+      header.setAttribute('scope', 'row');
+      header.innerHTML = `<span>Grupo ${g}</span><span style="color:${color(gPct)}">${gPct}%</span>`;
+      div.appendChild(header);
+
+      // Células de seleção — role=gridcell, tabindex, aria-label completo
+      sels.forEach((s, idx) => {
+        const st = rows.filter(r => r.s === s);
+        const sp = st.filter(r => r.p).length;
+        const pv = pct(sp, st.length);
+        const bg = pv === 0 ? '#E24B4A' : pv === 100 ? '#10b981' : pv >= 50 ? '#EF9F27' : '#D85A30';
+        const statusText = pv === 0 ? 'nenhuma figurinha colada' :
+                           pv === 100 ? 'completa' :
+                           `${sp} de ${st.length} coladas`;
+        const cell = document.createElement('div');
+        cell.className = 'hm-cell';
+        cell.style.background = bg;
+        cell.setAttribute('role', 'gridcell');
+        cell.setAttribute('tabindex', idx === 0 && g === 'A' ? '0' : '-1');
+        cell.setAttribute('aria-label', `${s} — Grupo ${g} — ${pv}% — ${statusText}`);
+        cell.setAttribute('aria-selected', 'false');
+        cell.dataset.grupo = g;
+        cell.dataset.idx = idx;
+        cell.innerHTML = `${s} <span aria-hidden="true">${pv}%</span>`;
+        // Navegação por setas dentro do heatmap
+        cell.addEventListener('keydown', hmKeydown);
+        cell.addEventListener('click', () => {
+          // Ao clicar numa célula, mostrar detalhes da seleção no filtro de seleções
+          const selEl = document.getElementById('fil-sel');
+          if (selEl) {
+            selEl.value = s;
+            showPage('selecoes');
+            renderSelecoes();
+          }
+        });
+        div.appendChild(cell);
+      });
       container.appendChild(div);
     });
+  }
+
+  function hmKeydown(e) {
+    const cells = Array.from(document.querySelectorAll('.hm-cell'));
+    const idx = cells.indexOf(e.currentTarget);
+    let next = -1;
+    // Detecta quantas células por linha (seleções por grupo — varia)
+    // Usar ArrowRight/Left para navegar linearmente, Up/Down por grupos
+    const grupo = e.currentTarget.dataset.grupo;
+    const gruposCells = cells.filter(c => c.dataset.grupo === grupo);
+    const posInGroup = gruposCells.indexOf(e.currentTarget);
+
+    if (e.key === 'ArrowRight') next = Math.min(idx + 1, cells.length - 1);
+    else if (e.key === 'ArrowLeft') next = Math.max(idx - 1, 0);
+    else if (e.key === 'ArrowDown') {
+      // Vai para o mesmo índice no próximo grupo
+      const grupos = 'ABCDEFGHIJKL'.split('');
+      const gi = grupos.indexOf(grupo);
+      if (gi < grupos.length - 1) {
+        const nextGrupoCells = cells.filter(c => c.dataset.grupo === grupos[gi + 1]);
+        const target = nextGrupoCells[Math.min(posInGroup, nextGrupoCells.length - 1)];
+        next = target ? cells.indexOf(target) : -1;
+      }
+    } else if (e.key === 'ArrowUp') {
+      const grupos = 'ABCDEFGHIJKL'.split('');
+      const gi = grupos.indexOf(grupo);
+      if (gi > 0) {
+        const prevGrupoCells = cells.filter(c => c.dataset.grupo === grupos[gi - 1]);
+        const target = prevGrupoCells[Math.min(posInGroup, prevGrupoCells.length - 1)];
+        next = target ? cells.indexOf(target) : -1;
+      }
+    } else if (e.key === 'Home') next = 0;
+    else if (e.key === 'End') next = cells.length - 1;
+    else if (e.key === 'Enter' || e.key === ' ') {
+      e.currentTarget.click();
+      return;
+    } else return;
+
+    if (next >= 0 && next !== idx) {
+      e.preventDefault();
+      cells[idx].setAttribute('tabindex', '-1');
+      cells[next].setAttribute('tabindex', '0');
+      cells[next].focus();
+    }
   }
 
   let simChart = null, mcChart = null;
@@ -1592,11 +1713,12 @@
   // dado que já temos 'already' de 'total' figurinhas
   function expectedPacksForOneMore(already, total, perPack) {
     if (already >= total) return 0;
-    const missing = total - already;
-    const pHit = missing / total;  // probabilidade de um slot do pacote ser uma nova fig
-    // Esperança de pacotes até ter pelo menos 1 nova figurinha: geométrica
-    // E[pacotes] = 1 / (1 - (1-pHit)^perPack)
-    const pNewInPack = 1 - Math.pow(1 - pHit, perPack);
+    // Probabilidade de que um pacote inteiro contenha PELO MENOS uma figurinha nova.
+    // Cada slot do pacote tem prob. (already/total) de ser uma figurinha que já temos.
+    // Logo, prob. de o pacote todo ser de repetidas = (already/total)^perPack.
+    // pNewInPack = 1 menos isso. Esta é a formulação correta por pacote — consistente
+    // com updateUltimaFig, corrigindo a antiga aproximação por slot que subestimava o custo.
+    const pNewInPack = 1 - Math.pow(already / total, perPack);
     if (pNewInPack <= 0) return Infinity;
     return 1 / pNewInPack;
   }
@@ -1617,21 +1739,20 @@
     document.getElementById('sim-total-count').textContent = TOTAL_ALBUM;
     document.getElementById('sim-faltam-count').textContent = missing;
 
-    // Previsão de conclusão
+    // Previsão de conclusão e custo total — modelo integrado (taxa variável)
+    // Em vez de assumir uma taxa de novas figs constante (otimista), integramos
+    // o número esperado de pacotes para CADA figurinha restante, do estado atual
+    // até a última. A soma reflete a desaceleração real conforme o álbum completa.
     const precoPacote = precoUnit * fpac;
-    const figsPorSemana = ppw * fpac; // figs brutas por semana
-    // Taxa efetiva de novas figs por semana — começa alta, cai com duplicatas
-    // Aproximação: E[novas] por semana dado estado atual
-    const pNovaFig = missing > 0 ? missing / TOTAL_ALBUM : 0;
-    const novasPorSemana = figsPorSemana * pNovaFig;
-    const semanasRestantes = novasPorSemana > 0 ? Math.ceil(missing / novasPorSemana) : null;
-
-    // Custo estimado total (baseado no modelo coupon collector ajustado)
     let custoTotal = 0;
+    let pacotesTotais = 0;
     for (let i = already; i < TOTAL_ALBUM; i++) {
       const expectedPacks = expectedPacksForOneMore(i, TOTAL_ALBUM, fpac);
       custoTotal += expectedPacks * precoPacote;
+      pacotesTotais += expectedPacks;
     }
+    // Semanas = total de pacotes esperados dividido pelo ritmo de compra semanal
+    const semanasRestantes = (missing > 0 && ppw > 0) ? Math.ceil(pacotesTotais / ppw) : null;
 
     const previsaoEl = document.getElementById('previsao-results');
     if (missing <= 0) {
@@ -1652,9 +1773,9 @@
             <div style="font-size:10px;color:var(--color-text-tertiary);">${mesesText} — comprando ${ppw} pac./semana</div>
           </div>
           <div style="background:var(--color-background-tertiary);border-radius:var(--border-radius-sm);padding:12px;">
-            <div style="font-size:11px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em;">Novas figs/semana (est.)</div>
-            <div style="font-size:22px;font-weight:700;color:var(--color-success);">${novasPorSemana.toFixed(1).replace('.', ',')}</div>
-            <div style="font-size:10px;color:var(--color-text-tertiary);">de ${figsPorSemana} figs abertas por semana</div>
+            <div style="font-size:11px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em;">Pacotes necessários (est.)</div>
+            <div style="font-size:22px;font-weight:700;color:var(--color-success);">${Math.round(pacotesTotais).toLocaleString('pt-BR')}</div>
+            <div style="font-size:10px;color:var(--color-text-tertiary);">${fpac} figs por pacote · modelo integrado</div>
           </div>
           <div style="background:var(--color-background-tertiary);border-radius:var(--border-radius-sm);padding:12px;">
             <div style="font-size:11px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em;">Faltam</div>
@@ -1741,7 +1862,7 @@
     // Gera 20 pontos ao longo do progresso (0% a 99.9%)
     const labels = [];
     const costs = [];
-    const checkpoints = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 98, 99];
+    const checkpoints = [0, 10, 20, 30, 40, 50, 60, 70, 80, 85, 90, 93, 95, 97, 98, 99, 99.5, 99.8, 99.9];
     const currentPct = Math.round(POSSUI_TOTAL / TOTAL_ALBUM * 100);
 
     for (const pct of checkpoints) {
@@ -1838,10 +1959,14 @@
       const sims = [];
       const iterations = 1000;
 
+      // Conjunto real de índices das figurinhas que o usuário JÁ possui.
+      // Usar o estado real (e não índices 0..already-1) torna a simulação fiel
+      // ao álbum atual e permite, no futuro, modelar trocas por figurinha específica.
+      const possuiIdx = [];
+      RAW.forEach((r, idx) => { if (r.p) possuiIdx.push(idx); });
+
       for (let i = 0; i < iterations; i++) {
-        const coladas = new Set();
-        // Pré-popula com figurinhas já coladas (índices 0..already-1)
-        for (let k = 0; k < already; k++) coladas.add(k);
+        const coladas = new Set(possuiIdx);
         let pacotes = 0;
         while (coladas.size < TOTAL_ALBUM) {
           for (let j = 0; j < fpac; j++) {
@@ -2015,6 +2140,9 @@
     grid.innerHTML = data.slice(0, 150).map((r, idx) => `
       <div class="card-fig ${r.p ? 'possui' : ''}"
            data-code="${r.c}"
+           role="gridcell"
+           aria-label="${r.n} (${r.c}) — ${r.p ? 'colada' : 'faltando'}"
+           aria-selected="${r.p ? 'true' : 'false'}"
            onclick="togglePossui('${r.c}')"
            tabindex="${idx === 0 ? '0' : '-1'}"
            onkeydown="handleCardKeydown(event, '${r.c}')">

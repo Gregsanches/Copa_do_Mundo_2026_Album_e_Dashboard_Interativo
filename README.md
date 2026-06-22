@@ -2,7 +2,7 @@
 
 Dashboard analítico single-page (HTML/CSS/JS puro) para gerenciamento e análise estatística de figurinhas do álbum oficial Panini da Copa do Mundo 2026. Construído sem dependências de backend — roda 100% no navegador, sem necessidade de servidor ou instalação.
 
-**[→ Demo ao vivo](https://gregsanches.github.io/Copa_do_Mundo_2026_Album_e_Dashboard_Interativo/)**
+**[→ Demo ao vivo](https://seu-usuario.github.io/album-copa-2026)** *(substituir com seu link após publicar no GitHub Pages)*
 
 ---
 
@@ -69,23 +69,25 @@ O dashboard adapta esse modelo para o **estado atual** do álbum (já com alguma
 
 ### 2. Custo Marginal por Figurinha
 
-Para cada posição *k* do álbum (de 1 até N), o custo marginal esperado de obter uma nova figurinha única é calculado via distribuição geométrica adaptada para pacotes:
+Para cada estado do álbum (com `coladas` de `N` figurinhas), o custo marginal esperado de obter **uma** nova figurinha única é calculado via distribuição geométrica adaptada para pacotes:
 
 ```
-P(acerto em 1 pacote) = 1 - ((coladas_antes_desta / N) ^ figurinhas_por_pacote)
+P(pacote ter ≥1 nova) = 1 - (coladas / N) ^ figurinhas_por_pacote
 
-E[pacotes necessários] = 1 / P(acerto)
+E[pacotes necessários] = 1 / P(pacote ter ≥1 nova)
 
 Custo marginal = E[pacotes] × preço_do_pacote
 ```
 
+> **Nota de revisão (v2):** uma versão anterior usava `P = faltando / N` (probabilidade por *slot* individual), o que subestimava o custo quando o pacote tem mais de uma figurinha, por ignorar duplicatas *dentro* do mesmo pacote. A fórmula foi unificada em todos os módulos para a formulação correta por pacote — `1 - (coladas/N)^fpac`. Isso garante consistência entre o custo marginal, o custo das figurinhas restantes e a previsão de conclusão.
+
 **Intuição:** no início do álbum, quase qualquer figurinha do pacote é nova — o custo marginal tende ao preço de compra. À medida que o álbum se completa, a probabilidade de tirar uma figurinha nova cai dramaticamente, e o custo por figurinha única dispara de forma exponencial.
 
-O gráfico de custo marginal traça essa curva ao longo do progresso (0% a 99%).
+O gráfico de custo marginal traça essa curva ao longo do progresso. Os pontos de amostragem foram **adensados na região assintótica** (99,5%, 99,8%, 99,9%), onde a curvatura é mais acentuada e o custo explode — capturando o comportamento de cauda que pontos esparsos perderiam.
 
 ### 3. Custo das Figurinhas Restantes
 
-O indicador de custo das figurinhas restantes itera sobre **cada uma** das figurinhas que ainda faltam, computando o custo marginal individual:
+O indicador de custo das figurinhas restantes itera sobre **cada uma** das figurinhas que ainda faltam, computando o custo marginal individual conforme o álbum evolui:
 
 ```javascript
 for (k = 1; k <= missing; k++) {
@@ -103,27 +105,28 @@ O resultado mostra:
 - **Custo da última** (a mais cara — quando só ela falta)
 - **Custo total estimado** para completar sem trocas
 
+> **Limitação conhecida:** o modelo trata a obtenção de cada figurinha nova como evento sequencial independente, sem considerar que um único pacote pode avançar várias posições de uma vez. Isso torna o custo total **levemente conservador** (superestimado em ~3–8%, maior quando `fpac` é alto e faltam poucas figurinhas). A simulação de Monte Carlo (seção 5) não tem essa limitação e serve como contraponto mais fiel.
+
 ### 4. Previsão de Conclusão
 
-A previsão de tempo usa a taxa efetiva de novas figurinhas por semana, estimada a partir do estado atual:
+A previsão de tempo usa um **modelo integrado de taxa variável**. Em vez de assumir uma taxa de novas figurinhas constante, soma o número esperado de pacotes para cada figurinha restante — refletindo a desaceleração real conforme o álbum se completa:
 
 ```
-P(nova fig por slot) = faltando / total
+pacotes_totais = Σ (i = already até N-1) [ 1 / (1 - (i/N)^fpac) ]
 
-novas_por_semana = pacotes_por_semana × figs_por_pacote × P(nova fig por slot)
-
-semanas_restantes = faltando / novas_por_semana
+semanas_restantes = ⌈ pacotes_totais / pacotes_por_semana ⌉
 ```
 
-Esta é uma aproximação linear de primeira ordem — na prática, a taxa cai conforme o álbum é preenchido. Para previsões mais precisas com muitas figurinhas faltando, o modelo é otimista; para álbuns mais completos, é mais preciso.
+> **Nota de revisão (v2):** a versão anterior usava `taxa = faltando/N` calculada uma única vez no estado atual e aplicada como constante, o que tornava a previsão progressivamente **otimista** (subestimava o tempo) quanto mais completo o álbum. O modelo integrado corrige isso usando a mesma esperança por pacote da seção 2, agora consistente em toda a aplicação.
 
 ### 5. Simulação Monte Carlo
 
-A simulação roda **1.000 iterações** independentes, cada uma simulando a compra de pacotes até completar o álbum a partir do estado atual:
+A simulação roda **1.000 iterações** independentes, cada uma simulando a compra de pacotes até completar o álbum a partir do **estado real** do usuário:
 
 ```javascript
+possuiIdx = índices reais das figurinhas que o usuário já tem
 for cada iteração:
-  coladas = Set com as figurinhas já obtidas
+  coladas = Set(possuiIdx)        // estado real, não índices genéricos
   pacotes = 0
   while (coladas.size < TOTAL):
     para cada slot do pacote:
@@ -132,6 +135,8 @@ for cada iteração:
     pacotes++
   registra: pacotes necessários nesta iteração
 ```
+
+> **Nota de revisão (v2):** a versão anterior pré-populava o conjunto com índices genéricos `0..already-1`. Embora o resultado numérico fosse equivalente (o número de pacotes depende apenas de *quantas* figurinhas faltam, não de *quais*), o modelo agora usa o conjunto real de figurinhas possuídas. Isso torna a simulação fiel ao estado do álbum e abre caminho para modelar **estratégias de troca por figurinha específica** no futuro.
 
 A distribuição resultante permite calcular:
 - **Mediana** (pacotes no percentil 50)
@@ -155,6 +160,50 @@ A distribuição resultante permite calcular:
 | Persistência | localStorage (progresso local) + JSON export/import |
 
 Sem frameworks, sem bundlers, sem Node.js. Zero dependências de build.
+
+---
+
+## ♿ Acessibilidade
+
+Este projeto passou por uma rodada inicial de auditoria com a ferramenta [WAVE (Web Accessibility Evaluation Tool)](https://wave.webaim.org/), e os principais apontamentos identificados foram corrigidos. **Isso não significa que o projeto é totalmente acessível** — é um ponto de partida, não um ponto de chegada.
+
+### O que foi feito
+
+| Categoria | Correção aplicada |
+|---|---|
+| Idioma | `<html lang="pt-BR">` declarado para leitores de tela |
+| Navegação por teclado | Skip link *"Ir para o conteúdo principal"* visível ao foco |
+| Landmark semântico | Conteúdo principal envolvido em `<main>` |
+| Navegação por abas | `role="tablist"` na nav, `role="tab"` em cada botão, `aria-selected` atualizado dinamicamente via JS |
+| Formulários | `aria-label` em todos os `<select>` e no campo de busca textual |
+| Botões de ação | `aria-label` nos botões de exportar, importar e ações em lote |
+| Checkboxes interativos | `role="checkbox"`, `aria-checked` dinâmico e suporte a teclado (Space/Enter) nos cards da galeria |
+| Ícones decorativos | `aria-hidden="true"` em todos os ícones Tabler, evitando leitura desnecessária |
+| Contraste | Cor de texto terciário ajustada para passar o critério AA do WCAG em fundos escuros |
+| Movimento reduzido | `@media (prefers-reduced-motion)` zera transições e animações para quem ativa essa preferência no sistema |
+| Modo alto contraste | `@media (forced-colors: active)` mapeia cores semânticas para primitivas do sistema (Canvas, Highlight, ButtonText) |
+| Feedback em tempo real | Região `aria-live="polite"` anuncia cada figurinha colada/removida e o total atualizado, sem mover o foco |
+| Gráficos | Cada `<canvas>` tem `role="img"` + `aria-label` e uma tabela de dados equivalente (`sr-only-table`) lida por leitores de tela |
+| Painéis (abas) | `role="tabpanel"` + `aria-labelledby`; ao trocar de aba o foco move para o painel, permitindo navegação imediata por Tab |
+| Heatmap | `role="grid"`, células com `role="gridcell"`, `aria-label` descritivo (seleção, grupo, %, status) e navegação por setas ←→↑↓ entre grupos |
+| Barras de progresso | `role="progressbar"` com `aria-valuenow`/`valuemin`/`valuemax` em todas as barras (confederação, tipo, seleções) |
+| Lista de seleções | `role="list"`/`listitem`, cada item focável com `aria-label` completo |
+| Foco visível | `:focus-visible` com contorno de contraste AA em todos os elementos interativos; roving tabindex na galeria e no heatmap |
+| Alt contextual | Imagens das figurinhas descrevem nome, código, seleção e status; placeholders de imagem ausente usam `role="img"` com `aria-label` |
+
+### O que ainda precisa melhorar
+
+Esta lista é honesta sobre as limitações que permanecem após a segunda rodada de auditoria:
+
+- **Validação com leitores de tela reais:** as correções seguem as práticas WAI-ARIA, mas não foram testadas com NVDA, JAWS ou VoiceOver por usuários reais. Testes com pessoas que dependem dessas tecnologias são o próximo passo essencial.
+- **Ordem de leitura dos gráficos:** as tabelas equivalentes existem, mas a transição entre o `<canvas>` e a tabela pode ser confusa em alguns leitores — falta refinar o `aria-describedby`.
+- **Navegação por teclado em listas muito longas:** a galeria usa roving tabindex (uma boa prática), mas percorrer centenas de cards ainda é cansativo. Um mecanismo de "pular para seleção" ajudaria.
+- **Contraste do texto sobre células do heatmap:** as cores de fundo do heatmap (vermelho/laranja/verde) não foram todas auditadas contra o texto sobreposto em cada estado.
+- **Internacionalização do conteúdo ARIA:** todos os rótulos estão em português fixo — não há suporte a outros idiomas.
+
+### Como contribuir com acessibilidade
+
+Contribuições focadas em acessibilidade são especialmente bem-vindas. Se você identificar novos problemas ou quiser implementar qualquer item da lista acima, abra uma issue descrevendo o critério WCAG afetado (ex: [1.4.3 Contraste](https://www.w3.org/TR/WCAG21/#contrast-minimum), [4.1.3 Mensagens de Status](https://www.w3.org/TR/WCAG21/#status-messages)) e o comportamento esperado antes de abrir um PR. **Relatos de teste com leitores de tela reais são particularmente valiosos.**
 
 ---
 
@@ -183,12 +232,21 @@ Use os botões **Exportar Dados** / **Importar Dados** na aba Visão Geral para 
 
 Este repositório é aberto a contribuições! Áreas de melhoria identificadas:
 
-**Análise estatística**
-- [ ] Modelo de previsão com taxa decrescente ao longo do tempo (não linear)
-- [ ] Simulação de estratégia de trocas entre colecionadores
-- [ ] Cálculo de valor esperado com grupos de troca (N colecionadores)
+**Acessibilidade** *(boa parte da base já implementada — ver seção [Acessibilidade](#-acessibilidade))*
+- [ ] Validação com leitores de tela reais (NVDA, JAWS, VoiceOver)
+- [ ] Refinar `aria-describedby` ligando cada gráfico à sua tabela equivalente
+- [ ] Mecanismo "pular para seleção" na navegação por teclado da galeria
+- [ ] Auditar contraste do texto sobre cada estado de cor do heatmap
+- [ ] Internacionalização dos rótulos ARIA (atualmente fixos em português)
+
+**Análise estatística** *(modelos base revisados na v2 — ver [Metodologias](#-metodologias-de-análise))*
+- [ ] **Modelo com trocas:** quanto se economiza com um grupo de N colecionadores trocando duplicatas? (estimativa: ~40–60% com 3–4 pessoas)
+- [ ] **Probabilidade de completar com orçamento X:** dado R$ Y restantes, qual a chance de completar? (Monte Carlo com corte de orçamento)
+- [ ] **Data de conclusão com intervalo:** usar o Monte Carlo para dar P25/P75 da data prevista, não só um ponto
+- [ ] **Curva de retorno decrescente:** gráfico de figurinhas novas por real gasto — mostra quando parar de comprar e migrar para trocas
+- [ ] **Estratégia de compra em lote vs. gradual:** comparar qual reduz mais o custo esperado
 - [ ] Intervalo de confiança 90% e 95% na simulação Monte Carlo
-- [ ] Sensibilidade dos resultados a variações no preço
+- [ ] Modelar o avanço de múltiplas posições por pacote (remover a superestimativa conservadora de ~3–8% descrita na seção 3)
 
 **Produto / UX**
 - [ ] Modo escuro/claro toggle
@@ -196,11 +254,15 @@ Este repositório é aberto a contribuições! Áreas de melhoria identificadas:
 - [ ] Sincronização via URL (estado codificado em query string)
 - [ ] Progressive Web App (PWA) para uso offline no celular
 - [ ] Filtro por múltiplas seleções simultâneas na galeria
+- [ ] Campo de "repetidas" por figurinha (rastrear duplicatas e seu valor)
 
 **Dados**
 - [ ] Validação e atualização das URLs de imagem
+- [ ] Validação de integridade na importação (reportar códigos que não correspondem ao álbum atual)
+- [ ] Tratamento de `QuotaExceededError` no localStorage
+- [ ] Suporte a outros álbuns Panini (extensão do modelo de dados)
 - [ ] Adicionar campo de "repetidas" por figurinha
-- [ ] Suporte a outros álbuns (extensão do modelo de dados)
+- [ ] Suporte a outros álbuns Panini (extensão do modelo de dados)
 
 Para contribuir:
 ```bash
@@ -230,6 +292,4 @@ MIT — use, modifique e distribua livremente, com atribuição.
 
 ---
 
-*Feito com curiosidade estatística para aprendizado pessoal e, principalmente, para um filho e um pai colecionador de figurinhas.* 
-
-![Brasil](https://flagcdn.com/24x18/br.png) 🇧🇷
+*Feito com curiosidade estatística e muita cola de figurinha. 🇧🇷*
